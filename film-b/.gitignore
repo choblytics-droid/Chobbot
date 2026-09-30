@@ -1,0 +1,4 @@
+out/
+analysis/work/
+analysis/__pycache__/
+node_modules/
