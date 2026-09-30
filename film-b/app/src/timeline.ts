@@ -11,17 +11,16 @@ const scene = (name: string) => () => {
   return m ? m() : Promise.reject(new Error(`scene module not found: scenes/${name}.ts`));
 };
 
+/** `?cut=generic` renders the first, data-panel take; the default is the cover-art / lyric take. */
+const CUT = typeof location !== 'undefined' ? new URLSearchParams(location.search).get('cut') ?? 'cover' : 'cover';
+
 export function makeTimeline(au: AudioData): TimelineEntry[] {
   const s = (name: string) => au.sections.find((x) => x.name === name)!;
   const E = (id: string, start: number, end: number, extra: Partial<TimelineEntry> = {}): TimelineEntry =>
     ({ id, load: scene(id), start, end, ...extra });
-  return [
-    E('riser', 0, au.drop),
-    E('scope', s('phrase1').start, s('phrase1').end),
-    E('grid', s('phrase2').start, s('phrase2').end),
-    E('rings', s('phrase3').start, s('phrase3').end),
-    E('slam', s('phrase4').start, s('phrase4').end),
-    E('infect', s('phrase5').start, s('phrase5').end),
-    E('end', s('phrase6').start, au.duration),
-  ];
+  const bounds = [0, au.drop, s('phrase1').end, s('phrase2').end, s('phrase3').end, s('phrase4').end, s('phrase5').end, au.duration];
+  const ids = CUT === 'generic'
+    ? ['riser', 'scope', 'grid', 'rings', 'slam', 'infect', 'end']
+    : ['alley', 'door', 'legend', 'puddle', 'wall', 'toxic', 'loop'];
+  return ids.map((id, i) => E(id, bounds[i]!, bounds[i + 1]!));
 }

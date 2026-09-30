@@ -24,6 +24,17 @@ const vec3 C_SIGNAL = ${v3(LIN.signal)};
 const vec3 C_EMBER = ${v3(LIN.ember)};
 const vec3 C_BLOOD = ${v3(LIN.blood)};
 const vec3 C_ACID = ${v3(LIN.acid)};
+const vec3 C_NIGHT = ${v3(LIN.night)};
+const vec3 C_STONE = ${v3(LIN.stone)};
+const vec3 C_STONE2 = ${v3(LIN.stone2)};
+const vec3 C_MIST = ${v3(LIN.mist)};
+const vec3 C_MAGENTA = ${v3(LIN.magenta)};
+const vec3 C_VIOLET = ${v3(LIN.violet)};
+const vec3 C_CYAN = ${v3(LIN.cyan)};
+const vec3 C_RUST = ${v3(LIN.rust)};
+const vec3 C_RUSTDARK = ${v3(LIN.rustDark)};
+const vec3 C_RUSTLITE = ${v3(LIN.rustLite)};
+const vec3 C_GHOST = ${v3(LIN.ghost)};
 
 /** Rotated-grid supersample offset k (0..3) within one pixel, in pixels. See SS_TAP (gl.ts). */
 vec2 rgss(int k) { return k == 0 ? vec2(0.125, -0.375) : k == 1 ? vec2(0.375, 0.125) : k == 2 ? vec2(-0.125, 0.375) : vec2(-0.375, -0.125); }

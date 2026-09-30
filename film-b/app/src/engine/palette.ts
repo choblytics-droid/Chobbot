@@ -1,7 +1,7 @@
 import { hexToLinear } from './util';
 
-// The whole video lives in a restrained palette: ink, bone, and one signal colour.
-// One rare accent (acid, the shrooms moment) — see docs/TREATMENT.md.
+// Palette. The first block is pdoom-video's (ink / bone / signal); the second is the song cover's
+// world (night blue stone, magenta and cyan neon, rust, ghost white) used by the version-B plates.
 export const HEX = {
   ink: '#0A0A0B', // background black (slightly warm)
   ink2: '#151517', // raised black (panels, paper-in-the-dark)
@@ -12,6 +12,18 @@ export const HEX = {
   ember: '#FF8A3D', // hotter, lighter orange for cores/highlights
   blood: '#C21D0B', // deep red-orange for shadows of signal
   acid: '#D8FF3C', // acid: only for the shrooms moment
+  // ---- the cover's world (version B, cover-art take): a rainy neon alley at night
+  night: '#0A0C1C', // sky / deepest shadow (blue-black)
+  stone: '#2B2E4A', // wet stone, lit by the night
+  stone2: '#454A70', // stone in neon light
+  mist: '#7C7FB0', // fog, far facades
+  magenta: '#FF3FB4', // neon sign (pink-magenta)
+  violet: '#A64DFF', // neon haze
+  cyan: '#39E8FF', // neon sign (cyan), the ghost's glow
+  rust: '#C4561F', // the door's rust (ferrugem)
+  rustDark: '#5E2410', // pitted rust
+  rustLite: '#E8914A', // fresh rust, embers
+  ghost: '#EAF6FF', // the ghost's sheet
 } as const;
 
 export type PaletteKey = keyof typeof HEX;
