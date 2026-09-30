@@ -1,15 +1,16 @@
 # Code Film — version B (vertical, 40 s)
 
 A code-rendered music video for **"Ferrugem Na Fenda x Cowbell Infection Tribute (Mashup)"**
-(venmar_lupus_et_vulpes), 1080×1920 at 60 fps. It's the "pure generic" take: no lyrics and no
-story. Every image is the song's own data (waveform, 48-band spectrum, the detected
-kick/clap/hat/cowbell hits and the beat grid), set in one palette and one type system, with every
-cut on a downbeat.
+(venmar_lupus_et_vulpes), 1080×1920 at 60 fps. It's built from the song itself: the cover art's
+world (a rainy neon alley at night, a rusted door in a cracked stone wall, a small sheet ghost) and
+the words actually sung, synced word by word. Every cut lands on a downbeat, and the percussion
+drives the motion.
 
 The method and most of the engine come from
 [mexicat/pdoom-video](https://github.com/mexicat/pdoom-video) (MIT, see `LICENSE.pdoom-video`),
-the project the `code-film` skill was distilled from. It is adapted here from landscape to portrait,
-from lyric-driven to audio-driven, and from a local GPU to a headless SwiftShader box.
+the project the `code-film` skill was distilled from. It is adapted here from landscape to portrait
+and from a local GPU to a headless SwiftShader box. The first, lyric-less data-panel take is still
+in the code: `?cut=generic` / `--cut generic`.
 
 ## What was taken from pdoom-video
 
@@ -33,26 +34,40 @@ from lyric-driven to audio-driven, and from a local GPU to a headless SwiftShade
 
 ## The edit (clip = song 35.975 s → 75.975 s, 133.0 BPM)
 
-| plate | clip time | idea |
-|---|---|---|
-| `riser` | 0 → 3.61 | count-in: the spark climbs a meter one tick per beat; the numeral 8 → 1 condenses and gets heavier |
-| `scope` | 3.61 → 10.83 | **the drop**: a portrait oscilloscope drawing the real waveform, time running down; one instrument setting per bar (1-beat sweep, 1-bar sweep, FFT, 1/8 sweep ×2 gain), strobing to paper |
-| `grid` | 10.83 → 18.05 | bone paper: the detected pattern as a step-sequencer sheet, cells stamped as they sound, width = velocity, the cowbell the only orange; blacked out from the top on the last beat |
-| `rings` | 18.05 → 25.26 | the spark emits a ring every 25 ms shaped by that instant's spectrum; kick rings burn orange, each clap snaps a 1/16 turn; flat / cone / inward / spin, then the break collapses it |
-| `slam` | 25.26 → 32.48 | a hit log in kinetic type (KICK / CLAP / BELL with timestamp and velocity), one page per bar, ink → bone → signal → ink |
-| `infect` | 32.48 → 39.70 | a 9×16 field infected one ring per bell/kick, the count rolling up to 100 %, strobing, shrinking, pulled into the spark at the break |
-| `end` | 39.70 → 40.00 | the last downbeat detonates the spark; under the flash is frame 0, so the video loops |
+| plate | clip time | lyric | image |
+|---|---|---|---|
+| `alley` | 0 → 3.61 | …king of the shadows in his broken heart / He told me everything | dolly down the cover's alley; each sung word lights its own blade sign (BROKEN buzzes, HEART cracks) |
+| `door` | 3.61 → 10.83 | oh, I hope he was the worst / I'm the ghost in his mind, I'm the beautiful curse | **the drop lands on "oh"**: the wall cracks from the rusted door, ghost light leaks out; the ghost slips out through the slit on "ghost"; rust spreads across the stones on "curse" |
+| `legend` | 10.83 → 18.05 | yeah, keep the legend alive / I hope I'm the reason he can barely survive | LEGEND lights letter by letter, ALIVE snaps on; SURVIVE buzzes and dies tube by tube through the held note |
+| `puddle` | 18.05 → 25.26 | (instrumental) | top-down puddle reflecting the signs and the ghost; every kick and cowbell hit is a drop; time freezes at the break |
+| `wall` | 25.26 → 32.48 | He's talking loud, keep spreading the infection / Building a wall, seeking protection | TALKING LOUD sized by the song's loudness; the infection spreads brick by brick per cowbell/kick; a new wall stacks up one course per 8th; the ghost sits on top |
+| `toxic` | 32.48 → 39.70 | And he tells you I'm toxic, he tells you I'm the end / Burning every bridge, losing every friend / But, but, but every word… | the lyric as neon: TOXIC drips, THE END slams, a neon bridge burns and falls, FRIEND's letters drop, three BUTs; power cut at the break |
+| `loop` | 39.70 → 40.00 | …speaks | SPEAKS flashes on the last downbeat over frame 0, so the video loops |
+
+## Lyrics and timing
+
+- `analysis/analyze.py`: beat grid, downbeats, drop, phrase map, onsets (kick / clap / hat / cowbell),
+  spectrum and waveform (`data/audio.json`, `data/scope.bin`, `audio/clip.wav`).
+- `analysis/vocals_asr.py`: vocal stem (`audio-separator`, UVR-MDX-NET-Voc_FT), then
+  Parakeet-TDT-0.6B (sherpa-onnx, token timestamps) and Whisper-small as a text cross-check. Models
+  come from GitHub releases, because Hugging Face is blocked in this environment.
+- `analysis/lyrics.py`: the corrected lines, matched word by word to the recogniser's timestamps
+  (88/88 matched) → `data/lyrics.json`. One phrase no model agreed on ("…of you," after "curse") is
+  left out. If you have the official lyrics, edit `LINES` there and rerun.
 
 ## Run it
 
 ```sh
 # analysis (numpy, scipy, soundfile + ffmpeg): writes data/audio.json, data/scope.bin, audio/clip.wav
 python3 analysis/analyze.py
+# lyrics (audio-separator, sherpa-onnx + models in /home/user/models): data/lyrics.json
+python3 analysis/vocals_asr.py && python3 analysis/lyrics.py
 
 cd app && bun install
 bunx vite                                  # preview at http://localhost:5173 (space, ←/→, [ ], l, h)
-bun scripts/render.ts stills --t 5,12,20 --only scope,grid,rings --out ../out/stills
-bun scripts/render.ts video --samples 4 --shutter 0.3 --out ../out/film-b.mp4
+bun scripts/render.ts stills --t 5,12,20 --only door,legend,puddle --out ../out/stills
+bun scripts/render.ts video --samples 2 --shutter 0.3 --out ../out/film-b.mp4
+bun scripts/render.ts video --cut generic --out ../out/film-b-generic.mp4   # the first take
 ```
 
 Without a local GPU, set `CHROME=/path/to/chromium` to render through SwiftShader WebGL2. That is
