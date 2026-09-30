@@ -31,10 +31,12 @@ This skill turns that film into a repeatable method.
    the 7.4 kHz "light" tone, **the title hidden in the spectrogram**, the boom synced to the frame collapse.
 6. `references/06_playbook_and_prompts.md`: the 9-step method, the medium-bible template, the agent
    loop, copy-paste prompts for a local model, QA checklists, cost planning.
-7. `templates/`: GLSL starting points: `state.glsl` (world state + blackbody), `lens_template.glsl`
+7. `references/07_quality_levels.md`: the 10-level cost scale (lines, agent hours, requests, tokens)
+   and how to measure your own plan's percentage per level.
+8. `templates/`: GLSL starting points: `state.glsl` (world state + blackbody), `lens_template.glsl`
    (the contract with the 4-stage structure), `mosaic.glsl` (any lens in any rectangle),
    `transition_template.glsl` (burn, ink bleed, shatter). All compile with glslangValidator (GLSL ES 3.00).
-8. `scripts/study_video.py`: turns any reference video into study sheets (10 fps timeline grids, a
+9. `scripts/study_video.py`: turns any reference video into study sheets (10 fps timeline grids, a
    frame after every cut, labelled per-style frames, palettes, audio levels, spectrograms). Frames of the
    film aren't committed; regenerate them into `assets/` from your copy (see `assets/README.md`).
 
