@@ -139,3 +139,34 @@ window, so windows needed ≈ agent hours × 1.3 ÷ 5.
 Videos per week at each plan (roughly): Level 10: Pro ≈ 1 (tight), Max 5× ≈ 4–5, Max 20× ≈ 18–20.
 Level 5: Pro ≈ 2, Max 5× ≈ 10, Max 20× ≈ 40. Calendar time is then limited by working hours and GPU
 rendering, not by the allowance.
+
+## Two tracks: Breadth (B) and Depth (D)
+
+The table above is the **Breadth track**: quality comes from many media. The **Depth track** keeps
+**1–2 styles** and spends the same effort on rendering: light, materials, atmosphere, simulation,
+camera, animation, film look. 《光先到》's four "real" shots (1,000–1,500 lines each for one look) are
+Depth work. Same level = same effort = **same token cost** (use the Opus Pro/Max columns above). What
+changes is **GPU render time**, which grows much faster on the Depth track.
+
+| Level | Lines | What the Depth track adds (cumulative, e.g. for a voxel + pixel-art world) | Render cost at the final res |
+|---|---|---|---|
+| D1 | ~4k | One look, basic lighting and post (our first MV) | minutes/1080p |
+| D2 | ~6k | Soft shadows, ambient occlusion, per-material shading (rust, wet metal, emissive), depth of field | low |
+| D3 | ~8k | Volumetric fog + god rays, rain with splashes, screen-space wet reflections, secondary motion on characters (wings, tail, ears) | low–medium |
+| D4 | ~10k | Global illumination approximation (emissive rift and neon light the world, colour bleeding), physically based bloom, anamorphic flares, lens dirt | medium |
+| D5 | ~13k | 2 fully dressed hero environments (props, interiors behind windows, signage), lit particle systems (embers, sparks, rain) | medium |
+| D6 | ~16k | Physical sky/atmosphere, volumetric clouds, the rift as a volumetric light phenomenon, 60 fps with adaptive motion blur | medium–high |
+| D7 | ~19k | Film pipeline: per-stock grain, halation, gate weave, lens breathing, an ACES-like colour pipeline, a per-shot grade | high |
+| D8 | ~22k | A bespoke camera choreography per shot, per-shot set dressing, in-world transitions, more expressive poses and facial frames | high |
+| D9 | ~25k | Simulation layers: cloth (scarves, banners), smoke/ink fluid look, voxel destruction with debris physics, crowds | very high |
+| D10 | ~27k+ | Every shot a hero shot with its own shader bible (like `shot_room`/`shot_eye`); 4K60, path-traced-looking light; sound synced to every event | very high (20–60+ GPU hours at 4K60) |
+
+**Mixed track** (common): e.g. 2 styles (voxel 3D "real world" + pixel-art "game world") at D6–D8
+depth, plus 3–4 short lenses for one montage moment.
+
+Depth-track notes:
+- Depth shows in **long holds and high resolution**; it gets lost in 0.1 s cuts. Pace for it: fewer,
+  longer shots, slow camera moves.
+- Platform compression eats fine detail (grain, hairlines). Deliver 4K even for a 1080p viewing; prefer
+  high-bitrate uploads.
+- Beyond D6 a GPU machine is required for the final render. This cloud container is for stills only.

@@ -4,6 +4,14 @@ Levels come from `07_quality_levels.md`. A level is a **promise about craft dept
 media, how deep each bible goes, how many hero shots, how bespoke the transitions and sound are.
 **Line counts and hours are consequences, never targets.** Nothing is added to reach a number.
 
+## Track: Breadth (B), Depth (D) or Mixed
+
+Every level has a track. **Breadth** = many media (the 《光先到》 montage). **Depth** = 1–2 styles pushed to the
+limit of rendering (light, atmosphere, materials, simulation, camera, film look). **Mixed** = 1–2 deep styles
+plus a short multi-media moment. Same level = same effort and token cost; Depth costs more GPU render time.
+Triggers: "level D8", "depth track level 10", "keep only the voxel style but max quality" → Depth.
+If the user gives few styles but asks for a high level, propose the Depth track instead of adding styles.
+
 ## Mode 1 — The user sets the bar
 
 Triggers: "level 6", "/medium-lens-film level 4", "quality bar 8", "make it level 10".
@@ -39,7 +47,7 @@ design, and by −1 if references are vague and must be researched from scratch.
 ## The plan card (always shown before work starts)
 
 ```
-QUALITY BAR — proposed Level N  (Opus 5.5)
+QUALITY BAR — proposed Level N, track B/D/Mixed  (Opus 5.5)
 What you get:   <styles list or count, hero shots, transition type, sound, ending>
 Why this level: <2–3 reasons from the brief: runtime, sections, references>
 Estimated:      ~<lines>k lines · <h> agent-hours · <windows> five-hour windows · ~<x–y>% of a Pro week (+30% rework: <z>%)
