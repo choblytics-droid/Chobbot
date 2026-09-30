@@ -16,6 +16,15 @@ Opus 5.5 over ~16 hours, with a ~30 GB working folder.
 
 This skill turns that film into a repeatable method.
 
+## Quality bar — do this first on any new video
+
+Every project starts with a quality level (1–10, `references/07_quality_levels.md`, Opus 5.5 table)
+and the protocol in `references/08_quality_bar_protocol.md`:
+- **The user set a level** ("level 6", `/medium-lens-film level 4`): check it fits the brief, show the plan card, wait for a go.
+- **No level given:** estimate one from runtime, sections, references, hero shots and sound, and propose it with the plan card, a one-down and a one-up option.
+- Downgrade drops the cheapest-to-lose items first. Upgrade happens only when the gain is visible on screen.
+- Anti-waste: work maps to visible items; calibrate on one style first; stop and ask at >30% overrun; lines and hours are results, never targets.
+
 ## Read in this order
 
 1. `references/01_film_breakdown.md`: the idea, second-by-second structure, pacing, the five devices,
@@ -33,10 +42,12 @@ This skill turns that film into a repeatable method.
    loop, copy-paste prompts for a local model, QA checklists, cost planning.
 7. `references/07_quality_levels.md`: the 10-level cost scale (lines, agent hours, requests, tokens)
    and how to measure your own plan's percentage per level.
-8. `templates/`: GLSL starting points: `state.glsl` (world state + blackbody), `lens_template.glsl`
+8. `references/08_quality_bar_protocol.md`: how a level is set by the user or proposed by the model,
+   the plan card, downgrade and upgrade rules, and anti-waste rules.
+9. `templates/`: GLSL starting points: `state.glsl` (world state + blackbody), `lens_template.glsl`
    (the contract with the 4-stage structure), `mosaic.glsl` (any lens in any rectangle),
    `transition_template.glsl` (burn, ink bleed, shatter). All compile with glslangValidator (GLSL ES 3.00).
-9. `scripts/study_video.py`: turns any reference video into study sheets (10 fps timeline grids, a
+10. `scripts/study_video.py`: turns any reference video into study sheets (10 fps timeline grids, a
    frame after every cut, labelled per-style frames, palettes, audio levels, spectrograms). Frames of the
    film aren't committed; regenerate them into `assets/` from your copy (see `assets/README.md`).
 
