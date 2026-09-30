@@ -1,0 +1,2132 @@
+{
+ "lines": [
+  {
+   "i": 0,
+   "text": "He’s running his mouth, he’s running for his life.",
+   "start": 9.95,
+   "end": 13.33,
+   "singer": "A",
+   "words": [
+    {
+     "w": "He’s",
+     "start": 9.95,
+     "end": 10.21,
+     "conf": 0.7
+    },
+    {
+     "w": "running",
+     "start": 10.21,
+     "end": 10.48,
+     "conf": 0.7
+    },
+    {
+     "w": "his",
+     "start": 10.48,
+     "end": 10.63,
+     "conf": 0.7
+    },
+    {
+     "w": "mouth,",
+     "start": 10.63,
+     "end": 10.9,
+     "conf": 0.7
+    },
+    {
+     "w": "he’s",
+     "start": 10.9,
+     "end": 11.14,
+     "conf": 0.7
+    },
+    {
+     "w": "running",
+     "start": 11.14,
+     "end": 11.53,
+     "conf": 0.7
+    },
+    {
+     "w": "for",
+     "start": 11.53,
+     "end": 11.79,
+     "conf": 0.7
+    },
+    {
+     "w": "his",
+     "start": 11.79,
+     "end": 12.05,
+     "conf": 0.7
+    },
+    {
+     "w": "life.",
+     "start": 13.28,
+     "end": 13.33,
+     "conf": 0.7
+    }
+   ]
+  },
+  {
+   "i": 1,
+   "text": "Cutting the connection with a rusty knife.",
+   "start": 13.35,
+   "end": 16.2,
+   "singer": "A",
+   "words": [
+    {
+     "w": "Cutting",
+     "start": 13.35,
+     "end": 13.82,
+     "conf": 0.7
+    },
+    {
+     "w": "the",
+     "start": 13.82,
+     "end": 13.99,
+     "conf": 0.7
+    },
+    {
+     "w": "connection",
+     "start": 14.03,
+     "end": 14.72,
+     "conf": 0.7
+    },
+    {
+     "w": "with",
+     "start": 14.72,
+     "end": 15.03,
+     "conf": 0.7
+    },
+    {
+     "w": "a",
+     "start": 15.03,
+     "end": 15.15,
+     "conf": 0.7
+    },
+    {
+     "w": "rusty",
+     "start": 15.15,
+     "end": 15.61,
+     "conf": 0.7
+    },
+    {
+     "w": "knife.",
+     "start": 15.61,
+     "end": 16.2,
+     "conf": 0.7
+    }
+   ]
+  },
+  {
+   "i": 2,
+   "text": "\"He's evil, he's toxic, he hurts people too!\"",
+   "start": 16.52,
+   "end": 19.91,
+   "singer": "A",
+   "words": [
+    {
+     "w": "\"He's",
+     "start": 16.52,
+     "end": 16.91,
+     "conf": 0.7
+    },
+    {
+     "w": "evil,",
+     "start": 16.91,
+     "end": 17.38,
+     "conf": 0.7
+    },
+    {
+     "w": "he's",
+     "start": 17.38,
+     "end": 17.66,
+     "conf": 0.7
+    },
+    {
+     "w": "toxic,",
+     "start": 17.66,
+     "end": 18.34,
+     "conf": 0.7
+    },
+    {
+     "w": "he",
+     "start": 18.34,
+     "end": 18.48,
+     "conf": 0.7
+    },
+    {
+     "w": "hurts",
+     "start": 18.48,
+     "end": 18.77,
+     "conf": 0.7
+    },
+    {
+     "w": "people",
+     "start": 18.77,
+     "end": 19.18,
+     "conf": 0.7
+    },
+    {
+     "w": "too!\"",
+     "start": 19.18,
+     "end": 19.91,
+     "conf": 0.7
+    }
+   ]
+  },
+  {
+   "i": 3,
+   "text": "If I’m so bad, why is he obsessed with me?",
+   "start": 20.35,
+   "end": 22.95,
+   "singer": "A",
+   "words": [
+    {
+     "w": "If",
+     "start": 20.35,
+     "end": 20.61,
+     "conf": 0.7
+    },
+    {
+     "w": "I’m",
+     "start": 20.61,
+     "end": 20.76,
+     "conf": 0.7
+    },
+    {
+     "w": "so",
+     "start": 20.76,
+     "end": 20.94,
+     "conf": 0.7
+    },
+    {
+     "w": "bad,",
+     "start": 20.94,
+     "end": 21.14,
+     "conf": 0.7
+    },
+    {
+     "w": "why",
+     "start": 21.14,
+     "end": 21.89,
+     "conf": 0.7
+    },
+    {
+     "w": "is",
+     "start": 21.92,
+     "end": 21.98,
+     "conf": 0.7
+    },
+    {
+     "w": "he",
+     "start": 21.98,
+     "end": 22.18,
+     "conf": 0.7
+    },
+    {
+     "w": "obsessed",
+     "start": 22.18,
+     "end": 22.64,
+     "conf": 0.7
+    },
+    {
+     "w": "with",
+     "start": 22.64,
+     "end": 22.74,
+     "conf": 0.7
+    },
+    {
+     "w": "me?",
+     "start": 22.74,
+     "end": 22.95,
+     "conf": 0.7
+    }
+   ]
+  },
+  {
+   "i": 4,
+   "text": "He’s building a fortress, he’s blocking the door.",
+   "start": 23.76,
+   "end": 27.12,
+   "singer": "A",
+   "words": [
+    {
+     "w": "He’s",
+     "start": 23.76,
+     "end": 23.99,
+     "conf": 0.7
+    },
+    {
+     "w": "building",
+     "start": 23.99,
+     "end": 24.82,
+     "conf": 0.7
+    },
+    {
+     "w": "a",
+     "start": 24.82,
+     "end": 24.98,
+     "conf": 0.7
+    },
+    {
+     "w": "fortress,",
+     "start": 24.98,
+     "end": 25.78,
+     "conf": 0.7
+    },
+    {
+     "w": "he’s",
+     "start": 25.78,
+     "end": 25.92,
+     "conf": 0.7
+    },
+    {
+     "w": "blocking",
+     "start": 25.92,
+     "end": 26.64,
+     "conf": 0.7
+    },
+    {
+     "w": "the",
+     "start": 26.64,
+     "end": 26.83,
+     "conf": 0.7
+    },
+    {
+     "w": "door.",
+     "start": 26.83,
+     "end": 27.12,
+     "conf": 0.7
+    }
+   ]
+  },
+  {
+   "i": 5,
+   "text": "But he’s thinking about me more than ever before!",
+   "start": 27.42,
+   "end": 31.19,
+   "singer": "A",
+   "words": [
+    {
+     "w": "But",
+     "start": 27.42,
+     "end": 27.63,
+     "conf": 0.7
+    },
+    {
+     "w": "he’s",
+     "start": 27.63,
+     "end": 27.82,
+     "conf": 0.7
+    },
+    {
+     "w": "thinking",
+     "start": 27.82,
+     "end": 28.15,
+     "conf": 0.7
+    },
+    {
+     "w": "about",
+     "start": 28.15,
+     "end": 28.51,
+     "conf": 0.7
+    },
+    {
+     "w": "me",
+     "start": 28.51,
+     "end": 28.65,
+     "conf": 0.7
+    },
+    {
+     "w": "more",
+     "start": 28.65,
+     "end": 29.16,
+     "conf": 0.7
+    },
+    {
+     "w": "than",
+     "start": 29.16,
+     "end": 29.45,
+     "conf": 0.7
+    },
+    {
+     "w": "ever",
+     "start": 30.31,
+     "end": 30.53,
+     "conf": 0.7
+    },
+    {
+     "w": "before!",
+     "start": 30.53,
+     "end": 31.19,
+     "conf": 0.7
+    }
+   ]
+  },
+  {
+   "i": 6,
+   "text": "He told you everything? That’s my favorite part.",
+   "start": 31.21,
+   "end": 34.39,
+   "singer": "A",
+   "words": [
+    {
+     "w": "He",
+     "start": 31.21,
+     "end": 31.38,
+     "conf": 0.7
+    },
+    {
+     "w": "told",
+     "start": 31.38,
+     "end": 31.68,
+     "conf": 0.7
+    },
+    {
+     "w": "you",
+     "start": 31.68,
+     "end": 31.97,
+     "conf": 0.7
+    },
+    {
+     "w": "everything?",
+     "start": 31.97,
+     "end": 32.8,
+     "conf": 0.7
+    },
+    {
+     "w": "That’s",
+     "start": 32.8,
+     "end": 32.96,
+     "conf": 0.7
+    },
+    {
+     "w": "my",
+     "start": 32.96,
+     "end": 33.12,
+     "conf": 0.7
+    },
+    {
+     "w": "favorite",
+     "start": 33.12,
+     "end": 33.64,
+     "conf": 0.7
+    },
+    {
+     "w": "part.",
+     "start": 33.64,
+     "end": 34.39,
+     "conf": 0.7
+    }
+   ]
+  },
+  {
+   "i": 7,
+   "text": "I’m the king of the shadows in his broken heart.",
+   "start": 34.6,
+   "end": 37.32,
+   "singer": "A",
+   "words": [
+    {
+     "w": "I’m",
+     "start": 34.6,
+     "end": 34.81,
+     "conf": 0.7
+    },
+    {
+     "w": "the",
+     "start": 34.81,
+     "end": 34.88,
+     "conf": 0.7
+    },
+    {
+     "w": "king",
+     "start": 34.88,
+     "end": 35.31,
+     "conf": 0.7
+    },
+    {
+     "w": "of",
+     "start": 35.31,
+     "end": 35.49,
+     "conf": 0.7
+    },
+    {
+     "w": "the",
+     "start": 35.49,
+     "end": 35.59,
+     "conf": 0.7
+    },
+    {
+     "w": "shadows",
+     "start": 35.59,
+     "end": 36.23,
+     "conf": 0.7
+    },
+    {
+     "w": "in",
+     "start": 36.23,
+     "end": 36.28,
+     "conf": 0.7
+    },
+    {
+     "w": "his",
+     "start": 36.28,
+     "end": 36.77,
+     "conf": 0.7
+    },
+    {
+     "w": "broken",
+     "start": 36.77,
+     "end": 37.16,
+     "conf": 0.7
+    },
+    {
+     "w": "heart.",
+     "start": 37.16,
+     "end": 37.32,
+     "conf": 0.7
+    }
+   ]
+  },
+  {
+   "i": 8,
+   "text": "\"He told me everything!\" – Oh, I hope it was the worst!",
+   "start": 37.34,
+   "end": 41.58,
+   "singer": "A",
+   "words": [
+    {
+     "w": "\"He",
+     "start": 37.34,
+     "end": 37.41,
+     "conf": 0.7
+    },
+    {
+     "w": "told",
+     "start": 37.41,
+     "end": 37.99,
+     "conf": 0.7
+    },
+    {
+     "w": "me",
+     "start": 37.99,
+     "end": 38.17,
+     "conf": 0.7
+    },
+    {
+     "w": "everything!\"",
+     "start": 38.8,
+     "end": 39.07,
+     "conf": 0.7
+    },
+    {
+     "w": "Oh,",
+     "start": 39.07,
+     "end": 39.17,
+     "conf": 0.7
+    },
+    {
+     "w": "I",
+     "start": 39.17,
+     "end": 39.6,
+     "conf": 0.7
+    },
+    {
+     "w": "hope",
+     "start": 39.6,
+     "end": 39.95,
+     "conf": 0.7
+    },
+    {
+     "w": "it",
+     "start": 40.64,
+     "end": 40.87,
+     "conf": 0.7
+    },
+    {
+     "w": "was",
+     "start": 40.87,
+     "end": 41.07,
+     "conf": 0.7
+    },
+    {
+     "w": "the",
+     "start": 41.07,
+     "end": 41.2,
+     "conf": 0.7
+    },
+    {
+     "w": "worst!",
+     "start": 41.2,
+     "end": 41.58,
+     "conf": 0.7
+    }
+   ]
+  },
+  {
+   "i": 9,
+   "text": "I’m the ghost in his mind, I’m the beautiful curse.",
+   "start": 41.84,
+   "end": 44.709999999999994,
+   "singer": "A",
+   "words": [
+    {
+     "w": "I’m",
+     "start": 41.84,
+     "end": 42.05,
+     "conf": 0.7
+    },
+    {
+     "w": "the",
+     "start": 42.05,
+     "end": 42.21,
+     "conf": 0.7
+    },
+    {
+     "w": "ghost",
+     "start": 42.21,
+     "end": 42.5,
+     "conf": 0.7
+    },
+    {
+     "w": "in",
+     "start": 42.5,
+     "end": 42.77,
+     "conf": 0.7
+    },
+    {
+     "w": "his",
+     "start": 42.77,
+     "end": 42.86,
+     "conf": 0.7
+    },
+    {
+     "w": "mind,",
+     "start": 42.86,
+     "end": 43.25,
+     "conf": 0.7
+    },
+    {
+     "w": "I’m",
+     "start": 43.73,
+     "end": 43.85,
+     "conf": 0.7
+    },
+    {
+     "w": "the",
+     "start": 43.85,
+     "end": 43.93,
+     "conf": 0.7
+    },
+    {
+     "w": "beautiful",
+     "start": 44.02,
+     "end": 44.7,
+     "conf": 0.7
+    },
+    {
+     "w": "curse.",
+     "start": 44.66,
+     "end": 44.709999999999994,
+     "conf": 0.7
+    }
+   ]
+  },
+  {
+   "i": 10,
+   "text": "\"I’ve heard of you!\" – Yeah, keep the legend alive.",
+   "start": 44.73,
+   "end": 48.45,
+   "singer": "A",
+   "words": [
+    {
+     "w": "\"I’ve",
+     "start": 44.73,
+     "end": 44.82,
+     "conf": 0.7
+    },
+    {
+     "w": "heard",
+     "start": 44.82,
+     "end": 46.23,
+     "conf": 0.7
+    },
+    {
+     "w": "of",
+     "start": 46.23,
+     "end": 46.38,
+     "conf": 0.7
+    },
+    {
+     "w": "you!\"",
+     "start": 46.38,
+     "end": 46.81,
+     "conf": 0.7
+    },
+    {
+     "w": "Yeah,",
+     "start": 46.95,
+     "end": 47.05,
+     "conf": 0.7
+    },
+    {
+     "w": "keep",
+     "start": 47.05,
+     "end": 47.38,
+     "conf": 0.7
+    },
+    {
+     "w": "the",
+     "start": 47.38,
+     "end": 47.64,
+     "conf": 0.7
+    },
+    {
+     "w": "legend",
+     "start": 47.64,
+     "end": 48.16,
+     "conf": 0.7
+    },
+    {
+     "w": "alive.",
+     "start": 48.16,
+     "end": 48.45,
+     "conf": 0.7
+    }
+   ]
+  },
+  {
+   "i": 11,
+   "text": "I hope I’m the reason he can barely survive!",
+   "start": 49.11,
+   "end": 53.01,
+   "singer": "A",
+   "words": [
+    {
+     "w": "I",
+     "start": 49.11,
+     "end": 49.18,
+     "conf": 0.7
+    },
+    {
+     "w": "hope",
+     "start": 49.18,
+     "end": 49.5,
+     "conf": 0.7
+    },
+    {
+     "w": "I’m",
+     "start": 49.5,
+     "end": 50.02,
+     "conf": 0.7
+    },
+    {
+     "w": "the",
+     "start": 50.02,
+     "end": 50.15,
+     "conf": 0.7
+    },
+    {
+     "w": "reason",
+     "start": 50.15,
+     "end": 50.42,
+     "conf": 0.7
+    },
+    {
+     "w": "he",
+     "start": 50.42,
+     "end": 50.76,
+     "conf": 0.7
+    },
+    {
+     "w": "can",
+     "start": 50.76,
+     "end": 51.04,
+     "conf": 0.7
+    },
+    {
+     "w": "barely",
+     "start": 51.04,
+     "end": 51.67,
+     "conf": 0.7
+    },
+    {
+     "w": "survive!",
+     "start": 52.31,
+     "end": 53.01,
+     "conf": 0.7
+    }
+   ]
+  },
+  {
+   "i": 12,
+   "text": "He’s talking loud, he’s spreading the infection.",
+   "start": 60.49,
+   "end": 63.48,
+   "singer": "B",
+   "words": [
+    {
+     "w": "He’s",
+     "start": 60.49,
+     "end": 60.72,
+     "conf": 0.7
+    },
+    {
+     "w": "talking",
+     "start": 60.72,
+     "end": 61.08,
+     "conf": 0.7
+    },
+    {
+     "w": "loud,",
+     "start": 61.08,
+     "end": 61.27,
+     "conf": 0.7
+    },
+    {
+     "w": "he’s",
+     "start": 61.87,
+     "end": 62.01,
+     "conf": 0.7
+    },
+    {
+     "w": "spreading",
+     "start": 62.01,
+     "end": 62.47,
+     "conf": 0.7
+    },
+    {
+     "w": "the",
+     "start": 62.47,
+     "end": 62.69,
+     "conf": 0.7
+    },
+    {
+     "w": "infection.",
+     "start": 62.69,
+     "end": 63.48,
+     "conf": 0.7
+    }
+   ]
+  },
+  {
+   "i": 13,
+   "text": "Building a wall, seeking his protection.",
+   "start": 63.77,
+   "end": 67.11,
+   "singer": "B",
+   "words": [
+    {
+     "w": "Building",
+     "start": 63.77,
+     "end": 64.56,
+     "conf": 0.7
+    },
+    {
+     "w": "a",
+     "start": 64.54,
+     "end": 64.59,
+     "conf": 0.7
+    },
+    {
+     "w": "wall,",
+     "start": 64.59,
+     "end": 65.29,
+     "conf": 0.7
+    },
+    {
+     "w": "seeking",
+     "start": 65.57,
+     "end": 66.07,
+     "conf": 0.7
+    },
+    {
+     "w": "his",
+     "start": 66.07,
+     "end": 66.18,
+     "conf": 0.7
+    },
+    {
+     "w": "protection.",
+     "start": 66.18,
+     "end": 67.11,
+     "conf": 0.7
+    }
+   ]
+  },
+  {
+   "i": 14,
+   "text": "He tells you I’m toxic, he tells you I’m the end.",
+   "start": 67.3,
+   "end": 70.6,
+   "singer": "B",
+   "words": [
+    {
+     "w": "He",
+     "start": 67.3,
+     "end": 67.44,
+     "conf": 0.7
+    },
+    {
+     "w": "tells",
+     "start": 67.44,
+     "end": 67.78,
+     "conf": 0.7
+    },
+    {
+     "w": "you",
+     "start": 67.78,
+     "end": 68.03,
+     "conf": 0.7
+    },
+    {
+     "w": "I’m",
+     "start": 68.03,
+     "end": 68.36,
+     "conf": 0.7
+    },
+    {
+     "w": "toxic,",
+     "start": 68.36,
+     "end": 69.03,
+     "conf": 0.7
+    },
+    {
+     "w": "he",
+     "start": 69.03,
+     "end": 69.23,
+     "conf": 0.7
+    },
+    {
+     "w": "tells",
+     "start": 69.23,
+     "end": 69.5,
+     "conf": 0.7
+    },
+    {
+     "w": "you",
+     "start": 69.5,
+     "end": 69.82,
+     "conf": 0.7
+    },
+    {
+     "w": "I’m",
+     "start": 69.82,
+     "end": 70.01,
+     "conf": 0.7
+    },
+    {
+     "w": "the",
+     "start": 70.01,
+     "end": 70.28,
+     "conf": 0.7
+    },
+    {
+     "w": "end.",
+     "start": 70.28,
+     "end": 70.6,
+     "conf": 0.7
+    }
+   ]
+  },
+  {
+   "i": 15,
+   "text": "Burning every bridge, losing every friend.",
+   "start": 71.12,
+   "end": 74.43,
+   "singer": "B",
+   "words": [
+    {
+     "w": "Burning",
+     "start": 71.12,
+     "end": 71.62,
+     "conf": 0.7
+    },
+    {
+     "w": "every",
+     "start": 71.62,
+     "end": 71.91,
+     "conf": 0.7
+    },
+    {
+     "w": "bridge,",
+     "start": 71.91,
+     "end": 72.49,
+     "conf": 0.7
+    },
+    {
+     "w": "losing",
+     "start": 72.89,
+     "end": 73.44,
+     "conf": 0.7
+    },
+    {
+     "w": "every",
+     "start": 73.5,
+     "end": 73.78,
+     "conf": 0.7
+    },
+    {
+     "w": "friend.",
+     "start": 74.29,
+     "end": 74.43,
+     "conf": 0.7
+    }
+   ]
+  },
+  {
+   "i": 16,
+   "text": "But every word he speaks is a tribute to my name.",
+   "start": 74.45,
+   "end": 77.48,
+   "singer": "B",
+   "words": [
+    {
+     "w": "But",
+     "start": 74.45,
+     "end": 74.8,
+     "conf": 0.7
+    },
+    {
+     "w": "every",
+     "start": 74.8,
+     "end": 75.1,
+     "conf": 0.7
+    },
+    {
+     "w": "word",
+     "start": 75.1,
+     "end": 75.66,
+     "conf": 0.7
+    },
+    {
+     "w": "he",
+     "start": 75.66,
+     "end": 75.88,
+     "conf": 0.7
+    },
+    {
+     "w": "speaks",
+     "start": 75.88,
+     "end": 76.23,
+     "conf": 0.7
+    },
+    {
+     "w": "is",
+     "start": 76.23,
+     "end": 76.31,
+     "conf": 0.7
+    },
+    {
+     "w": "a",
+     "start": 76.31,
+     "end": 76.44,
+     "conf": 0.7
+    },
+    {
+     "w": "tribute",
+     "start": 76.44,
+     "end": 77.01,
+     "conf": 0.7
+    },
+    {
+     "w": "to",
+     "start": 77.01,
+     "end": 77.18,
+     "conf": 0.7
+    },
+    {
+     "w": "my",
+     "start": 77.18,
+     "end": 77.35,
+     "conf": 0.7
+    },
+    {
+     "w": "name.",
+     "start": 77.35,
+     "end": 77.48,
+     "conf": 0.7
+    }
+   ]
+  },
+  {
+   "i": 17,
+   "text": "He’s playing the victim, but I’m the one who owns the game.",
+   "start": 78.1,
+   "end": 82.21000000000001,
+   "singer": "B",
+   "words": [
+    {
+     "w": "He’s",
+     "start": 78.1,
+     "end": 78.25,
+     "conf": 0.7
+    },
+    {
+     "w": "playing",
+     "start": 78.25,
+     "end": 78.73,
+     "conf": 0.7
+    },
+    {
+     "w": "the",
+     "start": 78.73,
+     "end": 78.98,
+     "conf": 0.7
+    },
+    {
+     "w": "victim,",
+     "start": 78.98,
+     "end": 79.49,
+     "conf": 0.7
+    },
+    {
+     "w": "but",
+     "start": 79.49,
+     "end": 79.73,
+     "conf": 0.7
+    },
+    {
+     "w": "I’m",
+     "start": 79.73,
+     "end": 79.94,
+     "conf": 0.7
+    },
+    {
+     "w": "the",
+     "start": 79.94,
+     "end": 80.04,
+     "conf": 0.7
+    },
+    {
+     "w": "one",
+     "start": 80.04,
+     "end": 80.38,
+     "conf": 0.7
+    },
+    {
+     "w": "who",
+     "start": 80.38,
+     "end": 80.51,
+     "conf": 0.7
+    },
+    {
+     "w": "owns",
+     "start": 80.51,
+     "end": 80.84,
+     "conf": 0.7
+    },
+    {
+     "w": "the",
+     "start": 80.84,
+     "end": 81.0,
+     "conf": 0.7
+    },
+    {
+     "w": "game.",
+     "start": 82.16000000000001,
+     "end": 82.21000000000001,
+     "conf": 0.7
+    }
+   ]
+  },
+  {
+   "i": 18,
+   "text": "You look at me like you’ve seen a ghost.",
+   "start": 82.23,
+   "end": 85.23,
+   "singer": "B",
+   "words": [
+    {
+     "w": "You",
+     "start": 82.23,
+     "end": 82.39,
+     "conf": 0.7
+    },
+    {
+     "w": "look",
+     "start": 82.39,
+     "end": 82.71,
+     "conf": 0.7
+    },
+    {
+     "w": "at",
+     "start": 82.71,
+     "end": 82.93,
+     "conf": 0.7
+    },
+    {
+     "w": "me",
+     "start": 82.93,
+     "end": 83.7,
+     "conf": 0.7
+    },
+    {
+     "w": "like",
+     "start": 83.7,
+     "end": 83.99,
+     "conf": 0.7
+    },
+    {
+     "w": "you’ve",
+     "start": 83.99,
+     "end": 84.15,
+     "conf": 0.7
+    },
+    {
+     "w": "seen",
+     "start": 84.15,
+     "end": 84.47,
+     "conf": 0.7
+    },
+    {
+     "w": "a",
+     "start": 84.47,
+     "end": 84.63,
+     "conf": 0.7
+    },
+    {
+     "w": "ghost.",
+     "start": 84.63,
+     "end": 85.23,
+     "conf": 0.7
+    }
+   ]
+  },
+  {
+   "i": 19,
+   "text": "He hates the thing he fears the most.",
+   "start": 85.8,
+   "end": 88.42,
+   "singer": "B",
+   "words": [
+    {
+     "w": "He",
+     "start": 85.8,
+     "end": 86.03,
+     "conf": 0.7
+    },
+    {
+     "w": "hates",
+     "start": 86.03,
+     "end": 86.25,
+     "conf": 0.7
+    },
+    {
+     "w": "the",
+     "start": 86.25,
+     "end": 86.38,
+     "conf": 0.7
+    },
+    {
+     "w": "thing",
+     "start": 86.38,
+     "end": 87.64,
+     "conf": 0.7
+    },
+    {
+     "w": "he",
+     "start": 87.64,
+     "end": 87.75,
+     "conf": 0.7
+    },
+    {
+     "w": "fears",
+     "start": 87.75,
+     "end": 88.09,
+     "conf": 0.7
+    },
+    {
+     "w": "the",
+     "start": 88.09,
+     "end": 88.16,
+     "conf": 0.7
+    },
+    {
+     "w": "most.",
+     "start": 88.16,
+     "end": 88.42,
+     "conf": 0.7
+    }
+   ]
+  },
+  {
+   "i": 20,
+   "text": "\"He told me everything!\" – Yeah, I bet he did.",
+   "start": 88.44,
+   "end": 92.35000000000001,
+   "singer": "B",
+   "words": [
+    {
+     "w": "\"He",
+     "start": 88.44,
+     "end": 88.52,
+     "conf": 0.7
+    },
+    {
+     "w": "told",
+     "start": 88.52,
+     "end": 89.56,
+     "conf": 0.7
+    },
+    {
+     "w": "me",
+     "start": 89.56,
+     "end": 89.68,
+     "conf": 0.7
+    },
+    {
+     "w": "everything!\"",
+     "start": 89.68,
+     "end": 90.03,
+     "conf": 0.7
+    },
+    {
+     "w": "Yeah,",
+     "start": 91.72,
+     "end": 91.79,
+     "conf": 0.7
+    },
+    {
+     "w": "I",
+     "start": 91.77,
+     "end": 91.82,
+     "conf": 0.7
+    },
+    {
+     "w": "bet",
+     "start": 91.82,
+     "end": 92.35000000000001,
+     "conf": 0.7
+    },
+    {
+     "w": "he",
+     "start": 92.30000000000001,
+     "end": 92.35000000000001,
+     "conf": 0.7
+    },
+    {
+     "w": "did.",
+     "start": 92.30000000000001,
+     "end": 92.35000000000001,
+     "conf": 0.7
+    }
+   ]
+  },
+  {
+   "i": 21,
+   "text": "I hope it was the worst, I hope nothing stayed hid.",
+   "start": 92.37,
+   "end": 95.65,
+   "singer": "B",
+   "words": [
+    {
+     "w": "I",
+     "start": 92.37,
+     "end": 92.42,
+     "conf": 0.7
+    },
+    {
+     "w": "hope",
+     "start": 92.42,
+     "end": 92.7,
+     "conf": 0.7
+    },
+    {
+     "w": "it",
+     "start": 92.7,
+     "end": 93.64,
+     "conf": 0.7
+    },
+    {
+     "w": "was",
+     "start": 93.64,
+     "end": 93.76,
+     "conf": 0.7
+    },
+    {
+     "w": "the",
+     "start": 93.76,
+     "end": 93.86,
+     "conf": 0.7
+    },
+    {
+     "w": "worst,",
+     "start": 93.86,
+     "end": 94.26,
+     "conf": 0.7
+    },
+    {
+     "w": "I",
+     "start": 95.15,
+     "end": 95.44,
+     "conf": 0.7
+    },
+    {
+     "w": "hope",
+     "start": 95.44,
+     "end": 95.65,
+     "conf": 0.7
+    },
+    {
+     "w": "nothing",
+     "start": 95.60000000000001,
+     "end": 95.65,
+     "conf": 0.7
+    },
+    {
+     "w": "stayed",
+     "start": 95.60000000000001,
+     "end": 95.65,
+     "conf": 0.7
+    },
+    {
+     "w": "hid.",
+     "start": 95.60000000000001,
+     "end": 95.65,
+     "conf": 0.7
+    }
+   ]
+  },
+  {
+   "i": 22,
+   "text": "I hope he painted me as dark as the night.",
+   "start": 95.67,
+   "end": 99.57000000000001,
+   "singer": "B",
+   "words": [
+    {
+     "w": "I",
+     "start": 95.65,
+     "end": 95.7,
+     "conf": 0.7
+    },
+    {
+     "w": "hope",
+     "start": 95.7,
+     "end": 95.83,
+     "conf": 0.7
+    },
+    {
+     "w": "he",
+     "start": 95.83,
+     "end": 95.89,
+     "conf": 0.7
+    },
+    {
+     "w": "painted",
+     "start": 95.89,
+     "end": 96.64,
+     "conf": 0.7
+    },
+    {
+     "w": "me",
+     "start": 96.64,
+     "end": 97.91,
+     "conf": 0.7
+    },
+    {
+     "w": "as",
+     "start": 97.91,
+     "end": 98.24,
+     "conf": 0.7
+    },
+    {
+     "w": "dark",
+     "start": 98.24,
+     "end": 98.38,
+     "conf": 0.7
+    },
+    {
+     "w": "as",
+     "start": 98.55,
+     "end": 98.76,
+     "conf": 0.7
+    },
+    {
+     "w": "the",
+     "start": 99.43,
+     "end": 99.57000000000001,
+     "conf": 0.7
+    },
+    {
+     "w": "night.",
+     "start": 99.52000000000001,
+     "end": 99.57000000000001,
+     "conf": 0.7
+    }
+   ]
+  },
+  {
+   "i": 23,
+   "text": "Because I’m the ghost in his head, stealing his light.",
+   "start": 99.59,
+   "end": 102.38,
+   "singer": "B",
+   "words": [
+    {
+     "w": "Because",
+     "start": 99.59,
+     "end": 99.87,
+     "conf": 0.7
+    },
+    {
+     "w": "I’m",
+     "start": 99.87,
+     "end": 99.93,
+     "conf": 0.7
+    },
+    {
+     "w": "the",
+     "start": 99.93,
+     "end": 100.04,
+     "conf": 0.7
+    },
+    {
+     "w": "ghost",
+     "start": 100.04,
+     "end": 100.17,
+     "conf": 0.7
+    },
+    {
+     "w": "in",
+     "start": 100.17,
+     "end": 100.23,
+     "conf": 0.7
+    },
+    {
+     "w": "his",
+     "start": 100.23,
+     "end": 100.34,
+     "conf": 0.7
+    },
+    {
+     "w": "head,",
+     "start": 100.34,
+     "end": 100.62,
+     "conf": 0.7
+    },
+    {
+     "w": "stealing",
+     "start": 101.58,
+     "end": 102.02,
+     "conf": 0.7
+    },
+    {
+     "w": "his",
+     "start": 102.02,
+     "end": 102.17,
+     "conf": 0.7
+    },
+    {
+     "w": "light.",
+     "start": 102.17,
+     "end": 102.38,
+     "conf": 0.7
+    }
+   ]
+  },
+  {
+   "i": 24,
+   "text": "Destroy my contact, delete every trace.",
+   "start": 111.36,
+   "end": 114.05,
+   "singer": "A",
+   "words": [
+    {
+     "w": "Destroy",
+     "start": 111.36,
+     "end": 111.71,
+     "conf": 0.7
+    },
+    {
+     "w": "my",
+     "start": 111.71,
+     "end": 111.95,
+     "conf": 0.7
+    },
+    {
+     "w": "contact,",
+     "start": 111.95,
+     "end": 112.7,
+     "conf": 0.7
+    },
+    {
+     "w": "delete",
+     "start": 112.7,
+     "end": 113.17,
+     "conf": 0.7
+    },
+    {
+     "w": "every",
+     "start": 113.17,
+     "end": 113.57,
+     "conf": 0.7
+    },
+    {
+     "w": "trace.",
+     "start": 113.57,
+     "end": 114.05,
+     "conf": 0.7
+    }
+   ]
+  },
+  {
+   "i": 25,
+   "text": "But you still see my features in every face.",
+   "start": 114.44,
+   "end": 119.81,
+   "singer": "A",
+   "words": [
+    {
+     "w": "But",
+     "start": 114.44,
+     "end": 114.71,
+     "conf": 0.7
+    },
+    {
+     "w": "you",
+     "start": 114.71,
+     "end": 114.9,
+     "conf": 0.7
+    },
+    {
+     "w": "still",
+     "start": 114.9,
+     "end": 115.14,
+     "conf": 0.7
+    },
+    {
+     "w": "see",
+     "start": 115.14,
+     "end": 115.2,
+     "conf": 0.7
+    },
+    {
+     "w": "my",
+     "start": 115.2,
+     "end": 115.6,
+     "conf": 0.7
+    },
+    {
+     "w": "features",
+     "start": 115.73,
+     "end": 116.34,
+     "conf": 0.7
+    },
+    {
+     "w": "in",
+     "start": 116.34,
+     "end": 116.63,
+     "conf": 0.7
+    },
+    {
+     "w": "every",
+     "start": 116.63,
+     "end": 117.17,
+     "conf": 0.7
+    },
+    {
+     "w": "face.",
+     "start": 119.58,
+     "end": 119.81,
+     "conf": 0.7
+    }
+   ]
+  },
+  {
+   "i": 26,
+   "text": "He’s terrified of me, he’s shaking with fear.",
+   "start": 120.17,
+   "end": 124.75,
+   "singer": "A",
+   "words": [
+    {
+     "w": "He’s",
+     "start": 120.17,
+     "end": 120.34,
+     "conf": 0.7
+    },
+    {
+     "w": "terrified",
+     "start": 120.34,
+     "end": 120.7,
+     "conf": 0.7
+    },
+    {
+     "w": "of",
+     "start": 120.7,
+     "end": 120.76,
+     "conf": 0.7
+    },
+    {
+     "w": "me,",
+     "start": 120.76,
+     "end": 120.92,
+     "conf": 0.7
+    },
+    {
+     "w": "he’s",
+     "start": 121.88,
+     "end": 122.08,
+     "conf": 0.7
+    },
+    {
+     "w": "shaking",
+     "start": 122.08,
+     "end": 122.46,
+     "conf": 0.7
+    },
+    {
+     "w": "with",
+     "start": 123.95,
+     "end": 124.42,
+     "conf": 0.7
+    },
+    {
+     "w": "fear.",
+     "start": 124.42,
+     "end": 124.75,
+     "conf": 0.7
+    }
+   ]
+  },
+  {
+   "i": 27,
+   "text": "That’s why my name is the only thing you hear.",
+   "start": 125.9,
+   "end": 128.86999999999998,
+   "singer": "A",
+   "words": [
+    {
+     "w": "That’s",
+     "start": 125.9,
+     "end": 126.29,
+     "conf": 0.7
+    },
+    {
+     "w": "why",
+     "start": 126.29,
+     "end": 126.64,
+     "conf": 0.7
+    },
+    {
+     "w": "my",
+     "start": 127.02,
+     "end": 127.2,
+     "conf": 0.7
+    },
+    {
+     "w": "name",
+     "start": 127.2,
+     "end": 127.77,
+     "conf": 0.7
+    },
+    {
+     "w": "is",
+     "start": 127.77,
+     "end": 127.97,
+     "conf": 0.7
+    },
+    {
+     "w": "the",
+     "start": 127.97,
+     "end": 128.03,
+     "conf": 0.7
+    },
+    {
+     "w": "only",
+     "start": 128.03,
+     "end": 128.63,
+     "conf": 0.7
+    },
+    {
+     "w": "thing",
+     "start": 128.81999999999996,
+     "end": 128.86999999999998,
+     "conf": 0.7
+    },
+    {
+     "w": "you",
+     "start": 128.81999999999996,
+     "end": 128.86999999999998,
+     "conf": 0.7
+    },
+    {
+     "w": "hear.",
+     "start": 128.81999999999996,
+     "end": 128.86999999999998,
+     "conf": 0.7
+    }
+   ]
+  },
+  {
+   "i": 28,
+   "text": "I’m proud of the monster he made me to be.",
+   "start": 128.89,
+   "end": 132.95999999999998,
+   "singer": "A",
+   "words": [
+    {
+     "w": "I’m",
+     "start": 128.89,
+     "end": 129.09,
+     "conf": 0.7
+    },
+    {
+     "w": "proud",
+     "start": 129.37,
+     "end": 129.64,
+     "conf": 0.7
+    },
+    {
+     "w": "of",
+     "start": 130.45,
+     "end": 130.51,
+     "conf": 0.7
+    },
+    {
+     "w": "the",
+     "start": 130.51,
+     "end": 130.64,
+     "conf": 0.7
+    },
+    {
+     "w": "monster",
+     "start": 130.64,
+     "end": 131.2,
+     "conf": 0.7
+    },
+    {
+     "w": "he",
+     "start": 131.2,
+     "end": 131.53,
+     "conf": 0.7
+    },
+    {
+     "w": "made",
+     "start": 131.92,
+     "end": 132.18,
+     "conf": 0.7
+    },
+    {
+     "w": "me",
+     "start": 132.18,
+     "end": 132.47,
+     "conf": 0.7
+    },
+    {
+     "w": "to",
+     "start": 132.89,
+     "end": 132.95999999999998,
+     "conf": 0.7
+    },
+    {
+     "w": "be.",
+     "start": 132.90999999999997,
+     "end": 132.95999999999998,
+     "conf": 0.7
+    }
+   ]
+  },
+  {
+   "i": 29,
+   "text": "In the prison of his mind, I’m the only thing that’s free.",
+   "start": 132.98,
+   "end": 139.2,
+   "singer": "A",
+   "words": [
+    {
+     "w": "In",
+     "start": 132.98,
+     "end": 133.04,
+     "conf": 0.7
+    },
+    {
+     "w": "the",
+     "start": 133.04,
+     "end": 133.22,
+     "conf": 0.7
+    },
+    {
+     "w": "prison",
+     "start": 133.6,
+     "end": 133.82,
+     "conf": 0.7
+    },
+    {
+     "w": "of",
+     "start": 133.82,
+     "end": 133.92,
+     "conf": 0.7
+    },
+    {
+     "w": "his",
+     "start": 133.92,
+     "end": 134.02,
+     "conf": 0.7
+    },
+    {
+     "w": "mind,",
+     "start": 134.8,
+     "end": 136.4,
+     "conf": 0.7
+    },
+    {
+     "w": "I’m",
+     "start": 136.5,
+     "end": 136.65,
+     "conf": 0.7
+    },
+    {
+     "w": "the",
+     "start": 136.65,
+     "end": 136.74,
+     "conf": 0.7
+    },
+    {
+     "w": "only",
+     "start": 136.74,
+     "end": 137.1,
+     "conf": 0.7
+    },
+    {
+     "w": "thing",
+     "start": 137.1,
+     "end": 137.29,
+     "conf": 0.7
+    },
+    {
+     "w": "that’s",
+     "start": 137.29,
+     "end": 137.49,
+     "conf": 0.7
+    },
+    {
+     "w": "free.",
+     "start": 139.12,
+     "end": 139.2,
+     "conf": 0.7
+    }
+   ]
+  },
+  {
+   "i": 30,
+   "text": "Bad things! Worst things! Say it again!",
+   "start": 139.22,
+   "end": 143.51,
+   "singer": "A",
+   "words": [
+    {
+     "w": "Bad",
+     "start": 139.22,
+     "end": 140.82,
+     "conf": 0.7
+    },
+    {
+     "w": "things!",
+     "start": 140.96,
+     "end": 141.11,
+     "conf": 0.7
+    },
+    {
+     "w": "Worst",
+     "start": 141.37,
+     "end": 142.41,
+     "conf": 0.7
+    },
+    {
+     "w": "things!",
+     "start": 142.41,
+     "end": 142.56,
+     "conf": 0.7
+    },
+    {
+     "w": "Say",
+     "start": 142.56,
+     "end": 142.87,
+     "conf": 0.7
+    },
+    {
+     "w": "it",
+     "start": 142.87,
+     "end": 143.17,
+     "conf": 0.7
+    },
+    {
+     "w": "again!",
+     "start": 143.17,
+     "end": 143.51,
+     "conf": 0.7
+    }
+   ]
+  },
+  {
+   "i": 31,
+   "text": "Inside his head! Where I’ve always been!",
+   "start": 145.43,
+   "end": 148.5,
+   "singer": "A",
+   "words": [
+    {
+     "w": "Inside",
+     "start": 145.43,
+     "end": 145.63,
+     "conf": 0.7
+    },
+    {
+     "w": "his",
+     "start": 145.63,
+     "end": 145.72,
+     "conf": 0.7
+    },
+    {
+     "w": "head!",
+     "start": 145.72,
+     "end": 146.01,
+     "conf": 0.7
+    },
+    {
+     "w": "Where",
+     "start": 146.01,
+     "end": 146.48,
+     "conf": 0.7
+    },
+    {
+     "w": "I’ve",
+     "start": 146.48,
+     "end": 146.76,
+     "conf": 0.7
+    },
+    {
+     "w": "always",
+     "start": 146.76,
+     "end": 147.36,
+     "conf": 0.7
+    },
+    {
+     "w": "been!",
+     "start": 148.45,
+     "end": 148.5,
+     "conf": 0.7
+    }
+   ]
+  },
+  {
+   "i": 32,
+   "text": "Only the bad things...",
+   "start": 148.52,
+   "end": 152.44,
+   "singer": "B",
+   "words": [
+    {
+     "w": "Only",
+     "start": 148.52,
+     "end": 148.9,
+     "conf": 0.7
+    },
+    {
+     "w": "the",
+     "start": 148.9,
+     "end": 150.5,
+     "conf": 0.7
+    },
+    {
+     "w": "bad",
+     "start": 152.29,
+     "end": 152.38,
+     "conf": 0.7
+    },
+    {
+     "w": "things...",
+     "start": 152.38,
+     "end": 152.44,
+     "conf": 0.7
+    }
+   ]
+  },
+  {
+   "i": 33,
+   "text": "Keep my name in your mouth...",
+   "start": 152.46,
+   "end": 153.76,
+   "singer": "B",
+   "words": [
+    {
+     "w": "Keep",
+     "start": 152.46,
+     "end": 152.55,
+     "conf": 0.7
+    },
+    {
+     "w": "my",
+     "start": 152.55,
+     "end": 152.77,
+     "conf": 0.7
+    },
+    {
+     "w": "name",
+     "start": 152.77,
+     "end": 152.86,
+     "conf": 0.7
+    },
+    {
+     "w": "in",
+     "start": 152.86,
+     "end": 152.93,
+     "conf": 0.7
+    },
+    {
+     "w": "your",
+     "start": 153.01,
+     "end": 153.44,
+     "conf": 0.7
+    },
+    {
+     "w": "mouth...",
+     "start": 153.59,
+     "end": 153.76,
+     "conf": 0.7
+    }
+   ]
+  },
+  {
+   "i": 34,
+   "text": "It’s cozy in your head.",
+   "start": 160.45,
+   "end": 164.0,
+   "singer": "B",
+   "words": [
+    {
+     "w": "It’s",
+     "start": 160.45,
+     "end": 160.59,
+     "conf": 0.7
+    },
+    {
+     "w": "cozy",
+     "start": 160.59,
+     "end": 160.94,
+     "conf": 0.7
+    },
+    {
+     "w": "in",
+     "start": 160.94,
+     "end": 161.03,
+     "conf": 0.7
+    },
+    {
+     "w": "your",
+     "start": 161.03,
+     "end": 161.52,
+     "conf": 0.7
+    },
+    {
+     "w": "head.",
+     "start": 163.86,
+     "end": 164.0,
+     "conf": 0.7
+    }
+   ]
+  }
+ ],
+ "source": "spleeter vocals + pocketsphinx forced alignment per line, line slots from fwd/bwd passes + 2-bar grid prior"
+}

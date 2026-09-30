@@ -1,0 +1,52 @@
+[
+ {
+  "name": "intro",
+  "start": 0,
+  "end": 8.678
+ },
+ {
+  "name": "verseA1",
+  "start": 8.678,
+  "end": 30.347
+ },
+ {
+  "name": "verseA2",
+  "start": 30.347,
+  "end": 53.821
+ },
+ {
+  "name": "break1",
+  "start": 53.821,
+  "end": 59.238
+ },
+ {
+  "name": "verseB1",
+  "start": 59.238,
+  "end": 82.712
+ },
+ {
+  "name": "verseB2",
+  "start": 82.712,
+  "end": 104.381
+ },
+ {
+  "name": "break2",
+  "start": 104.381,
+  "end": 111.604
+ },
+ {
+  "name": "verseA3",
+  "start": 111.604,
+  "end": 138.689
+ },
+ {
+  "name": "chant",
+  "start": 138.689,
+  "end": 147.718
+ },
+ {
+  "name": "outro",
+  "start": 147.718,
+  "end": 166.56
+ }
+]
