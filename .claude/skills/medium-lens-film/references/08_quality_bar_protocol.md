@@ -4,7 +4,7 @@ Levels come from `07_quality_levels.md`. A level is a **promise about craft dept
 media, how deep each bible goes, how many hero shots, how bespoke the transitions and sound are.
 **Line counts and hours are consequences, never targets.** Nothing is added to reach a number.
 
-## Track: Breadth (B), Depth (D) or Mixed
+## Path: breadth, depth or mixed
 
 Every level has a path, all in one master list (`07_quality_levels.md`). **Breadth** = many media (the
 《光先到》 montage). **Depth** = 1–2 styles pushed to the limit of rendering (light, atmosphere, materials,
