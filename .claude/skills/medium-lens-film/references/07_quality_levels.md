@@ -65,3 +65,31 @@ Practical expectations:
 - Write the bible first. A precise bible cuts the fix-it rounds roughly in half.
 - Family A lenses (sampling the real render) cost 3–10× less code than family C (redrawn iconography).
   Mix them to hit a level cheaply.
+
+## Planning table under stated assumptions (Pro plan)
+
+**Assumptions** (not official; replace once you have calibrated):
+- A. Pro weekly allowance ≈ **60 active Sonnet-hours** (middle of the 40–80 h third-party estimates).
+- B. Opus draws the allowance **~3× faster** than Sonnet.
+- C. Agent hours ≈ active hours. Conservative: the time spent waiting for renders is counted as usage.
+- D. The **recommended mix** is Opus for ~25% of the work (bibles, architecture, critique) and Sonnet for
+  ~75% (write–render–fix loops), so 1.5× Sonnet cost overall.
+- E. One 5-hour window ≈ 4 agent-hours on Sonnet, ≈ 2 on Opus, ≈ 3 on the mix.
+- F. Add **+30%** for rework (direction changes, failed ideas).
+
+| Level | Lines | Styles | Agent hours | % of Pro week — all Sonnet | — recommended mix | — all Opus | 5-hour windows (mix) | With +30% rework (mix) |
+|---|---|---|---|---|---|---|---|---|
+| 1 | ~4k | 0 | 3–4 | 5–7% | 8–10% | 15–20% | 1–2 | 10–13% |
+| 2 | ~6k | 2–3 | 4–5 | 7–8% | 10–13% | 20–25% | 2 | 13–16% |
+| 3 | ~8k | 5–6 | 5–6 | 8–10% | 13–15% | 25–30% | 2 | 16–20% |
+| 4 | ~10k | 8 | 6–7 | 10–12% | 15–18% | 30–35% | 2–3 | 20–23% |
+| 5 | ~13k | 10–12 | 7–8 | 12–13% | 18–20% | 35–40% | 3 | 23–26% |
+| 6 | ~16k | 14 | 8–10 | 13–17% | 20–25% | 40–50% | 3–4 | 26–33% |
+| 7 | ~19k | 18 | 10–11 | 17–18% | 25–28% | 50–55% | 4 | 33–36% |
+| 8 | ~22k | 22 | 11–13 | 18–22% | 28–33% | 55–65% | 4–5 | 36–42% |
+| 9 | ~25k | 26 | 13–14 | 22–23% | 33–35% | 65–70% | 5 | 42–46% |
+| 10 | ~27k+ | 28–30 | 14–16 | 23–27% | 35–40% | 70–80% | 5–6 | 46–52% |
+
+Reading it: a Level 10 film on the recommended mix ≈ half a Pro week including rework, spread
+over ~5–6 five-hour windows (e.g. 2 windows a day for 3 days). All-Opus Level 10 ≈ 70–80% of a week
+before rework, so it can overflow into a second week. Rendering is extra GPU time and costs no tokens.
