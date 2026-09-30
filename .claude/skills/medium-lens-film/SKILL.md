@@ -18,8 +18,9 @@ This skill turns that film into a repeatable method.
 
 ## Quality bar — do this first on any new video
 
-Every project starts with a quality level (1–10, `references/07_quality_levels.md`, Opus 5.5 table)
-and the protocol in `references/08_quality_bar_protocol.md`:
+Every project starts with a quality level (1–10) on a path (breadth, depth or mixed), from the one
+master list and options menu in `references/07_quality_levels.md` (Opus 5.5; Pro, Max 5× and Max 20×
+columns). Use only the options the project needs. Follow `references/08_quality_bar_protocol.md`:
 - **The user set a level** ("level 6", `/medium-lens-film level 4`): check it fits the brief, show the plan card, wait for a go.
 - **No level given:** estimate one from runtime, sections, references, hero shots and sound, and propose it with the plan card, a one-down and a one-up option.
 - Downgrade drops the cheapest-to-lose items first. Upgrade happens only when the gain is visible on screen.
@@ -40,8 +41,8 @@ and the protocol in `references/08_quality_bar_protocol.md`:
    the 7.4 kHz "light" tone, **the title hidden in the spectrogram**, the boom synced to the frame collapse.
 6. `references/06_playbook_and_prompts.md`: the 9-step method, the medium-bible template, the agent
    loop, copy-paste prompts for a local model, QA checklists, cost planning.
-7. `references/07_quality_levels.md`: the 10-level cost scale (lines, agent hours, requests, tokens)
-   and how to measure your own plan's percentage per level.
+7. `references/07_quality_levels.md`: the master list (levels 1–10 × breadth/depth/mixed paths × Pro/Max
+   costs), the options menu with hours per option, and how to calibrate to your own account.
 8. `references/08_quality_bar_protocol.md`: how a level is set by the user or proposed by the model,
    the plan card, downgrade and upgrade rules, and anti-waste rules.
 9. `templates/`: GLSL starting points: `state.glsl` (world state + blackbody), `lens_template.glsl`

@@ -6,9 +6,11 @@ media, how deep each bible goes, how many hero shots, how bespoke the transition
 
 ## Track: Breadth (B), Depth (D) or Mixed
 
-Every level has a track. **Breadth** = many media (the 《光先到》 montage). **Depth** = 1–2 styles pushed to the
-limit of rendering (light, atmosphere, materials, simulation, camera, film look). **Mixed** = 1–2 deep styles
-plus a short multi-media moment. Same level = same effort and token cost; Depth costs more GPU render time.
+Every level has a path, all in one master list (`07_quality_levels.md`). **Breadth** = many media (the
+《光先到》 montage). **Depth** = 1–2 styles pushed to the limit of rendering (light, atmosphere, materials,
+simulation, camera, film look). **Mixed** = 1–2 deep styles plus a short multi-media moment. Same level =
+same effort and token cost; Depth costs more GPU render time. Options are picked from the **options menu**
+in 07; a project uses only what it needs. The plan card lists the chosen options with their hours.
 Triggers: "level D8", "depth track level 10", "keep only the voxel style but max quality" → Depth.
 If the user gives few styles but asks for a high level, propose the Depth track instead of adding styles.
 
@@ -48,9 +50,9 @@ design, and by −1 if references are vague and must be researched from scratch.
 
 ```
 QUALITY BAR — proposed Level N, track B/D/Mixed  (Opus 5.5)
-What you get:   <styles list or count, hero shots, transition type, sound, ending>
+What you get:   <chosen options from the 07 menu, each with its hours: styles, depth packs, structure, sound>
 Why this level: <2–3 reasons from the brief: runtime, sections, references>
-Estimated:      ~<lines>k lines · <h> agent-hours · <windows> five-hour windows · ~<x–y>% of a Pro week (+30% rework: <z>%)
+Estimated:      ~<lines>k lines · <h> agent-hours · Pro <a>% · Max 5× <b>% · Max 20× <c>% of a week (incl. +30% rework)
 Render:         <resolution/fps> on <GPU / this container>, ~<time>
 Checkpoints:    1) calibration lens + stills  2) half of the lenses  3) full cut preview  4) final render
 Options:        Level N−1: <what is dropped, saves ~a%>    Level N+1: <what is gained, costs ~b%>
