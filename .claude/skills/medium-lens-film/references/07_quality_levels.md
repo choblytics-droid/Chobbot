@@ -93,3 +93,26 @@ Practical expectations:
 Reading it: a Level 10 film on the recommended mix ≈ half a Pro week including rework, spread
 over ~5–6 five-hour windows (e.g. 2 windows a day for 3 days). All-Opus Level 10 ≈ 70–80% of a week
 before rework, so it can overflow into a second week. Rendering is extra GPU time and costs no tokens.
+
+## Default for this project: Opus 5.5 only
+
+Same assumptions: Pro week ≈ 60 Sonnet-hours ≈ **20 Opus agent-hours**; one 5-hour window ≈ 2 Opus agent-hours.
+
+| Level | Lines | Styles | Agent hours | % of Pro week | With +30% rework | 5-hour windows |
+|---|---|---|---|---|---|---|
+| 1 | ~4k | 0 | 3–4 | 15–20% | 20–26% | 2–3 |
+| 2 | ~6k | 2–3 | 4–5 | 20–25% | 26–33% | 3 |
+| 3 | ~8k | 5–6 | 5–6 | 25–30% | 33–39% | 3–4 |
+| 4 | ~10k | 8 | 6–7 | 30–35% | 39–46% | 4–5 |
+| 5 | ~13k | 10–12 | 7–8 | 35–40% | 46–52% | 5 |
+| 6 | ~16k | 14 | 8–10 | 40–50% | 52–65% | 5–7 |
+| 7 | ~19k | 18 | 10–11 | 50–55% | 65–72% | 7 |
+| 8 | ~22k | 22 | 11–13 | 55–65% | 72–85% | 7–8 |
+| 9 | ~25k | 26 | 13–14 | 65–70% | 85–91% | 8–9 |
+| 10 | ~27k+ | 28–30 | 14–16 | 70–80% | 91–104% | 9–10 |
+
+Levels 1–5 fit in one week comfortably. Levels 7–8 are the top that fit in one week with headroom.
+Level 10 ≈ a full week: plan it over two (week 1 lenses, week 2 transitions, sound and polish).
+Saving levers on Opus: one lens per session + `/clear`; `/effort` lower for routine loops, high for
+bibles and critique; contact sheets instead of many stills; bible first; mix cheap family-A lenses
+with expensive family-C ones.
