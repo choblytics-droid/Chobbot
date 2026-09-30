@@ -116,3 +116,26 @@ Level 10 ≈ a full week: plan it over two (week 1 lenses, week 2 transitions, s
 Saving levers on Opus: one lens per session + `/clear`; `/effort` lower for routine loops, high for
 bibles and critique; contact sheets instead of many stills; bible first; mix cheap family-A lenses
 with expensive family-C ones.
+
+## Opus 5.5 only — Pro vs Max (all figures include the +30% rework buffer)
+
+Extra assumption: **Max 5× ≈ 5 Pro weeks, Max 20× ≈ 20 Pro weeks** of allowance (as the plan names say; not
+official numbers). On Max the 5-hour window is no longer the bottleneck: the agent can work the whole
+window, so windows needed ≈ agent hours × 1.3 ÷ 5.
+
+| Level | Lines | Styles | Agent hours | **Pro** % of week | **Max 5×** % of week | **Max 20×** % of week | Windows (Pro) | Windows (Max) |
+|---|---|---|---|---|---|---|---|---|
+| 1 | ~4k | 0 | 3–4 | 20–26% | 4–5% | ~1% | 2–3 | 1–2 |
+| 2 | ~6k | 2–3 | 4–5 | 26–33% | 5–7% | 1–2% | 3 | 2 |
+| 3 | ~8k | 5–6 | 5–6 | 33–39% | 7–8% | ~2% | 3–4 | 2 |
+| 4 | ~10k | 8 | 6–7 | 39–46% | 8–9% | ~2% | 4–5 | 2 |
+| 5 | ~13k | 10–12 | 7–8 | 46–52% | 9–10% | 2–3% | 5 | 2–3 |
+| 6 | ~16k | 14 | 8–10 | 52–65% | 10–13% | ~3% | 5–7 | 3 |
+| 7 | ~19k | 18 | 10–11 | 65–72% | 13–14% | 3–4% | 7 | 3 |
+| 8 | ~22k | 22 | 11–13 | 72–85% | 14–17% | ~4% | 7–8 | 3–4 |
+| 9 | ~25k | 26 | 13–14 | 85–91% | 17–18% | 4–5% | 8–9 | 4 |
+| 10 | ~27k+ | 28–30 | 14–16 | 91–104% | 18–21% | ~5% | 9–10 | 4–5 |
+
+Videos per week at each plan (roughly): Level 10: Pro ≈ 1 (tight), Max 5× ≈ 4–5, Max 20× ≈ 18–20.
+Level 5: Pro ≈ 2, Max 5× ≈ 10, Max 20× ≈ 40. Calendar time is then limited by working hours and GPU
+rendering, not by the allowance.
