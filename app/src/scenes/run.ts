@@ -5,6 +5,7 @@
 import * as THREE from 'three';
 import type { Frame, PostOverrides } from '../engine/scene';
 import { V2 } from '../config';
+import { RoofProps, drawSplashes } from '../engine/dressing';
 import { Stage, type V3 } from './_stage';
 import { City, Surface, makeRoof, drawRain, drawEmbers } from '../engine/world';
 import { VoxelChar } from '../engine/voxel';
@@ -22,7 +23,10 @@ export default class Run extends Stage {
   him = new VoxelChar(SHADOW);
   L0!: Line; L1!: Line; L2!: Line; L3!: Line;
 
+  dress = V2 ? new RoofProps(140, 110, 0, { seed: 3, keep: [[0, 0, 26]], neon: [0.2, 1.6, 2.4] }) : null;
+
   build() {
+    if (this.dress) this.world.add(this.dress.boxes.mesh);
     this.city.group.position.y = -60;
     this.world.add(this.city.group, this.street.mesh, this.roof.group, this.him.group);
     const ly = this.ctx.lyrics;
@@ -96,6 +100,7 @@ export default class Run extends Stage {
 
     // rain + roof-edge embers
     drawRain(this.fx, t, { center: [this.cam.position.x, this.cam.position.y, this.cam.position.z - 60], size: [220, 180, 200], n: 1400, speed: 240, len: 8, width: 0.16, alpha: 0.45 });
+    if (this.dress) { this.dress.update(t); drawSplashes(this.fx, t, { center: [0, 0, 0], size: [136, 106], n: 260, avoid: [0, 0, 9] }); }
     drawEmbers(this.fx, t, { center: [0, 20, -40], size: [160, 60, 40], n: 60, speed: 12, width: 0.4 });
 
     return {

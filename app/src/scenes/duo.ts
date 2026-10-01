@@ -3,6 +3,7 @@
 // lightning on the cowbells, the title card "VENMAR × QUEST" slammed on the bar lines.
 import type { Frame, PostOverrides } from '../engine/scene';
 import { V2 } from '../config';
+import { RoofProps, drawSplashes } from '../engine/dressing';
 import { Stage } from './_stage';
 import { City, Surface, makeRoof, drawEmbers } from '../engine/world';
 import { F, font } from '../engine/type';
@@ -16,7 +17,10 @@ export default class Duo extends Stage {
   roof = makeRoof(110, 110, 0, { rust: 1 });
   bars: number[] = [];
 
+  dress = V2 ? new RoofProps(110, 110, 0, { seed: 8, keep: [[0, 0, 36]], neon: [2.4, 0.3, 1.6] }) : null;
+
   build() {
+    if (this.dress) this.world.add(this.dress.boxes.mesh);
     this.world.add(this.city.group, this.street.mesh, this.roof.group);
     this.bars = this.ctx.audio.downbeats.filter((d) => d >= this.ctx.start - 0.05 && d < this.ctx.end);
   }
@@ -39,6 +43,7 @@ export default class Duo extends Stage {
     // orbit: accelerating (ease-in) full turn, rising slightly
     const yaw = lerp(-0.4, Math.PI * 2 - 0.4, ease.inOutCubic(p));
     this.orbit([0, 18, 0], yaw, lerp(0.05, 0.28, p), lerp(120, 90, p), { t, fov: 42, hand: 1, shake: k * 0.8 });
+    this.dress?.update(t);
     drawEmbers(this.fx, t, { center: [0, 30, 0], size: [200, 80, 200], n: 160, speed: 25, width: 0.45, col: [2.4, 0.9, 0.3] });
     drawEmbers(this.fx, t, { center: [0, 30, 0], size: [200, 80, 200], n: 100, speed: 20, width: 0.4, col: [0.4, 1.6, 2.6], seed: 9 });
 

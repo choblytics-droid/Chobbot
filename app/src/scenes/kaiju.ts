@@ -4,6 +4,7 @@
 // and on "free" they burst outward and she takes off into the rift, wings beating.
 import type { Frame, PostOverrides } from '../engine/scene';
 import { V2 } from '../config';
+import { RoofProps, drawSplashes } from '../engine/dressing';
 import { Stage } from './_stage';
 import { City, Surface, drawRain, drawEmbers } from '../engine/world';
 import { Boxes } from '../engine/voxel';
@@ -83,6 +84,7 @@ export default class Kaiju extends Stage {
     }
 
     drawRain(this.fx, t, { center: [this.cam.position.x, this.cam.position.y + 60, this.cam.position.z - 120], size: [320, 300, 300], n: 1300, speed: 280, alpha: 0.35, len: 12, width: 0.3 });
+    if (V2) drawSplashes(this.fx, t, { center: [this.cam.position.x * 0.5, 0, this.cam.position.z - 110], size: [260, 200], n: 320, scale: 1.4 });
     if (fly > 0) drawEmbers(this.fx, t, { center: [0, fly * 900 - 20, -40], size: [160, 200, 60], n: 150, speed: 90, col: [0.5, 2.0, 3.0], width: 1.2 });
     // lightning bolts down to the towers on the strongest cowbells
     for (const b of this.bolts) {

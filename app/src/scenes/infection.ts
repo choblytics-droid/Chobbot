@@ -5,6 +5,7 @@
 // flicker on: TOXIC, THE END. Quest walks through it all, unbothered. JRPG dialogue box with her portrait.
 import type { Frame, PostOverrides } from '../engine/scene';
 import { V2 } from '../config';
+import { RoofProps, drawSplashes } from '../engine/dressing';
 import { Stage } from './_stage';
 import { City, Surface, drawRain } from '../engine/world';
 import { Boxes, VoxelChar, Billboard } from '../engine/voxel';
@@ -131,6 +132,7 @@ export default class Infection extends Stage {
     }
 
     drawRain(this.fx, t, { center: [this.cam.position.x, this.cam.position.y + 40, this.cam.position.z - 60], size: [200, 160, 200], n: 900, speed: 250, alpha: 0.35, col: [0.4, 0.45, 0.4] });
+    if (V2) drawSplashes(this.fx, t, { center: [0, 0, qz - 30], size: [170, 170], n: 300, col: [0.45, 0.6, 0.45], avoid: [0, qz, 8] });
 
     const line = t < this.L13.start - 0.05 ? this.L12 : t < this.L14.start - 0.05 ? this.L13 : this.L14;
     dialogueBox(this.c, line, t, { def: QUEST, accent: 'signal', open: prog(t, f.start, f.start + 0.25), mouth: this.ctx.audio.env('vocal', t) > 0.35 && (frameIdx(t) >> 2) % 2 === 0, y: 1080 - 230 - 60 });

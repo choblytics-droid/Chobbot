@@ -3,6 +3,7 @@
 // the fortress, a skyscraper-sized hologram of Venmar rises: what he's really thinking about.
 import type { Frame, PostOverrides } from '../engine/scene';
 import { V2 } from '../config';
+import { RoofProps, drawSplashes } from '../engine/dressing';
 import { Stage } from './_stage';
 import { City, Surface, drawRain, drawEmbers } from '../engine/world';
 import { Boxes, VoxelChar } from '../engine/voxel';
@@ -24,7 +25,10 @@ export default class Fortress extends Stage {
   L4!: Line; L5!: Line;
   door = 0;
 
+  dress = V2 ? new RoofProps(60, 40, 60, { seed: 2, x0: -30, z0: 60, keep: [[-30, 60, 12]], tank: false }) : null;
+
   build() {
+    if (this.dress) this.world.add(this.dress.boxes.mesh);
     const ly = this.ctx.lyrics, au = this.ctx.audio;
     this.L4 = ly.get('building a fortress'); this.L5 = ly.get('thinking about me');
     this.city.group.position.y = 0;
@@ -111,6 +115,7 @@ export default class Fortress extends Stage {
     }
 
     drawRain(this.fx, t, { center: [this.cam.position.x, this.cam.position.y - 20, this.cam.position.z - 80], size: [240, 200, 240], n: 1100, speed: 250, alpha: 0.4 });
+    if (this.dress) { this.dress.update(t); drawSplashes(this.fx, t, { center: [-30, 60, 60], size: [56, 36], n: 90, avoid: [-30, 60, 7] }); drawSplashes(this.fx, t, { center: [0, 0, -120], size: [260, 300], n: 220, scale: 1.6, alpha: 0.4 }); }
 
     const line = t < this.L5.start - 0.05 ? this.L4 : this.L5;
     slamWord(this.c, line, t, { cx: 960, cy: 250, size: 150, color: line === this.L5 ? rgba('cyan', 1) : rgba('bone', 1), context: true, maxW: 1500 });

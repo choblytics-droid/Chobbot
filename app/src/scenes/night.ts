@@ -5,6 +5,7 @@
 // red eyes). On "stealing his light" every lit window streams into her as light trails; she blazes.
 import type { Frame, PostOverrides } from '../engine/scene';
 import { V2 } from '../config';
+import { RoofProps, drawSplashes } from '../engine/dressing';
 import { Stage } from './_stage';
 import { City, Surface, makeRoof, drawRain } from '../engine/world';
 import { dialogueBox, slamWord } from '../engine/kinetic';
@@ -21,7 +22,10 @@ export default class Night extends Stage {
   tDark = 0; tSteal = 0;
   lights: [number, number, number][] = [];
 
+  dress = V2 ? new RoofProps(90, 70, 0, { seed: 5, keep: [[0, 20, 16]], tank: true }) : null;
+
   build() {
+    if (this.dress) this.world.add(this.dress.boxes.mesh);
     const ly = this.ctx.lyrics;
     this.L20 = ly.get('I bet he did'); this.L21 = ly.get('nothing stayed hid'); this.L22 = ly.get('dark as the night'); this.L23 = ly.get('stealing his light');
     this.tDark = this.L22.words.find((w) => /dark/i.test(w.w))!.start;
@@ -83,6 +87,7 @@ export default class Night extends Stage {
       this.orbit([0, 16, 20], lerp(0.9, Math.PI - 0.3, p) + Math.PI, 0.1, lerp(130, 60, p), { t, fov: 40, hand: 1, shake: steal * 2 });
     }
     drawRain(this.fx, t, { center: [this.cam.position.x, this.cam.position.y, this.cam.position.z - 50], size: [180, 150, 180], n: 700, speed: 240, alpha: 0.3 * (1 - dark) + 0.05 });
+    if (this.dress) { this.dress.update(t); drawSplashes(this.fx, t, { center: [0, 0, 0], size: [86, 66], n: 160, alpha: 0.5 * (1 - dark) + 0.08, avoid: [0, 20, 8] }); }
 
     // typography: dialogue box for the two first lines, slams for the last two; the brush stroke on "dark"
     const c = this.c;
