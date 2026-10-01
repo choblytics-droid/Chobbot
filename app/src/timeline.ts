@@ -8,6 +8,7 @@ import type { TimelineEntry } from './engine/engine';
 import type { SceneClass } from './engine/scene';
 import type { Lyrics } from './engine/lyrics';
 import type { AudioData } from './engine/audio';
+import { LAB } from './config';
 
 const modules = import.meta.glob<{ default: SceneClass }>('./scenes/*.ts');
 const scene = (name: string) => () => {
@@ -47,6 +48,7 @@ export function makeTimeline(ly: Lyrics, au: AudioData): TimelineEntry[] {
 
   const E = (id: string, file: string, start: number, end: number, extra: Partial<TimelineEntry> = {}): TimelineEntry =>
     ({ id, load: scene(file), start, end, ...extra });
+  if (LAB) return [E('lab', '_lab', 0, au.duration)];
 
   return [
     E('intro', 'intro', 0, b.run),

@@ -8,6 +8,10 @@ import * as THREE from 'three';
 import { GLSL_COMMON } from './glsl/common';
 import { hexToLinear } from './util';
 import { poseGrid, type PartName, type SpriteDef } from '../sprites/sprites';
+import type { Joint, SculptSpec } from '../sprites/sculpt';
+import { rigPose, type Layer, type MoveCtx, type MoveOpts, type RigPose } from './moves';
+import { sculptFor } from '../sprites/sculpt';
+import { LEGS, V2 } from '../config';
 
 const VERT = /* glsl */ `
 precision highp float;
@@ -26,8 +30,34 @@ out vec3 vCol;
 out float vEmis;
 out float vRand;
 out vec3 vLocal;
+#ifdef SCULPT
+// v2 rig: 27-bit neighbour occupancy per voxel (bit (dx+1)*9+(dy+1)*3+(dz+1)) for corner AO,
+// mouth voxels (pushed back as the jaw opens) and the voxel's local axes in world space (bevel)
+in uint aOcc;
+in float aMouth;
+uniform float uMouth;
+out float vAO;
+out vec3 vAx;
+out vec3 vAy;
+out vec3 vAz;
+float occ(ivec3 o) { return float((aOcc >> uint((o.x + 1) * 9 + (o.y + 1) * 3 + (o.z + 1))) & 1u); }
+#endif
 void main() {
   vec4 lp = instanceMatrix * vec4(position, 1.0);
+#ifdef SCULPT
+  {
+    // block-game vertex AO: the two edge neighbours and the corner neighbour in front of this face corner
+    ivec3 N = ivec3(round(normal));
+    ivec3 S = ivec3(sign(position));
+    ivec3 T1 = N.x != 0 ? ivec3(0, S.y, 0) : ivec3(S.x, 0, 0);
+    ivec3 T2 = N.z != 0 ? ivec3(0, S.y, 0) : ivec3(0, 0, S.z);
+    float s1 = occ(N + T1), s2 = occ(N + T2), sc = occ(N + T1 + T2);
+    vAO = (s1 > 0.5 && s2 > 0.5) ? 0.0 : (3.0 - s1 - s2 - sc) / 3.0;
+    lp.z -= aMouth * uMouth * 1.6;
+    mat3 M = mat3(modelMatrix) * mat3(instanceMatrix);
+    vAx = normalize(M[0]); vAy = normalize(M[1]); vAz = normalize(M[2]);
+  }
+#endif
   vec3 n = normalize(mat3(instanceMatrix) * normal);
   // dissolve: each voxel flies out along a random direction biased by uDissolveDir, tumbling
   if (uDissolve > 0.0) {
@@ -68,18 +98,46 @@ out vec4 fragColor;
 uniform vec3 cameraPosition;
 uniform vec3 uKeyDir, uKeyCol, uRimA, uRimB, uAmbTop, uAmbBot, uFogCol, uTintCol;
 uniform float uFogNear, uFogFar, uGhost, uGlow, uFlash, uTime, uTint, uAlpha, uEdge;
+#ifdef SCULPT
+in float vAO;
+in vec3 vAx;
+in vec3 vAy;
+in vec3 vAz;
+uniform float uAOk, uRimK, uBevel;
+#define RIMK uRimK
+#else
+#define RIMK 1.0
+#endif
 ${GLSL_COMMON}
 void main() {
   vec3 n = normalize(vN);
+  vec3 nFace = n;
+#ifdef SCULPT
+  {
+    // rounded voxel edges: bend the normal towards the two in-face axes near the cube's edges
+    vec3 ln = vec3(dot(n, vAx), dot(n, vAy), dot(n, vAz));
+    vec3 bl = sign(vLocal) * smoothstep(0.28, 0.5, abs(vLocal)) * (1.0 - abs(ln));
+    n = normalize(n + uBevel * (bl.x * vAx + bl.y * vAy + bl.z * vAz));
+  }
+#endif
   vec3 v = normalize(cameraPosition - vW);
   float k = dot(n, normalize(uKeyDir));
   float wrap = sat(k * 0.6 + 0.4);
   vec3 amb = mix(uAmbBot, uAmbTop, n.y * 0.5 + 0.5);
   vec3 base = mix(vCol, uTintCol, uTint);
   vec3 col = base * (amb + uKeyCol * wrap);
+#ifdef SCULPT
+  col *= mix(1.0, 0.45 + 0.55 * vAO, uAOk);
+#endif
+#ifdef SCULPT
+  // rim from the face normal (bevelled normals would light every voxel edge), soft-capped
+  float fr = pow(1.0 - sat(dot(nFace, v)), 3.0);
+  col += (uRimA * fr * sat(nFace.x * 0.8 + 0.4) + uRimB * fr * sat(-nFace.x * 0.8 + 0.4)) * RIMK * (0.4 + 0.6 * vAO);
+#else
   float fr = pow(1.0 - sat(dot(n, v)), 2.5);
   // two rim lights from either side (the teal/orange split)
-  col += uRimA * fr * sat(n.x * 0.8 + 0.4) + uRimB * fr * sat(-n.x * 0.8 + 0.4);
+  col += (uRimA * fr * sat(n.x * 0.8 + 0.4) + uRimB * fr * sat(-n.x * 0.8 + 0.4)) * RIMK;
+#endif
   // bevel: darken voxel edges slightly so the pixel grid reads in 3D
   vec3 e = abs(vLocal) * 2.0;
   float edge = max(max(min(e.x, e.y), min(e.y, e.z)), min(e.x, e.z));
@@ -130,6 +188,8 @@ export interface Pose {
   flap?: number;
   wag?: number;
   arms?: [number, number];
+  /** v2 rig only: a full rig pose (overrides flap/wag/arms; blink/mouth come from it). */
+  rig?: RigPose;
 }
 
 const PARTS: PartName[] = ['body', 'wingL', 'wingR', 'tail', 'armL', 'armR'];
@@ -142,8 +202,30 @@ export class VoxelChar {
   private meshes: { part: PartName; mesh: THREE.InstancedMesh; cells: [number, number][] }[] = [];
   private lastPoseKey = '';
   private linPal: Record<string, [number, number, number]> = {};
+  /** Rows in the (possibly extended) sprite: px() puts the last row's pixel centres at y = 0.5. */
+  private nRows = 32;
+  /** v2 rig: the sculpt spec, the squash/root-motion group, and per-mesh voxel colour sources. */
+  sculpt: SculptSpec | null = null;
+  rigRoot: THREE.Group | null = null;
+  private sMeshes: { mesh: THREE.InstancedMesh; vox: { c: number; r: number; key: (g: string[][]) => string }[] }[] = [];
+  /** Last applied rig pose (v2), for helpers such as the contact shadow. */
+  lastRig: RigPose | null = null;
+  /** v2: this frame's movement layers and their context (set by Stage.place, extended by act()). */
+  layers: Layer[] = [];
+  cx: MoveCtx | null = null;
+  /** v2: evaluate the layers at t and apply the pose. */
+  applyRig(t: number) {
+    if (this.sculpt && this.cx) this.pose({ rig: rigPose(this.layers, t, this.cx) });
+    return this;
+  }
+  /** v2: add a move (see moves.ts) started at song time t0 and re-apply the pose at t. No-op on v1. */
+  act(name: string, t0: number, t: number, o: MoveOpts = {}) {
+    if (!this.sculpt) return this;
+    this.layers.push({ name, t0, o });
+    return this.applyRig(t);
+  }
 
-  constructor(public def: SpriteDef, o: { depth?: number; emissive?: number } = {}) {
+  constructor(public def: SpriteDef, o: { depth?: number; emissive?: number; sculpt?: SculptSpec | null } = {}) {
     for (const [k, hex] of Object.entries(def.pal)) this.linPal[k] = hexToLinear(hex);
     this.mat = new THREE.RawShaderMaterial({
       glslVersion: THREE.GLSL3,
@@ -164,6 +246,10 @@ export class VoxelChar {
       depthTest: true,
     });
     this.look(DEFAULT_LOOK);
+    if (o.sculpt) {
+      this.buildSculpt(o.sculpt);
+      return;
+    }
     const grid = poseGrid(def);
     const filled = (c: number, r: number) => r >= 0 && r < 32 && c >= 0 && c < 32 && grid[r]![c] !== '.';
     // distance to the silhouette edge (chessboard, 2 passes)
@@ -219,7 +305,107 @@ export class VoxelChar {
   }
 
   /** Pixel (col,row) -> local units: 1 unit per pixel, feet on y = 0, centred on x. */
-  px(c: number, r: number): [number, number] { return [c - 15.5, 31.5 - r]; }
+  px(c: number, r: number): [number, number] { return [c - 15.5, this.nRows - 0.5 - r]; }
+
+  // ---------------------------------------------------------------- v2: sculpted, jointed model
+  private buildSculpt(S: SculptSpec) {
+    this.sculpt = S;
+    const u = this.mat.uniforms;
+    this.mat.defines = { SCULPT: '' };
+    u.uMouth = { value: 0 }; u.uAOk = { value: 1 }; u.uRimK = { value: 0.9 }; u.uBevel = { value: 0.6 };
+    u.uEdge!.value = 0.18;
+    const M = sculptModel(this.def, S);
+    this.nRows = M.rows;
+    const root = new THREE.Group();
+    this.rigRoot = root;
+    this.group.add(root);
+    const pivots = {} as Record<Joint, THREE.Group>;
+    for (const j of Object.keys(S.joints) as Joint[]) pivots[j] = new THREE.Group();
+    for (const j of Object.keys(S.joints) as Joint[]) {
+      const J = S.joints[j], [x, y] = this.px(...J.at);
+      const par = J.parent ? S.joints[J.parent] : null, [px0, py0] = par ? this.px(...par.at) : [0, 0];
+      pivots[j].position.set(x - px0, y - py0, 0);
+      (J.parent ? pivots[J.parent] : root).add(pivots[j]);
+      (this.parts as Record<string, THREE.Group>)[j] = pivots[j];
+    }
+    this.parts.body = pivots.torso;
+    const box = new THREE.BoxGeometry(1, 1, 1);
+    const m = new THREE.Matrix4();
+    let seed = 1;
+    const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+    const mouthCells = new Set(this.def.mouth.map(([c, r]) => c + r * 64));
+    for (const j of Object.keys(S.joints) as Joint[]) {
+      const vs = M.vox.filter((v) => v.part === j);
+      if (!vs.length) continue;
+      const [jx, jy] = this.px(...S.joints[j].at);
+      const mesh = new THREE.InstancedMesh(box, this.mat, vs.length);
+      mesh.frustumCulled = false;
+      const n = vs.length;
+      const col = new Float32Array(n * 3), emis = new Float32Array(n), rand = new Float32Array(n * 4), occ = new Uint32Array(n), mouth = new Float32Array(n);
+      vs.forEach((v, i) => {
+        const [x, y] = this.px(v.c, v.r);
+        m.makeTranslation(x - jx, y - jy, v.k);
+        mesh.setMatrixAt(i, m);
+        rand.set([rnd(), rnd(), rnd(), rnd()], i * 4);
+        occ[i] = v.occ;
+        mouth[i] = v.front && v.k === v.zf && mouthCells.has(v.c + v.r * 64) ? 1 : 0;
+      });
+      const g = mesh.geometry.clone();
+      g.setAttribute('aColor', new THREE.InstancedBufferAttribute(col, 3));
+      g.setAttribute('aEmis', new THREE.InstancedBufferAttribute(emis, 1));
+      g.setAttribute('aRand', new THREE.InstancedBufferAttribute(rand, 4));
+      g.setAttribute('aOcc', new THREE.InstancedBufferAttribute(occ, 1));
+      g.setAttribute('aMouth', new THREE.InstancedBufferAttribute(mouth, 1));
+      mesh.geometry = g;
+      pivots[j].add(mesh);
+      this.sMeshes.push({ mesh, vox: vs.map((v) => ({ c: v.c, r: v.r, key: v.key })) });
+    }
+    this.lastPoseKey = '';
+    this.pose({});
+  }
+
+  private poseSculpt(p: Pose) {
+    const key = `${(p.rig ? p.rig.blink > 0.5 : p.blink) ? 1 : 0}${(p.rig ? p.rig.mouth > 0.2 : p.mouth) ? 1 : 0}`;
+    if (key !== this.lastPoseKey) {
+      this.lastPoseKey = key;
+      const g = poseGrid(this.def, { blink: key[0] === '1', mouth: key[1] === '1' });
+      if (this.nRows > 32) for (const row of this.sculpt!.extraRows ?? []) g.push(row.split(''));
+      for (const { mesh, vox } of this.sMeshes) {
+        const col = mesh.geometry.getAttribute('aColor') as THREE.InstancedBufferAttribute;
+        const em = mesh.geometry.getAttribute('aEmis') as THREE.InstancedBufferAttribute;
+        vox.forEach((v, i) => {
+          const k = v.key(g);
+          const lin = this.linPal[k === '.' ? 'a' : k] ?? [1, 0, 1];
+          col.setXYZ(i, lin[0], lin[1], lin[2]);
+          em.setX(i, this.def.emissive[k] ?? 0);
+        });
+        col.needsUpdate = true;
+        em.needsUpdate = true;
+      }
+    }
+    const R = p.rig, P = this.parts as Record<string, THREE.Group>;
+    if (R) {
+      this.lastRig = R;
+      const root = this.rigRoot!;
+      root.position.set(R.x, R.y, R.z);
+      root.rotation.set(R.pitch, R.yaw, R.roll, 'YXZ');
+      const sq = Math.max(0.3, R.sq);
+      root.scale.set(1 / Math.sqrt(sq), sq, 1 / Math.sqrt(sq));
+      for (const j of Object.keys(R.j) as Joint[]) P[j]?.rotation.set(R.j[j][0], R.j[j][1], R.j[j][2]);
+      this.mat.uniforms.uMouth!.value = R.mouth;
+    } else {
+      this.lastRig = null;
+      this.rigRoot!.position.set(0, 0, 0); this.rigRoot!.rotation.set(0, 0, 0); this.rigRoot!.scale.set(1, 1, 1);
+      for (const j of Object.keys(this.sculpt!.joints)) P[j]?.rotation.set(0, 0, 0);
+      P.wingL?.rotation.set(0, p.flap ?? 0, (p.flap ?? 0) * 0.5);
+      P.wingR?.rotation.set(0, -(p.flap ?? 0), -(p.flap ?? 0) * 0.5);
+      P.tail?.rotation.set(0, (p.wag ?? 0) * 0.6, p.wag ?? 0);
+      P.armL?.rotation.set(p.arms?.[0] ?? 0, 0, 0);
+      P.armR?.rotation.set(p.arms?.[1] ?? 0, 0, 0);
+      this.mat.uniforms.uMouth!.value = p.mouth ? 1 : 0;
+    }
+    return this;
+  }
 
   look(l: Partial<VoxelLook>) {
     const u = this.mat.uniforms;
@@ -260,6 +446,7 @@ export class VoxelChar {
 
   /** Apply a pose: pixel patches (blink, mouth) and part rotations. */
   pose(p: Pose) {
+    if (this.sculpt) return this.poseSculpt(p);
     const key = `${p.blink ? 1 : 0}${p.mouth ? 1 : 0}`;
     if (key !== this.lastPoseKey) {
       this.lastPoseKey = key;
@@ -285,6 +472,135 @@ export class VoxelChar {
     P.armR?.rotation.set(p.arms?.[1] ?? 0, 0, 0);
     return this;
   }
+}
+
+/** The character for a sprite under the current rig (src/config.ts): sculpted on v2, extruded on v1. */
+export function makeChar(def: SpriteDef, o: { depth?: number; emissive?: number } = {}) {
+  return new VoxelChar(def, { ...o, sculpt: V2 ? sculptFor(def, LEGS) : null });
+}
+
+/** A soft contact shadow on the ground under a v2 character (fades and widens as it leaves the ground). */
+export class ContactShadow {
+  mesh: THREE.Mesh;
+  private v = new THREE.Vector3();
+  constructor() {
+    const mat = new THREE.ShaderMaterial({
+      uniforms: { uA: { value: 0.6 } },
+      vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
+      fragmentShader: 'varying vec2 vUv; uniform float uA; void main(){ float d = length(vUv - 0.5) * 2.0; float a = uA * (0.55 * (1.0 - smoothstep(0.0, 1.0, d)) + 0.45 * (1.0 - smoothstep(0.0, 0.5, d))); gl_FragColor = vec4(0.0, 0.0, 0.0, a); }',
+      transparent: true, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2,
+    });
+    this.mesh = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), mat);
+    this.mesh.rotation.x = -Math.PI / 2;
+    this.mesh.visible = false;
+    this.mesh.renderOrder = 1;
+  }
+  /** Place under `ch` on the plane y = ground. */
+  update(ch: VoxelChar, ground: number, strength = 1) {
+    if (!ch.group.visible || !ch.rigRoot) { this.mesh.visible = false; return; }
+    ch.group.updateMatrixWorld(true);
+    ch.rigRoot.getWorldPosition(this.v);
+    const s = ch.group.scale.x, h = Math.max(0, this.v.y - ground);
+    const fade = Math.max(0, 1 - h / (34 * s));
+    this.mesh.visible = fade > 0.01;
+    this.mesh.position.set(this.v.x, ground + 0.05 * s, this.v.z);
+    const R = 30 * s * (1 + h / (40 * s));
+    this.mesh.scale.set(R, R * 0.8, 1);
+    (this.mesh.material as THREE.ShaderMaterial).uniforms.uA!.value = 0.65 * fade * strength;
+  }
+}
+
+// ---------------------------------------------------------------- v2 sculpt model (cached per sprite + spec)
+interface SVox { part: Joint; c: number; r: number; k: number; zf: number; front: boolean; occ: number; key: (g: string[][]) => string }
+const sculptCache = new Map<string, { rows: number; vox: SVox[] }>();
+
+/**
+ * Voxelise a sprite with a sculpt spec: each pixel becomes a column of unit voxels from zb to zf, where
+ * the half thickness follows a quarter-circle profile of the pixel's distance to its part's outline, plus
+ * the spec's domes. Only shell voxels (an empty 6-neighbour within the same part) are kept. Front-half
+ * voxels show the sprite pixel; back-half voxels show the spec's back palette (face details become fur;
+ * interior outline pixels take the part's main colour).
+ */
+function sculptModel(def: SpriteDef, S: SculptSpec) {
+  const ck = def.name + '|' + (S.extraRows?.join('') ?? '');
+  const hit = sculptCache.get(ck);
+  if (hit) return hit;
+  const rows = [...def.rows, ...(S.extraRows ?? [])], NR = rows.length;
+  const filled = (c: number, r: number) => r >= 0 && r < NR && c >= 0 && c < 32 && rows[r]![c] !== '.';
+  const part: (Joint | null)[][] = rows.map((_, r) => Array.from({ length: 32 }, (_, c) => (filled(c, r) ? S.part(c, r) : null)));
+  // euclidean distance (px) to the part's outline, and chessboard distance to the sprite's silhouette
+  const dPart: number[][] = [], dSil: number[][] = [];
+  for (let r = 0; r < NR; r++) {
+    dPart.push([]); dSil.push([]);
+    for (let c = 0; c < 32; c++) {
+      if (!part[r]![c]) { dPart[r]!.push(0); dSil[r]!.push(0); continue; }
+      let best = 99, bs = 99;
+      for (let rr = -1; rr <= NR; rr++)
+        for (let cc = -1; cc <= 32; cc++) {
+          const pq = rr >= 0 && rr < NR && cc >= 0 && cc < 32 ? part[rr]![cc] : null;
+          if (pq === part[r]![c]) continue;
+          best = Math.min(best, Math.hypot(cc - c, rr - r));
+          if (!pq) bs = Math.min(bs, Math.max(Math.abs(cc - c), Math.abs(rr - r)));
+        }
+      dPart[r]!.push(best); dSil[r]!.push(bs);
+    }
+  }
+  // columns
+  const ZO = 24, ZN = 48; // z index offset / range
+  const occ = new Int8Array(32 * NR * ZN); // 0 empty, else part index + 1
+  const partIdx = Object.keys(S.joints) as Joint[];
+  const at = (c: number, r: number, k: number) => (c < 0 || c >= 32 || r < 0 || r >= NR || k + ZO < 0 || k + ZO >= ZN ? 0 : occ[(r * 32 + c) * ZN + k + ZO]!);
+  const cols: { c: number; r: number; zb: number; zf: number; p: Joint }[] = [];
+  for (let r = 0; r < NR; r++)
+    for (let c = 0; c < 32; c++) {
+      const p = part[r]![c];
+      if (!p) continue;
+      const D = S.depth[p];
+      const u = Math.min(1, Math.max(0, dPart[r]![c]! - 0.5) / D.span);
+      const h = D.edge + (D.R - D.edge) * Math.sqrt(1 - (1 - u) * (1 - u));
+      let bump = 0;
+      for (const b of S.bulges) {
+        if (b.part !== p) continue;
+        const q = ((c - b.c) / b.rx) ** 2 + ((r - b.r) / b.ry) ** 2;
+        if (q < 1) bump += b.h * (1 - q);
+      }
+      const zf = Math.round(D.zc + h + bump), zb = Math.min(zf, Math.round(D.zc - h * (D.back ?? 1)));
+      cols.push({ c, r, zb, zf, p });
+      for (let k = zb; k <= zf; k++) occ[(r * 32 + c) * ZN + k + ZO] = partIdx.indexOf(p) + 1;
+    }
+  // outline pixels on the silhouette keep their dark key only on the front and back faces; the wall between
+  // takes the nearest non-outline colour of the same part (so the sides read as body, not as a black slab)
+  const fill: (string | null)[][] = rows.map((row, r) => Array.from({ length: 32 }, (_, c) => {
+    if (row[c] !== 'a' || dSil[r]![c]! > 1) return null;
+    let best: string | null = null, bd = 99;
+    for (let rr = Math.max(0, r - 4); rr <= Math.min(NR - 1, r + 4); rr++)
+      for (let cc = Math.max(0, c - 4); cc <= Math.min(31, c + 4); cc++) {
+        const k = rows[rr]![cc]!, d = Math.hypot(cc - c, rr - r);
+        if (k !== '.' && k !== 'a' && part[rr]![cc] === part[r]![c] && d < bd) { bd = d; best = k; }
+      }
+    return best;
+  }));
+  const vox: SVox[] = [];
+  for (const { c, r, zb, zf, p } of cols) {
+    const pi = partIdx.indexOf(p) + 1, D = S.depth[p], bm = S.back[p] ?? {};
+    for (let k = zb; k <= zf; k++) {
+      const same = (dc: number, dr: number, dk: number) => at(c + dc, r + dr, k + dk) === pi;
+      if (same(1, 0, 0) && same(-1, 0, 0) && same(0, 1, 0) && same(0, -1, 0) && same(0, 0, 1) && same(0, 0, -1)) continue;
+      let o = 0;
+      for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++) for (let dz = -1; dz <= 1; dz++)
+        if (at(c + dx, r - dy, k + dz)) o |= 1 << ((dx + 1) * 9 + (dy + 1) * 3 + (dz + 1));
+      const front = k >= D.zc - 0.25;
+      const interior = dSil[r]![c]! > 1;
+      const wall = fill[r]![c] && k < zf && k > zb ? fill[r]![c]! : null;
+      const key = front
+        ? (g: string[][]) => wall ?? g[r]![c]!
+        : (g: string[][]) => { const k0 = wall ?? g[r]![c]!; return k0 === 'a' ? (interior ? bm.a ?? 'a' : 'a') : bm[k0] ?? k0; };
+      vox.push({ part: p, c, r, k, zf, front, occ: o, key });
+    }
+  }
+  const res = { rows: NR, vox };
+  sculptCache.set(ck, res);
+  return res;
 }
 
 /** A lively default pose as a function of song time: blinks, beat-synced wing/tail motion, mouth on vocal. */

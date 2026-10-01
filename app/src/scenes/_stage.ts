@@ -7,7 +7,9 @@ import { Scene, type Frame, type PostOverrides } from '../engine/scene';
 import { Layer2D, W, H } from '../engine/gl';
 import { LineBatch } from '../engine/lines';
 import { Sky } from '../engine/world';
-import { VoxelChar, autoPose } from '../engine/voxel';
+import { VoxelChar, autoPose, makeChar, ContactShadow } from '../engine/voxel';
+import type { MoveOpts } from '../engine/moves';
+import { V2 } from '../config';
 import { VENMAR, QUEST } from '../sprites/sprites';
 import type { Line } from '../engine/lyrics';
 import { noise1, pulse } from '../engine/util';
@@ -21,8 +23,13 @@ export abstract class Stage extends Scene {
   fx = new LineBatch(24000, { screen2D: false, worldWidth: true, blend: 'add', depthTest: true });
   fx2d = new LineBatch(6000, { blend: 'add' });
   ui = new Layer2D();
-  venmar = new VoxelChar(VENMAR);
-  quest = new VoxelChar(QUEST);
+  venmar = makeChar(VENMAR);
+  quest = makeChar(QUEST);
+  /** v2: world y of the ground under the characters (null = no contact shadows), and the shadows. */
+  groundY: number | null = null;
+  shadows = V2 ? [new ContactShadow(), new ContactShadow()] : [];
+  /** Song time of the frame being rendered (for act()). */
+  now = 0;
   /** Whether to draw the sky pass (off for plates that fill the frame with their own background). */
   useSky = true;
   uiUsed = false;
@@ -32,6 +39,7 @@ export abstract class Stage extends Scene {
     this.venmar.group.visible = false;
     this.quest.group.visible = false;
     this.world.add(this.venmar.group, this.quest.group);
+    for (const s of this.shadows) this.world.add(s.mesh);
     await this.build();
   }
 
@@ -48,7 +56,12 @@ export abstract class Stage extends Scene {
     this.ui.clear();
     this.venmar.fx({ t: f.t });
     this.quest.fx({ t: f.t });
+    this.now = f.t;
+    this.venmar.layers = []; this.quest.layers = [];
     const post = this.update(f);
+    if (this.shadows.length) {
+      [this.venmar, this.quest].forEach((ch, i) => (this.groundY === null ? (this.shadows[i]!.mesh.visible = false) : this.shadows[i]!.update(ch, this.groundY)));
+    }
     this.cam.updateProjectionMatrix();
     this.cam.updateMatrixWorld();
     renderer.setRenderTarget(out);
@@ -95,16 +108,31 @@ export abstract class Stage extends Scene {
     return { line: l, who: l ? ((l as any).singer ?? 'A') : null };
   }
   /** Place a character: position, yaw (rad), scale, auto pose from the music. */
-  place(ch: VoxelChar, f: Frame, pos: V3, o: { yaw?: number; pitch?: number; roll?: number; scale?: number; hop?: number; seed?: number; sing?: boolean; energy?: number } = {}) {
+  place(ch: VoxelChar, f: Frame, pos: V3, o: { yaw?: number; pitch?: number; roll?: number; scale?: number; hop?: number; seed?: number; sing?: boolean; energy?: number; move?: 'groove' | 'idle' | 'walk' | 'run' | 'fly' | 'none'; moveOpts?: MoveOpts } = {}) {
     ch.group.visible = true;
     const who = ch === this.venmar ? 'A' : 'B';
     const s = this.singing(f.t);
     const sing = o.sing ?? s.who === who;
-    ch.pose(autoPose(f.t, f.beat, { singing: sing, vocal: this.ctx.audio.env('vocal', f.t), seed: o.seed ?? (who === 'A' ? 0 : 5), energy: o.energy }));
+    const seed = o.seed ?? (who === 'A' ? 0 : 5);
+    if (ch.sculpt) {
+      // v2: base layers (breathing + beat groove by default), blinks, jaw on the vocal; act() adds moves
+      const au = this.ctx.audio;
+      ch.cx = { beat: (t) => au.beatAt(t), vocal: (t) => au.env('vocal', t), seed, sing, energy: o.energy ?? 1 };
+      const mv = o.move ?? 'groove';
+      ch.layers = [{ name: 'idle', t0: -1e9, o: {} }];
+      if (mv !== 'none' && mv !== 'idle') ch.layers.push({ name: mv, t0: -1e9, o: { amp: 0.8, ...o.moveOpts } });
+      ch.applyRig(f.t);
+    } else ch.pose(autoPose(f.t, f.beat, { singing: sing, vocal: this.ctx.audio.env('vocal', f.t), seed, energy: o.energy }));
     const hop = (o.hop ?? 0) * Math.abs(Math.sin(f.beat * Math.PI));
     ch.group.position.set(pos[0], pos[1] + hop, pos[2]);
     ch.group.rotation.set(o.pitch ?? 0, o.yaw ?? 0, o.roll ?? 0);
     ch.group.scale.setScalar(o.scale ?? 1);
+    return ch;
+  }
+
+  /** v2: play a move from moves.ts on a placed character, started at song time t0 (no-op on v1). */
+  act(ch: VoxelChar, name: string, t0: number, o: MoveOpts = {}) {
+    ch.act(name, t0, this.now, o);
     return ch;
   }
 
