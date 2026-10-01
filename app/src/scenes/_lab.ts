@@ -7,6 +7,7 @@ import { Stage } from './_stage';
 import { Boxes, type VoxelChar } from '../engine/voxel';
 import type { Layer, MoveOpts } from '../engine/moves';
 
+const B1 = 1 / 2.2 + 1e-4; // one lab beat (s)
 export const LAB_MOVES: { name: string; label: string; who: 'both' | 'A' | 'B'; o?: MoveOpts; o3?: MoveOpts; at: [number, number, number] }[] = [
   { name: 'idle', label: 'idle / breathe / blink', who: 'both', at: [0.6, 1.9, 2.9] },
   { name: 'walk', label: 'walk', who: 'both', at: [0.0, 0.15, 0.3] },
@@ -15,11 +16,15 @@ export const LAB_MOVES: { name: string; label: string; who: 'both' | 'A' | 'B'; 
   { name: 'turn', label: 'turn (head leads)', who: 'both', o: { angle: Math.PI / 2, dur: 0.45 }, at: [0.1, 0.22, 0.5] },
   { name: 'accuse', label: 'point / accuse', who: 'both', o: { dur: 1 }, at: [0.08, 0.2, 0.9] },
   { name: 'punch', label: 'punch: wind-up / strike / recover', who: 'both', at: [0.13, 0.24, 0.55] },
-  { name: 'groove', label: 'dance groove (beat 1 / & / 2)', who: 'both', o: { amp: 1.4 }, at: [0.0, 0.25, 0.4545] },
+  { name: 'groove', label: 'dance groove (beat 1 / & / 2)', who: 'both', o: { amp: 1.4 }, at: [0.0, 0.25, B1] },
   { name: 'sit', label: 'sit down / sit / slump', who: 'both', o: { dur: 3, slump: 0 }, o3: { dur: 3, slump: 1 }, at: [0.2, 1.2, 1.5] },
   { name: 'fly', label: 'Venmar flight: wing beats', who: 'A', o: { h: 8 }, at: [0.8, 0.9, 1.0] },
   { name: 'swipe', label: 'Quest tail swipe', who: 'B', at: [0.16, 0.3, 0.5] },
   { name: 'sing', label: 'mouth on vocal / blink', who: 'both', at: [0.0, 1.0, 2.0] },
+  // hip-hop set (k = 12..): lab beat = 2.2/s, so B1 s = one beat; phases on the beat / & / next beat
+  ...['twostep', 'bodyrock', 'wop', 'cabbage', 'runningman', 'shrug'].map((st) => ({ name: 'hiphop', label: `hip-hop: ${st}`, who: 'both' as const, o: { step: st, amp: 1.2 }, at: [B1 * 4, B1 * 4.5, B1 * 5] as [number, number, number] })),
+  { name: 'hiphop', label: 'hip-hop: spin (beat 15 of the phrase)', who: 'both', o: { amp: 1.2 }, at: [B1 * 14.2, B1 * 14.5, B1 * 14.8] },
+  { name: 'hiphop', label: 'hip-hop: b-boy freeze (beat 16)', who: 'both', o: { amp: 1.2 }, at: [B1 * 15.05, B1 * 15.2, B1 * 15.8] },
 ];
 
 export default class Lab extends Stage {
@@ -34,7 +39,7 @@ export default class Lab extends Stage {
   }
 
   private pose(ch: VoxelChar, layers: Layer[], T: number, o: { sing?: number; seed: number }) {
-    ch.cx = { beat: (t) => t * 2.2, vocal: () => o.sing ?? 0, seed: o.seed, sing: (o.sing ?? 0) > 0, energy: 1 };
+    ch.cx = { beat: (t) => t * 2.2, bar: (t) => (t * 2.2) / 4, vocal: () => o.sing ?? 0, seed: o.seed, sing: (o.sing ?? 0) > 0, energy: 1 };
     ch.layers = layers;
     if (ch.sculpt) ch.applyRig(T);
     else ch.pose({ blink: false, mouth: (o.sing ?? 0) > 0.5 });
@@ -59,8 +64,8 @@ export default class Lab extends Stage {
     }
     const k = Math.floor((t - 10) / 3), p = Math.floor(t - 10) - k * 3;
     const M = LAB_MOVES[Math.max(0, Math.min(LAB_MOVES.length - 1, k))]!;
-    const lt = M.at[p]!, T = 100 + lt;
-    const layers: Layer[] = M.name === 'sing' || M.name === 'idle' ? [{ name: 'idle', t0: -1e9, o: {} }] : [{ name: 'idle', t0: -1e9, o: { amp: 0.3 } }, { name: M.name, t0: M.name === 'groove' || M.name === 'walk' || M.name === 'run' || M.name === 'fly' ? -1e9 : 100, o: (p === 2 && M.o3) || M.o || {} }];
+    const lt = M.at[p]!, T = M.name === 'hiphop' ? lt + (16 * 10) / 2.2 : 100 + lt;
+    const layers: Layer[] = M.name === 'sing' || M.name === 'idle' ? [{ name: 'idle', t0: -1e9, o: {} }] : [{ name: 'idle', t0: -1e9, o: { amp: 0.3 } }, { name: M.name, t0: M.name === 'groove' || M.name === 'hiphop' || M.name === 'walk' || M.name === 'run' || M.name === 'fly' ? -1e9 : 100, o: (p === 2 && M.o3) || M.o || {} }];
     const both: [VoxelChar, number, number, boolean][] = M.who === 'A' ? [[V, 0, 0, true], [Q, 0, 5, false]] : M.who === 'B' ? [[Q, 0, 5, true], [V, 0, 0, false]] : [[V, -19, 0, true], [Q, 19, 5, true]];
     for (const [ch, x, seed, on] of both) {
       ch.group.visible = on;

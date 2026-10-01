@@ -34,6 +34,8 @@ export interface MoveCtx {
   beat: (t: number) => number;
   /** Vocal envelope 0..1 at t. */
   vocal: (t: number) => number;
+  /** Continuous bar index aligned to the downbeats (optional; else beat / 4). */
+  bar?: (t: number) => number;
   seed: number;
   /** Singing now (mouth follows the vocal envelope). */
   sing: boolean;
@@ -58,6 +60,9 @@ export interface MoveOpts {
   slump?: number;
   /** jump: airtime (s). */
   air?: number;
+  /** hiphop: fixed move instead of the routine (one of HIPHOP_STEPS), routine variant offset. */
+  step?: string;
+  variant?: number;
 }
 
 /** A move adds into P at song time t; lt = t - t0 (local time). Weight w is already enveloped. */
@@ -118,6 +123,8 @@ export const MOVES: Record<string, { fn: MoveFn; cyclic?: boolean; len?: (o: Mov
       add(P, 'wingR', w, 0, -f, f * 0.5);
     },
   },
+  /** Hip-hop routine (16-beat phrases: steps, spin, freeze) or one step with o.step (see HIPHOP). */
+  hiphop: { cyclic: true, fn: hiphopFn },
   /** Walk cycle (rate = strides/s); run is the same with lean, bounce and bigger swings. travel moves +z. */
   walk: { cyclic: true, fn: (P, lt, t, w, o, cx) => gait(P, lt, t, w, o, cx, false) },
   run: { cyclic: true, fn: (P, lt, t, w, o, cx) => gait(P, lt, t, w, o, cx, true) },
@@ -244,6 +251,126 @@ export const MOVES: Record<string, { fn: MoveFn; cyclic?: boolean; len?: (o: Mov
     },
   },
 };
+
+// ------------------------------------------------------------------ hip-hop set
+// Built for these bodies: a big head and short limbs, so the dance lives in the bounce, the torso, the head
+// and the arms; legs only mark the steps. All on the downbeat-aligned beat grid, accents on 2 and 4.
+// u = phase within a beat-bounded segment (spin / freeze), or ignored.
+type HipFn = (P: RigPose, bb: number, w: number, e: number, u: number) => void;
+const hipBounce = (P: RigPose, bb: number, w: number, e: number, depth = 1.3) => {
+  const ph = fract(bb), back = Math.floor(bb) % 2 === 1 ? 1.25 : 0.85; // heavier on 2 and 4
+  const dip = Math.pow(1 - ph, 2.2) * back;
+  P.y += w * e * depth * (0.55 - dip);
+  P.sq += w * e * (0.025 - 0.06 * dip);
+  add(P, 'head', w * e, 0.2 * Math.pow(1 - fract(bb - 0.15), 3) * back); // nod lands just after the beat
+  return dip;
+};
+export const HIPHOP: Record<string, HipFn> = {
+  /** Two-step: step side to side each beat, arms swing across, shoulders lead. */
+  twostep: (P, bb, w, e) => {
+    hipBounce(P, bb, w, e);
+    const sw = sin(PI * bb), st = sin(PI * (bb - 0.25));
+    P.x += w * e * 2.6 * st; P.roll -= w * e * 0.05 * sw;
+    add(P, 'torso', w * e, 0.06, 0.18 * sw, 0.05 * sw);
+    add(P, 'armL', w * e, -0.55 * sw, 0, -0.25 + 0.25 * sw); add(P, 'armR', w * e, 0.55 * sw, 0, 0.25 + 0.25 * sw);
+    add(P, 'legL', w * e, -0.5 * Math.max(0, -st)); add(P, 'legR', w * e, -0.5 * Math.max(0, st));
+    add(P, 'tail', w * e, 0, 0.4 * sin(PI * bb - 1), 0);
+  },
+  /** Body rock / chest pop: the torso pops forward on each beat, elbows out, the head holds still. */
+  bodyrock: (P, bb, w, e) => {
+    const ph = fract(bb), pop = Math.exp(-ph * 7) * (Math.floor(bb) % 2 === 1 ? 1.2 : 0.9);
+    hipBounce(P, bb, w, e, 0.7);
+    add(P, 'torso', w * e, 0.34 * pop - 0.06, 0, 0);
+    add(P, 'head', w * e, -0.3 * pop, 0, 0);
+    P.sq += w * e * 0.05 * pop; P.z += w * e * 0.9 * pop;
+    add(P, 'armL', w * e, -0.5 - 0.35 * pop, 0, -0.55 - 0.2 * pop); add(P, 'armR', w * e, -0.5 - 0.35 * pop, 0, 0.55 + 0.2 * pop);
+    pairZ(P, 'earL', 'earR', w * e, 0.2 * pop, 0.2 * pop, 1);
+  },
+  /** Wop: shoulders and head roll in a circle over two beats, loose swinging arms. */
+  wop: (P, bb, w, e) => {
+    hipBounce(P, bb, w, e, 0.8);
+    const th = PI * bb;
+    add(P, 'torso', w * e, 0.2 * sin(th), 0, 0.16 * cos(th));
+    add(P, 'head', w * e, 0.16 * sin(th - 0.9), 0, -0.14 * cos(th - 0.9));
+    P.x += w * e * 1.2 * cos(th);
+    add(P, 'armL', w * e, -0.6 * sin(th), 0, -0.2 - 0.2 * cos(th)); add(P, 'armR', w * e, -0.6 * sin(th + PI), 0, 0.2 - 0.2 * cos(th));
+    add(P, 'tail', w * e, 0, 0.5 * cos(th - 1.4), 0.2 * sin(th));
+  },
+  /** Cabbage patch: both arms stir a circle in front, the hips circle the other way. */
+  cabbage: (P, bb, w, e) => {
+    hipBounce(P, bb, w, e, 0.9);
+    const th = PI * bb;
+    add(P, 'armL', w * e, -1.15 + 0.45 * sin(th), 0, 0.15 + 0.35 * cos(th));
+    add(P, 'armR', w * e, -1.15 + 0.45 * sin(th), 0, -0.15 + 0.35 * cos(th));
+    P.x -= w * e * 1.6 * cos(th); P.z += w * e * 1.0 * sin(th); P.roll += w * e * 0.06 * cos(th);
+    add(P, 'torso', w * e, 0.1, 0.12 * sin(th), 0);
+    add(P, 'head', w * e, 0, -0.12 * sin(th), 0.08 * cos(th));
+  },
+  /** Running man: one leg slides back per beat while the other knee lifts, arms pump, body stays level. */
+  runningman: (P, bb, w, e) => {
+    const s = sin(PI * bb), ph = fract(bb);
+    P.y += w * e * 1.4 * Math.abs(sin(PI * bb)) - w * e * 0.4;
+    P.sq -= w * e * 0.06 * Math.pow(1 - ph, 3);
+    add(P, 'legL', w * e, 0.8 * s); add(P, 'legR', w * e, -0.8 * s);
+    add(P, 'armL', w * e, -0.9 * Math.max(0, -s) + 0.3, 0, -0.2); add(P, 'armR', w * e, -0.9 * Math.max(0, s) + 0.3, 0, 0.2);
+    add(P, 'torso', w * e, 0.14, 0.08 * s, 0);
+    add(P, 'tail', w * e, 0.2, 0.3 * s, 0);
+    pairZ(P, 'earL', 'earR', w * e, 0.12 * Math.abs(s), 0.12 * Math.abs(s), 1);
+  },
+  /** Shoulder bounce: alternate shoulders pop up on each beat, the head tilts with them. */
+  shrug: (P, bb, w, e) => {
+    const ph = fract(bb), pop = Math.exp(-ph * 6), L = Math.floor(bb) % 2 === 0 ? 1 : 0;
+    hipBounce(P, bb, w, e, 0.9);
+    add(P, 'armL', w * e, -0.2, 0, -0.15 - 0.45 * pop * L); add(P, 'armR', w * e, -0.2, 0, 0.15 + 0.45 * pop * (1 - L));
+    add(P, 'torso', w * e, 0.04, 0, 0.12 * pop * (L ? -1 : 1));
+    add(P, 'head', w * e, 0, 0.12 * pop * (L ? 1 : -1), 0.2 * pop * (L ? 1 : -1));
+    pairZ(P, 'earL', 'earR', w * e, 0.3 * pop * L, 0.3 * pop * (1 - L), 1);
+  },
+  /** Toprock spin (u: 0..1 over the segment): wind, full turn with arms out, land on the beat. */
+  spin: (P, _bb, w, _e, u) => {
+    const k = ease.inOutCubic(clamp((u - 0.1) / 0.85));
+    P.yaw += TAU * k - w * 0.3 * hump(clamp(u / 0.15)); // full turn unweighted: a crossfade must not stop it half-way
+    P.y += w * 2.2 * hump(clamp((u - 0.1) / 0.85));
+    const out = hump(clamp((u - 0.05) / 0.95));
+    add(P, 'armL', w * out, -0.2, 0, -1.3); add(P, 'armR', w * out, -0.2, 0, 1.3);
+    add(P, 'tail', w * out, 0, 0, 0.6);
+    pairZ(P, 'earL', 'earR', w * out, 0.4, 0.4, 1);
+    add(P, 'legL', w * out, -0.4);
+  },
+  /** B-boy stance freeze (u: 0..1): snap into arms crossed, lean back, chin up, head tilted; hold. */
+  freeze: (P, _bb, w, _e, u) => {
+    const k = ease.outBack(clamp(u / 0.2));
+    add(P, 'armL', w * k, -1.35, 0.1, 0.75); add(P, 'armR', w * k, -1.25, -0.1, -0.75);
+    add(P, 'torso', w * k, -0.14, 0.15, 0);
+    add(P, 'head', w * k, -0.16, 0.25, 0.2);
+    P.roll += w * k * 0.05; P.yaw += w * k * 0.35;
+    P.sq += w * 0.08 * hump(clamp(u / 0.25)) - w * k * 0.02;
+    pairZ(P, 'earL', 'earR', w * k, -0.12, -0.12, 1);
+    add(P, 'tail', w * k, 0, 0.4, 0.5);
+  },
+};
+export const HIPHOP_STEPS = Object.keys(HIPHOP);
+
+/** The routine: a 16-beat phrase on the downbeats; the step order rotates per phrase (and per variant). */
+const ROUTINE: [string, number][][] = [
+  [['twostep', 4], ['bodyrock', 4], ['wop', 4], ['runningman', 2], ['spin', 1], ['freeze', 1]],
+  [['shrug', 4], ['cabbage', 4], ['twostep', 4], ['bodyrock', 2], ['spin', 1], ['freeze', 1]],
+  [['wop', 4], ['runningman', 4], ['shrug', 4], ['cabbage', 2], ['spin', 1], ['freeze', 1]],
+];
+
+function hiphopFn(P: RigPose, _lt: number, t: number, w: number, o: MoveOpts, cx: MoveCtx) {
+  const bb = cx.bar ? cx.bar(t) * 4 : cx.beat(t), e = (o.amp ?? 1) * cx.energy;
+  if (o.step) { HIPHOP[o.step]?.(P, bb, w, e, fract(bb)); return; }
+  const phrase = Math.floor(bb / 16), pb = bb - phrase * 16;
+  const R = ROUTINE[(((phrase + (o.variant ?? 0)) % ROUTINE.length) + ROUTINE.length) % ROUTINE.length]!;
+  let s = 0;
+  for (const [name, len] of R) {
+    const f = 0.18; // crossfade (beats) around segment edges
+    const ws = smoothstep(s - f, s + f, pb) * (1 - smoothstep(s + len - f, s + len + f, pb));
+    if (ws > 0) HIPHOP[name]!(P, bb, w * ws, e, clamp((pb - s) / len));
+    s += len;
+  }
+}
 
 function gait(P: RigPose, lt: number, t: number, w: number, o: MoveOpts, cx: MoveCtx, run: boolean) {
   const f = o.rate ?? (run ? 2.6 : 1.7), ph = TAU * f * t + cx.seed;

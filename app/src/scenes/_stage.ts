@@ -108,7 +108,7 @@ export abstract class Stage extends Scene {
     return { line: l, who: l ? ((l as any).singer ?? 'A') : null };
   }
   /** Place a character: position, yaw (rad), scale, auto pose from the music. */
-  place(ch: VoxelChar, f: Frame, pos: V3, o: { yaw?: number; pitch?: number; roll?: number; scale?: number; hop?: number; seed?: number; sing?: boolean; energy?: number; move?: 'groove' | 'idle' | 'walk' | 'run' | 'fly' | 'none'; moveOpts?: MoveOpts } = {}) {
+  place(ch: VoxelChar, f: Frame, pos: V3, o: { yaw?: number; pitch?: number; roll?: number; scale?: number; hop?: number; seed?: number; sing?: boolean; energy?: number; move?: 'groove' | 'hiphop' | 'idle' | 'walk' | 'run' | 'fly' | 'none'; moveOpts?: MoveOpts } = {}) {
     ch.group.visible = true;
     const who = ch === this.venmar ? 'A' : 'B';
     const s = this.singing(f.t);
@@ -117,7 +117,7 @@ export abstract class Stage extends Scene {
     if (ch.sculpt) {
       // v2: base layers (breathing + beat groove by default), blinks, jaw on the vocal; act() adds moves
       const au = this.ctx.audio;
-      ch.cx = { beat: (t) => au.beatAt(t), vocal: (t) => au.env('vocal', t), seed, sing, energy: o.energy ?? 1 };
+      ch.cx = { beat: (t) => au.beatAt(t), bar: (t) => au.barAt(t), vocal: (t) => au.env('vocal', t), seed, sing, energy: o.energy ?? 1 };
       const mv = o.move ?? 'groove';
       ch.layers = [{ name: 'idle', t0: -1e9, o: {} }];
       if (mv !== 'none' && mv !== 'idle') ch.layers.push({ name: mv, t0: -1e9, o: { amp: 0.8, ...o.moveOpts } });
