@@ -5,6 +5,7 @@
 // finally his HP bar drains while an EKG line races across and he runs off down the corridor.
 import * as THREE from 'three';
 import type { Frame, PostOverrides } from '../engine/scene';
+import { V2 } from '../config';
 import { Stage } from './_stage';
 import { Boxes, VoxelChar, Billboard } from '../engine/voxel';
 import { SHADOW, VENMAR, drawSprite } from '../sprites/sprites';
@@ -88,7 +89,8 @@ export default class Ghost extends Stage {
     // ghost Venmar: floats down the corridor toward the camera, flickering; solid for a beat on "curse"
     const curse = this.L9.words.find((w) => /curse/i.test(w.w))!.start;
     const zG = lerp(-240, -30, prog(t, this.L8.start, this.L11.start));
-    this.place(this.venmar, f, [Math.sin(t * 0.9) * 6, 6 + Math.sin(t * 2) * 3, zG], { yaw: Math.sin(t * 0.7) * 0.4, scale: 0.9, energy: 1.2 });
+    this.place(this.venmar, f, [Math.sin(t * 0.9) * 6, 6 + Math.sin(t * 2) * 3, zG], { yaw: Math.sin(t * 0.7) * 0.4, scale: 0.9, energy: 1.2, move: 'fly', moveOpts: { h: 0, rate: 1.6 } });
+    if (V2) this.act(this.venmar, 'spin', curse - 0.2, { dur: 0.8 });
     const flick = hash(frameIdx(t) >> 1, 5) > 0.15 ? 1 : 0.3;
     const solid = pulse(t, curse, 0.25);
     this.venmar.fx({ t, ghost: clamp(1 - solid), alpha: (phase === 0 ? 0.35 : 0.95) * flick, glitch: sn * 0.15 + pulse(t, this.L9.start, 0.2), glow: 1.2 });

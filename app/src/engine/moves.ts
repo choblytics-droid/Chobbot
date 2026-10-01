@@ -254,6 +254,21 @@ export const MOVES: Record<string, { fn: MoveFn; cyclic?: boolean; len?: (o: Mov
       add(P, 'torso', w * Math.max(0, s), 0.25); pairZ(P, 'earL', 'earR', w * s, 0.5, 0.5, 1);
     },
   },
+  /** Roar: rear up, jaw wide, arms flung up and out, ears back; hold for dur. */
+  roar: {
+    len: (o) => (o.dur ?? 0.9) + 0.35,
+    fn: (P, lt, _t, w, o) => {
+      const d = o.dur ?? 0.9, k = ease.outBack(clamp(lt / 0.18)) * (1 - ease.inOutQuad(clamp((lt - d) / 0.35)));
+      P.mouth = Math.max(P.mouth, k);
+      add(P, 'torso', w * k, -0.22); add(P, 'head', w * k, -0.3 + 0.04 * Math.sin(lt * 40));
+      add(P, 'armL', w * k, -0.6, 0, -1.6); add(P, 'armR', w * k, -0.6, 0, 1.6);
+      add(P, 'earL', w * k, -0.5); add(P, 'earR', w * k, -0.5);
+      add(P, 'wingL', w * k, 0, 0.4, -0.7); add(P, 'wingR', w * k, 0, -0.4, 0.7);
+      P.sq += w * 0.1 * k; P.y += w * 1.2 * k;
+    },
+  },
+  /** One toprock spin (dur s), arms out, lands facing front. */
+  spin: { len: (o) => o.dur ?? 0.8, fn: (P, lt, _t, w, o) => HIPHOP.spin!(P, 0, w, 1, clamp(lt / (o.dur ?? 0.8))) },
   /** A shocked recoil: rear back, arms up, ears flat, settle. */
   recoil: {
     len: () => 0.9,

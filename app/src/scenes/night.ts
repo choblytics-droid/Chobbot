@@ -4,6 +4,7 @@
 // huge black brush stroke sweeps the frame and the world comes back night-black (only the rift and his
 // red eyes). On "stealing his light" every lit window streams into her as light trails; she blazes.
 import type { Frame, PostOverrides } from '../engine/scene';
+import { V2 } from '../config';
 import { Stage } from './_stage';
 import { City, Surface, makeRoof, drawRain } from '../engine/world';
 import { dialogueBox, slamWord } from '../engine/kinetic';
@@ -45,7 +46,13 @@ export default class Night extends Stage {
     this.roof.top.set({ t, wet: 0.6 });
 
     // Quest on the roof edge, swinging her tail; glows as she steals the light
-    this.place(this.quest, f, [0, 0, 20], { yaw: Math.PI + 0.3 + Math.sin(t * 0.4) * 0.15, scale: 1, energy: 0.8 });
+    this.place(this.quest, f, [0, 0, 20], { yaw: Math.PI + 0.3 + Math.sin(t * 0.4) * 0.15, scale: 1, energy: 0.8, move: V2 ? 'idle' : undefined });
+    if (V2) {
+      // perched on the roof edge, legs over; she rises and folds her arms on "stealing his light"
+      this.groundY = 0;
+      this.act(this.quest, 'sit', f.start - 1, { dur: this.tSteal - f.start + 0.6, slump: 0.25 });
+      this.act(this.quest, 'stance', this.tSteal + 0.3, { dur: 9 });
+    }
     this.quest.fx({ t, glow: 1 + steal * 3, flash: steal * 0.25 + pulse(t, this.L23.end, 0.3) * 0.6 });
 
     // light trails: lit windows streaming into her

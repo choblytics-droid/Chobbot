@@ -4,6 +4,7 @@
 // Line 26: in the void her voxels fly back together; on "every face" a mosaic of strangers' faces flips,
 // tile by tile, into hers.
 import type { Frame, PostOverrides } from '../engine/scene';
+import { V2 } from '../config';
 import { Stage } from './_stage';
 import { drawSprite, VENMAR } from '../sprites/sprites';
 import { drawPix, pixWidth } from '../engine/pixelfont';
@@ -34,6 +35,11 @@ export default class Delete extends Stage {
     // --- 3D: Venmar reassembling in the void (line 25), dissolved before
     const re = prog(t, this.L25.start - 0.15, this.tFace - 0.1, ease.outCubic);
     this.place(this.venmar, f, [0, 0, 0], { yaw: Math.sin(t * 0.5) * 0.3, scale: 1, energy: 1 });
+    if (V2) {
+      this.groundY = 0;
+      this.act(this.venmar, 'recoil', this.tDestroy); this.act(this.venmar, 'recoil', this.tDelete, { w: 0.6 });
+      this.act(this.venmar, 'stance', this.tFace, { dur: 9 });
+    }
     this.venmar.group.visible = phase2;
     this.venmar.fx({ t, dissolve: 1 - re, dissolveDir: [0, 0.4, 0.3], glow: 1.5 + (1 - re) * 2, flash: pulse(t, this.tFace - 0.1, 0.1) * 0.6 });
     this.orbit([0, 17, 0], lerp(-0.4, 0.3, re), 0.08, lerp(110, 60, re), { t, fov: 40, hand: 1, shake: k * 0.5 });

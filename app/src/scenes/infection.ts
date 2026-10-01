@@ -124,7 +124,8 @@ export default class Infection extends Stage {
       this.look([lerp(-20, 10, walk * 3), 10, qz + 70], [HX * 0.5, 60, HZ * 0.5], { t, fov: 44, hand: 2, shake: k * 0.6 });
     } else if (t < this.L14.start - 0.1) {
       const p = prog(t, this.L13.start, this.L14.start);
-      this.look([lerp(120, 100, p), 26, -30], [0, 24, -110], { t, fov: 44, hand: 1.5 });
+      if (V2) this.look([lerp(75, 62, p), 20, qz + 45], [-4, 20, (qz - 110) / 2], { t, fov: 46, hand: 1.5 });
+      else this.look([lerp(120, 100, p), 26, -30], [0, 24, -110], { t, fov: 44, hand: 1.5 });
     } else {
       this.look([-18, 4, qz + 44], [0, 30, qz - 20], { t, fov: 42, hand: 1.2, roll: 0.06 });
     }

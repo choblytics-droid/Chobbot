@@ -4,6 +4,7 @@
 // through the window and out: the room floats inside a giant translucent head — his — with his red
 // eyes burning above it. Title card, fade to black.
 import type { Frame, PostOverrides } from '../engine/scene';
+import { V2 } from '../config';
 import { Stage } from './_stage';
 import { Boxes, VoxelChar, Billboard } from '../engine/voxel';
 import { SHADOW, QUEST, drawSprite } from '../sprites/sprites';
@@ -69,8 +70,14 @@ export default class Outro extends Stage {
 
     // the two on the couch: chilling, then bouncing on the drop
     const hop = drop ? 4 : 0;
-    this.place(this.venmar, f, [-18, 12, -18], { yaw: 0.3, scale: 0.9, hop, energy: drop ? 1.5 : 0.5 });
-    this.place(this.quest, f, [18, 12, -18], { yaw: -0.3, scale: 0.9, hop, energy: drop ? 1.5 : 0.5 });
+    this.place(this.venmar, f, [-18, 12, -18], { yaw: 0.3, scale: 0.9, hop: V2 ? 0 : hop, energy: drop ? 1.5 : 0.5, moveOpts: { amp: drop ? 1.6 : 0.6 } });
+    this.place(this.quest, f, [18, 12, -18], { yaw: -0.3, scale: 0.9, hop: V2 ? 0 : hop, energy: drop ? 1.5 : 0.5, moveOpts: { amp: drop ? 1.6 : 0.6 } });
+    if (V2) {
+      // v2: actually sitting on the couch (legs forward), grooving in their seats
+      this.groundY = 12;
+      this.act(this.venmar, 'sit', f.start - 1, { dur: 99, slump: 0.15 });
+      this.act(this.quest, 'sit', f.start - 1, { dur: 99, slump: 0.05 });
+    }
 
     // his head around the room: invisible inside, revealed as we pull out
     const headA = prog(t, this.tOut + 0.3, this.L34.start + 1.2);

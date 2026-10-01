@@ -3,6 +3,7 @@
 // lightning storm; roars (mouth open, flash) on "monster". Line 30: prison bars slam down around her,
 // and on "free" they burst outward and she takes off into the rift, wings beating.
 import type { Frame, PostOverrides } from '../engine/scene';
+import { V2 } from '../config';
 import { Stage } from './_stage';
 import { City, Surface, drawRain, drawEmbers } from '../engine/world';
 import { Boxes } from '../engine/voxel';
@@ -44,7 +45,12 @@ export default class Kaiju extends Stage {
     const fly = prog(t, this.tFree, f.end + 0.4, ease.inCubic);
     const roar = t >= this.tMonster - 0.05 && t < this.tMonster + 0.9;
     this.place(this.venmar, f, [0, fly * 900, -40], { yaw: 0.2 + Math.sin(t * 0.5) * 0.15, scale: S, energy: 1.2 + fly * 2 });
-    this.venmar.pose({ mouth: roar || this.singing(t).who === 'A' && this.ctx.audio.env('vocal', t) > 0.35, blink: false, flap: Math.sin(t * (fly > 0 ? 22 : 4)) * (0.5 + fly), wag: Math.sin(t * 3) * 0.4 });
+    if (V2) {
+      this.rayK = 0.5; // lightning already floods this scene
+      this.act(this.venmar, 'roar', this.tMonster - 0.05, { dur: 0.9 });
+      this.act(this.venmar, 'punch', this.tPrison - 0.14, { side: 'R' });
+      if (t > this.tFree - 0.3) this.act(this.venmar, 'fly', this.tFree - 0.3, { h: 0, rate: 3.2 });
+    } else this.venmar.pose({ mouth: roar || this.singing(t).who === 'A' && this.ctx.audio.env('vocal', t) > 0.35, blink: false, flap: Math.sin(t * (fly > 0 ? 22 : 4)) * (0.5 + fly), wag: Math.sin(t * 3) * 0.4 });
     this.venmar.fx({ t, glow: 1.5 + bl, flash: bolt * 0.25 });
 
     // prison bars: slam down on "prison", burst outward on "free"

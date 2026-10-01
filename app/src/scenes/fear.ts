@@ -3,6 +3,7 @@
 // her rim light, ear and eyes glowing. Line 28: a ring of voxel equalizer bars driven by the track
 // surrounds him and her name circles in light bulbs: it is all he can hear.
 import type { Frame, PostOverrides } from '../engine/scene';
+import { V2 } from '../config';
 import { Stage } from './_stage';
 import { Boxes, VoxelChar } from '../engine/voxel';
 import { SHADOW } from '../sprites/sprites';
@@ -49,7 +50,7 @@ export default class Fear extends Stage {
 
     // giant Venmar behind, rising from the dark on line 26
     const rise = prog(t, f.start, this.L26.start + 1.2, ease.outCubic);
-    this.place(this.venmar, f, [0, lerp(-120, -20, rise), -120], { yaw: 0, scale: 5, energy: 0.5 });
+    this.place(this.venmar, f, [0, lerp(-120, -20, rise), -120], { yaw: 0, scale: 5, energy: 0.5, move: V2 ? 'idle' : undefined, moveOpts: { amp: 1.5 } });
     this.venmar.fx({ t, glow: 1.6 + bl, breath: Math.sin(t * 2) });
 
     // line 27: equalizer ring + her name in bulbs orbiting

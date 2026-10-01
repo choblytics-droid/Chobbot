@@ -12,7 +12,7 @@ import { SHADOW } from '../sprites/sprites';
 import { glyphCells, drawPix, pixWidth } from '../engine/pixelfont';
 import { slamWord } from '../engine/kinetic';
 import { rgba } from '../engine/palette';
-import { clamp, ease, lerp, prog, pulse, hash, frameIdx } from '../engine/util';
+import { clamp, ease, lerp, prog, pulse, hash, frameIdx, window01 } from '../engine/util';
 import type { Line } from '../engine/lyrics';
 
 const WORD = 'QUEST', CELL = 9;
@@ -84,6 +84,9 @@ export default class Arcade extends Stage {
       this.groundY = 0;
       this.act(this.quest, 'stance', this.tName, { dur: 1.2 });
       this.act(this.quest, 'accuse', this.tVictim, { dur: 1.0, side: 'R' });
+      // turn so the pointing arm aims at the fake K.O. (in profile to the camera), then back
+      const aim = window01(t, this.tVictim - 0.2, this.tVictim + 1.3, 0.2, 0.3);
+      this.quest.group.rotation.y = lerp(this.quest.group.rotation.y, 0.6, aim);
       this.act(this.quest, 'jump', this.tGame - 0.16, { h: 14, air: 0.55 });
     }
 

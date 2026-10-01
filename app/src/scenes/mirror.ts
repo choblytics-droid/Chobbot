@@ -3,6 +3,7 @@
 // placed behind the glass). On "ghost" one reflection is Venmar, as a hologram. On line 20 the
 // reflections turn, one by one on the beats, into him — red eyes in every mirror.
 import type { Frame, PostOverrides } from '../engine/scene';
+import { V2 } from '../config';
 import { Stage } from './_stage';
 import { Boxes, VoxelChar } from '../engine/voxel';
 import { QUEST, SHADOW, VENMAR } from '../sprites/sprites';
@@ -52,7 +53,8 @@ export default class Mirror extends Stage {
   update(f: Frame): PostOverrides {
     const t = f.t;
     const k = this.kick(t), bl = this.bell(t);
-    this.place(this.quest, f, [0, 0, 0], { yaw: t * 0.25, scale: 1, energy: 0.7 });
+    this.place(this.quest, f, [0, 0, 0], { yaw: t * 0.25, scale: 1, energy: 0.7, move: V2 ? 'idle' : undefined });
+    if (V2) { this.groundY = 0; this.act(this.quest, 'recoil', this.tGhost); this.act(this.quest, 'accuse', this.L19.start + 0.2, { dur: 1.2, side: 'R' }); }
     const fi = frameIdx(t);
     // reflections: mirrored copies just behind each mirror, facing out of it
     for (let i = 0; i < M; i++) {

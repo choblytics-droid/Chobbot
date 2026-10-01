@@ -3,6 +3,7 @@
 // the planks behind her ignite one by one and drop into the glow; on "friend" the little figures waiting
 // on the far side dissolve into sparks. Side-on tracking shot, then a swing behind her.
 import type { Frame, PostOverrides } from '../engine/scene';
+import { V2 } from '../config';
 import { Stage } from './_stage';
 import { Boxes, VoxelChar } from '../engine/voxel';
 import { VENMAR } from '../sprites/sprites';
@@ -61,7 +62,8 @@ export default class Bridge extends Stage {
     // molten glow far below (a huge emissive slab)
     this.planks.set(3 * N, 0, -260, 0, 2000, 2, 400, [1.2, 0.25, 0.04], 2.0);
 
-    this.place(this.quest, f, [qx, 0, 0], { yaw: Math.PI / 2 - 0.75, scale: 0.9, hop: 1.5, energy: 1.2 });
+    this.place(this.quest, f, [qx, 0, 0], { yaw: Math.PI / 2 - 0.75, scale: 0.9, hop: V2 ? 0 : 1.5, energy: 1.2, move: 'walk', moveOpts: { rate: 1.4, amp: 1.3 } });
+    if (V2) this.groundY = 0;
 
     // friends: wait on the far end, dissolve into sparks on "friend"
     const fd = prog(t, this.tFriend - 0.05, this.tFriend + 1.2, ease.inCubic);
