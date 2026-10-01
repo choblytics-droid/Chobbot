@@ -10,7 +10,7 @@ import { Sky } from '../engine/world';
 import { VoxelChar, autoPose, makeChar, ContactShadow } from '../engine/voxel';
 import type { MoveOpts } from '../engine/moves';
 import { V2 } from '../config';
-import { GodRays } from '../engine/atmos';
+import { GodRays, TextHalo } from '../engine/atmos';
 import { VENMAR, QUEST } from '../sprites/sprites';
 import type { Line } from '../engine/lyrics';
 import { noise1, pulse } from '../engine/util';
@@ -32,6 +32,9 @@ export abstract class Stage extends Scene {
   /** v2: light shafts from the rift (scenes with the sky); strength multiplier (0 = off). */
   rays = V2 ? new GodRays() : null;
   rayK = 1;
+  /** v2: dark halo under the UI type (legibility); strength 0..1. */
+  halo = V2 ? new TextHalo() : null;
+  haloK = 0.72;
   /** Song time of the frame being rendered (for act()). */
   now = 0;
   /** Whether to draw the sky pass (off for plates that fill the frame with their own background). */
@@ -84,7 +87,11 @@ export abstract class Stage extends Scene {
     }
     this.fx.render(renderer, out, this.cam);
     this.fx2d.render(renderer, out);
-    if (this.uiUsed) comp.draw(renderer, this.ui.upload(), out);
+    if (this.uiUsed) {
+      const tex = this.ui.upload();
+      if (this.halo && this.haloK > 0) this.halo.render(renderer, tex, out, this.haloK);
+      comp.draw(renderer, tex, out);
+    }
     return post;
   }
 

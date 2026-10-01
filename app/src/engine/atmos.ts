@@ -24,8 +24,9 @@ export class GodRays {
       }
       fragColor = vec4(acc / 48.0, 1.0);
     }`, { src: { value: null }, uL: { value: new THREE.Vector2() }, uThr: { value: 0.6 }, uDecay: { value: 0.965 }, uLen: { value: 0.85 } });
-  private add = new FSPass('uniform sampler2D src; uniform float uK; uniform vec3 uTint; void main(){ fragColor = vec4(texture(src, vUv).rgb * uK * uTint, 1.0); }',
-    { src: { value: null }, uK: { value: 1 }, uTint: { value: new THREE.Vector3(1, 0.85, 0.75) } }, { blending: THREE.AdditiveBlending, transparent: true });
+  // rays over solid geometry (characters, buildings) at 35%: haze in front of them, not a wash
+  private add = new FSPass('uniform sampler2D src; uniform sampler2D occ; uniform float uK; uniform vec3 uTint; void main(){ float sky = step(0.004, dot(texture(occ, vUv).rgb, vec3(0.33))); fragColor = vec4(texture(src, vUv).rgb * uK * uTint * (0.35 + 0.65 * sky), 1.0); }',
+    { src: { value: null }, occ: { value: null }, uK: { value: 1 }, uTint: { value: new THREE.Vector3(1, 0.85, 0.75) } }, { blending: THREE.AdditiveBlending, transparent: true });
   private v = new THREE.Vector3();
   private fwd = new THREE.Vector3();
 
@@ -58,7 +59,39 @@ export class GodRays {
     (this.blur.u.uL!.value as THREE.Vector2).set(p.x * 0.5 + 0.5, p.y * 0.5 + 0.5);
     this.blur.render(renderer, this.ray);
     this.add.u.src!.value = this.ray.texture;
+    this.add.u.occ!.value = this.occ.texture;
     this.add.u.uK!.value = k * 1.3;
     this.add.render(renderer, out);
+  }
+}
+
+/**
+ * v2 text legibility: a soft dark halo under everything on the Canvas2D UI layer (lyrics, titles, HUD),
+ * so white type reads on bright skies, flashes and sunbursts. The halo is the UI alpha dilated over two
+ * rings (~5 and ~11 px), multiplied into the frame before the UI is drawn on top.
+ */
+export class TextHalo {
+  private pass = new FSPass(/* glsl */ `
+    uniform sampler2D src; uniform vec2 texel; uniform float uK;
+    void main() {
+      float a = 0.0;
+      for (int i = 0; i < 12; i++) {
+        float ang = float(i) * 0.5236;
+        vec2 d = vec2(cos(ang), sin(ang));
+        a = max(a, texture(src, vUv + d * texel * 5.0).a);
+        a = max(a, 0.6 * texture(src, vUv + d * texel * 11.0).a);
+      }
+      a = max(a, texture(src, vUv).a);
+      fragColor = vec4(vec3(1.0 - uK * a), 1.0);
+    }`, { src: { value: null }, texel: { value: new THREE.Vector2(1 / W, 1 / H) }, uK: { value: 0.72 } },
+    { blending: THREE.CustomBlending, transparent: true });
+  constructor() {
+    const m = this.pass.mat;
+    m.blendEquation = THREE.AddEquation; m.blendSrc = THREE.ZeroFactor; m.blendDst = THREE.SrcColorFactor;
+  }
+  render(renderer: THREE.WebGLRenderer, ui: THREE.Texture, out: THREE.WebGLRenderTarget, k = 0.72) {
+    this.pass.u.src!.value = ui;
+    this.pass.u.uK!.value = k;
+    this.pass.render(renderer, out);
   }
 }

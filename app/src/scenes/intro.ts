@@ -11,6 +11,9 @@ import { F, font } from '../engine/type';
 import { drawPix } from '../engine/pixelfont';
 import { drawSprite, VENMAR, QUEST } from '../sprites/sprites';
 import { clamp, ease, hash, lerp, prog, pulse, frameIdx } from '../engine/util';
+import { V2 } from '../config';
+import { TextHalo } from '../engine/atmos';
+const HALO = V2 ? new TextHalo() : null;
 
 export default class Intro extends Scene {
   wall = new FSPass(/* glsl */ `
@@ -140,7 +143,9 @@ export default class Intro extends Scene {
     const pxs = 9 * (1 + 0.02 * k);
     if (vIn > 0) drawSprite(c, VENMAR, 960 - 90 - 32 * pxs, 540 - 16 * pxs + (1 - vIn) * 80, pxs, { alpha: clamp(vIn) * out0, blink: (t % 2.1) < 0.1 });
     if (qIn > 0) drawSprite(c, QUEST, 960 + 90, 540 - 16 * pxs + (1 - qIn) * 80, pxs, { alpha: clamp(qIn) * out0, flip: true, blink: (t % 2.7) < 0.1 });
-    comp.draw(renderer, L.upload(), out);
+    const tex = L.upload();
+    if (HALO) HALO.render(renderer, tex, out);
+    comp.draw(renderer, tex, out);
 
     const dive = prog(t, end - 0.35, end, ease.inExpo);
     return {
