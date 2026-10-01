@@ -4,6 +4,7 @@
 // in a ring; "broken heart": the heart cracks and its halves swing apart.
 import * as THREE from 'three';
 import type { Frame, PostOverrides } from '../engine/scene';
+import { V2 } from '../config';
 import { Stage } from './_stage';
 import { Boxes, VoxelChar } from '../engine/voxel';
 import { SHADOW, type SpriteDef } from '../sprites/sprites';
@@ -103,7 +104,13 @@ export default class Throne extends Stage {
 
     // Venmar sits on top of the heart (the heart's top is ~ 31*3.2 = 99 units); she drops with the split
     const topY = 31.5 * 3.2 - 12 - br * 30;
-    this.place(this.venmar, f, [0, topY, 6], { yaw: 0.25 + Math.sin(t * 0.5) * 0.1, scale: 1.1, energy: 0.6 });
+    this.place(this.venmar, f, [0, topY, 6], { yaw: 0.25 + Math.sin(t * 0.5) * 0.1, scale: 1.1, energy: 0.6, move: V2 ? 'idle' : undefined });
+    if (V2) {
+      // she sits on the heart like a throne; arms fold on "king"; jolted when it breaks
+      this.act(this.venmar, 'sit', f.start - 1, { dur: 99, slump: 0.1 });
+      this.act(this.venmar, 'stance', this.tKing + 0.1, { dur: this.tBroken - this.tKing - 0.2 });
+      this.act(this.venmar, 'recoil', this.tBroken);
+    }
 
     // crown: gold voxels dropping onto her head on "king"
     const cp = prog(t, this.tKing - 0.1, this.tKing + 0.25, ease.outBack);

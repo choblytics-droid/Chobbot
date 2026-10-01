@@ -132,7 +132,7 @@ void main() {
 #ifdef SCULPT
   // rim from the face normal (bevelled normals would light every voxel edge), soft-capped
   float fr = pow(1.0 - sat(dot(nFace, v)), 3.0);
-  col += (uRimA * fr * sat(nFace.x * 0.8 + 0.4) + uRimB * fr * sat(-nFace.x * 0.8 + 0.4)) * RIMK * (0.4 + 0.6 * vAO);
+  col += (uRimA * fr * sat(nFace.x * 1.2) + uRimB * fr * sat(-nFace.x * 1.2)) * RIMK * (0.4 + 0.6 * vAO) * (1.0 - 0.7 * abs(nFace.y));
 #else
   float fr = pow(1.0 - sat(dot(n, v)), 2.5);
   // two rim lights from either side (the teal/orange split)
@@ -312,7 +312,7 @@ export class VoxelChar {
     this.sculpt = S;
     const u = this.mat.uniforms;
     this.mat.defines = { SCULPT: '' };
-    u.uMouth = { value: 0 }; u.uAOk = { value: 1 }; u.uRimK = { value: 0.9 }; u.uBevel = { value: 0.6 };
+    u.uMouth = { value: 0 }; u.uAOk = { value: 1 }; u.uRimK = { value: 1.4 }; u.uBevel = { value: 0.6 };
     u.uEdge!.value = 0.18;
     const M = sculptModel(this.def, S);
     this.nRows = M.rows;

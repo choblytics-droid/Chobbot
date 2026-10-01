@@ -4,6 +4,7 @@
 // infection spreads over the buildings. A brick wall stacks up between them on the beats; neon signs
 // flicker on: TOXIC, THE END. Quest walks through it all, unbothered. JRPG dialogue box with her portrait.
 import type { Frame, PostOverrides } from '../engine/scene';
+import { V2 } from '../config';
 import { Stage } from './_stage';
 import { City, Surface, drawRain } from '../engine/world';
 import { Boxes, VoxelChar, Billboard } from '../engine/voxel';
@@ -108,7 +109,14 @@ export default class Infection extends Stage {
     // Quest walks down the street toward camera
     const walk = prog(t, f.start, f.end);
     const qz = lerp(-60, 30, walk);
-    this.place(this.quest, f, [0, 0, qz], { yaw: 0, scale: 1, hop: 2.5, energy: 1.1 });
+    this.place(this.quest, f, [0, 0, qz], { yaw: 0, scale: 1, hop: V2 ? 0 : 2.5, energy: 1.1, move: 'walk', moveOpts: { rate: 1.1, amp: 1.3 } });
+    if (V2) {
+      // a slow swaggering walk; she calls him out on "toxic" and squares up on "end"
+      this.groundY = 0;
+      this.act(this.quest, 'accuse', toxic - 0.05, { dur: 0.8, side: 'L' });
+      this.act(this.quest, 'stance', endW, { dur: 4 });
+      for (const w of this.L13.words.filter((x) => /wall|protection/i.test(x.w))) this.act(this.quest, 'punch', w.start - 0.14, { side: /wall/i.test(w.w) ? 'R' : 'L' });
+    }
     this.quest.look({ rimA: [0.3, 1.8, 0.4], rimB: [2.2, 0.6, 0.15] });
 
     // camera: low street tracking shot; line 13 side view of the wall; line 14 low hero angle

@@ -2,6 +2,7 @@
 // than ever before!" Rusted walls erupt around him on every kick, a door slab slams shut; then, over
 // the fortress, a skyscraper-sized hologram of Venmar rises: what he's really thinking about.
 import type { Frame, PostOverrides } from '../engine/scene';
+import { V2 } from '../config';
 import { Stage } from './_stage';
 import { City, Surface, drawRain, drawEmbers } from '../engine/world';
 import { Boxes, VoxelChar } from '../engine/voxel';
@@ -76,7 +77,14 @@ export default class Fortress extends Stage {
     this.him.fx({ t, glow: 2 });
 
     // Venmar on a rooftop edge in the foreground
-    this.place(this.venmar, f, [-30, 60, 60], { yaw: Math.PI + 0.35, scale: 1 });
+    this.place(this.venmar, f, [-30, 60, 60], { yaw: Math.PI + 0.35, scale: 1, move: V2 ? 'idle' : undefined });
+    if (V2) {
+      this.groundY = 60;
+      // startled by the door slam; then she points him out ("thinking about me") and folds her arms
+      this.act(this.venmar, 'recoil', this.door);
+      this.act(this.venmar, 'accuse', this.L5.start, { dur: 0.9 });
+      this.act(this.venmar, 'stance', this.L5.start + 1.4, { dur: 9 });
+    }
     this.walls.set(this.plan.length + 2, -30, 30, 60, 60, 60, 40, [0.012, 0.012, 0.018], 0);
     this.walls.set(this.plan.length + 3, -30, 60.3, 80, 60, 0.6, 0.6, [0.3, 1.4, 2.0], 1.2);
 

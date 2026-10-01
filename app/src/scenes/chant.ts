@@ -4,6 +4,7 @@
 // inverted frames, the "again"s crunch into pixelation, speed lines on the kicks.
 import * as THREE from 'three';
 import type { Frame, PostOverrides } from '../engine/scene';
+import { V2 } from '../config';
 import { Stage } from './_stage';
 import { FSPass } from '../engine/gl';
 import { VoxelChar } from '../engine/voxel';
@@ -61,14 +62,15 @@ export default class Chant extends Stage {
     const punch = 1 + 0.12 * cutK;
     const tilt = (hash(beat, 7) - 0.5) * 0.5;
     if (setup === 0) {
-      this.place(this.venmar, f, [0, 0, 0], { yaw: tilt, scale: punch, hop: 3, energy: 1.8 });
+      this.place(this.venmar, f, [0, 0, 0], { yaw: tilt, scale: punch, hop: V2 ? 0 : 3, energy: 1.8, move: 'hiphop', moveOpts: { step: 'bodyrock', amp: 1.3 } });
       this.look([0, 20, 55], [0, 19, 0], { fov: 40, roll: tilt * 0.3, t, shake: k * 1.5 });
     } else if (setup === 1) {
-      this.place(this.quest, f, [0, 0, 0], { yaw: tilt, scale: punch, hop: 3, energy: 1.8, sing: true });
+      this.place(this.quest, f, [0, 0, 0], { yaw: tilt, scale: punch, hop: V2 ? 0 : 3, energy: 1.8, sing: true, move: 'hiphop', moveOpts: { step: 'shrug', amp: 1.3 } });
+      if (V2) this.act(this.quest, 'accuse', bt - 0.02, { dur: 0.25, side: beat % 2 ? 'L' : 'R' });
       this.look([0, 20, 55], [0, 19, 0], { fov: 40, roll: -tilt * 0.3, t, shake: k * 1.5 });
     } else if (setup === 2) {
-      this.place(this.venmar, f, [-18, 0, 0], { yaw: 0.4, scale: punch, hop: 5, energy: 1.8 });
-      this.place(this.quest, f, [18, 0, 0], { yaw: -0.4, scale: punch, hop: 5, energy: 1.8, sing: true });
+      this.place(this.venmar, f, [-18, 0, 0], { yaw: 0.4, scale: punch, hop: V2 ? 0 : 5, energy: 1.8, move: 'hiphop', moveOpts: { step: 'twostep', amp: 1.5 } });
+      this.place(this.quest, f, [18, 0, 0], { yaw: -0.4, scale: punch, hop: V2 ? 0 : 5, energy: 1.8, sing: true, move: 'hiphop', moveOpts: { step: 'runningman', amp: 1.5 } });
       this.look([0, 26, 100], [0, 16, 0], { fov: 40, t, shake: k * 1.5 });
     } else {
       this.him.group.visible = true;

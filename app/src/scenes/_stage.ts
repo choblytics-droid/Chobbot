@@ -10,6 +10,7 @@ import { Sky } from '../engine/world';
 import { VoxelChar, autoPose, makeChar, ContactShadow } from '../engine/voxel';
 import type { MoveOpts } from '../engine/moves';
 import { V2 } from '../config';
+import { GodRays } from '../engine/atmos';
 import { VENMAR, QUEST } from '../sprites/sprites';
 import type { Line } from '../engine/lyrics';
 import { noise1, pulse } from '../engine/util';
@@ -28,6 +29,9 @@ export abstract class Stage extends Scene {
   /** v2: world y of the ground under the characters (null = no contact shadows), and the shadows. */
   groundY: number | null = null;
   shadows = V2 ? [new ContactShadow(), new ContactShadow()] : [];
+  /** v2: light shafts from the rift (scenes with the sky); strength multiplier (0 = off). */
+  rays = V2 ? new GodRays() : null;
+  rayK = 1;
   /** Song time of the frame being rendered (for act()). */
   now = 0;
   /** Whether to draw the sky pass (off for plates that fill the frame with their own background). */
@@ -74,6 +78,10 @@ export abstract class Stage extends Scene {
     renderer.setRenderTarget(out);
     renderer.clearDepth();
     renderer.render(this.world, this.cam);
+    if (this.rays && this.rayK > 0 && this.useSky && !this.background) {
+      this.rays.render(renderer, this.sky, this.world, this.cam, out, this.rayK, this.shadows.map((s) => s.mesh));
+      renderer.setRenderTarget(out);
+    }
     this.fx.render(renderer, out, this.cam);
     this.fx2d.render(renderer, out);
     if (this.uiUsed) comp.draw(renderer, this.ui.upload(), out);

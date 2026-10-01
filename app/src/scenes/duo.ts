@@ -2,6 +2,7 @@
 // A full 360° orbit that speeds up into the drop, both hopping on the beats (wings flapping, tail wagging),
 // lightning on the cowbells, the title card "VENMAR × QUEST" slammed on the bar lines.
 import type { Frame, PostOverrides } from '../engine/scene';
+import { V2 } from '../config';
 import { Stage } from './_stage';
 import { City, Surface, makeRoof, drawEmbers } from '../engine/world';
 import { F, font } from '../engine/type';
@@ -30,8 +31,10 @@ export default class Duo extends Stage {
     this.roof.top.set({ t, wet: 0.9, pulse: k });
 
     const barIdx = this.bars.filter((b) => b <= t).length;
-    this.place(this.venmar, f, [-20, 0, 0], { yaw: 0.35, scale: 1, hop: 6, energy: 1.5, sing: false });
-    this.place(this.quest, f, [20, 0, 0], { yaw: -0.35, scale: 1, hop: 6, energy: 1.5, sing: false });
+    // v2: both dance the hip-hop routine, in canon (different variants), spin + freeze on the phrase end
+    this.place(this.venmar, f, [-20, 0, 0], { yaw: 0.35, scale: 1, hop: V2 ? 0 : 6, energy: 1.5, sing: false, move: 'hiphop', moveOpts: { amp: 1.1, variant: 0 } });
+    this.place(this.quest, f, [20, 0, 0], { yaw: -0.35, scale: 1, hop: V2 ? 0 : 6, energy: 1.5, sing: false, move: 'hiphop', moveOpts: { amp: 1.1, variant: 1 } });
+    if (V2) this.groundY = 0;
 
     // orbit: accelerating (ease-in) full turn, rising slightly
     const yaw = lerp(-0.4, Math.PI * 2 - 0.4, ease.inOutCubic(p));

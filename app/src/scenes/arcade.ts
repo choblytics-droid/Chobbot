@@ -4,6 +4,7 @@
 // victim": he lies on the floor with a fake K.O. halo. "owns the game": PLAYER 2 WINS, PERFECT, a score
 // counter racing up, pixel confetti.
 import type { Frame, PostOverrides } from '../engine/scene';
+import { V2 } from '../config';
 import { Stage } from './_stage';
 import { Surface } from '../engine/world';
 import { Boxes, VoxelChar } from '../engine/voxel';
@@ -77,7 +78,14 @@ export default class Arcade extends Stage {
     else this.orbit([0, 18, 0], 0.15, 0.02, lerp(80, 60, prog(t, this.tGame, f.end)), { t, fov: 40, hand: 1, shake: pulse(t, this.tGame, 0.2) * 3 });
 
     const toCam = Math.atan2(this.cam.position.x, this.cam.position.z);
-    this.place(this.quest, f, [0, 0, 0], { yaw: toCam * 0.7 + Math.sin(t * 0.8) * 0.2, scale: 1, hop: t > this.tGame ? 5 : 2, energy: 1.3 });
+    this.place(this.quest, f, [0, 0, 0], { yaw: toCam * 0.7 + Math.sin(t * 0.8) * 0.2, scale: 1, hop: V2 ? 0 : t > this.tGame ? 5 : 2, energy: 1.3, move: 'hiphop', moveOpts: { amp: 1.2, variant: 2 } });
+    if (V2) {
+      // dancing on the grid; stance on "name"; points at the fake K.O. on "victim"; victory jump on "game"
+      this.groundY = 0;
+      this.act(this.quest, 'stance', this.tName, { dur: 1.2 });
+      this.act(this.quest, 'accuse', this.tVictim, { dur: 1.0, side: 'R' });
+      this.act(this.quest, 'jump', this.tGame - 0.16, { h: 14, air: 0.55 });
+    }
 
     // UI: arcade HUD
     const c = this.c, fi = frameIdx(t);

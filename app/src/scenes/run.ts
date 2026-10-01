@@ -4,6 +4,7 @@
 // 180° orbit while his accusations get stamped around her -> push-in on the shrug.
 import * as THREE from 'three';
 import type { Frame, PostOverrides } from '../engine/scene';
+import { V2 } from '../config';
 import { Stage, type V3 } from './_stage';
 import { City, Surface, makeRoof, drawRain, drawEmbers } from '../engine/world';
 import { VoxelChar } from '../engine/voxel';
@@ -41,7 +42,13 @@ export default class Run extends Stage {
 
     // Venmar centre of the roof; "him" far away on a lower roof, running (bob) along x
     const vpos: V3 = [0, 0, 0];
-    this.place(this.venmar, f, vpos, { yaw: 0, scale: 1, energy: 0.8 + k * 0.5 });
+    this.place(this.venmar, f, vpos, { yaw: 0, scale: 1, energy: 0.8 + k * 0.5, move: 'idle' });
+    if (V2) {
+      this.groundY = 0;
+      // flinch on the knife slash; brush the accusations off (shoulder bounce) through the stamps
+      this.act(this.venmar, 'recoil', kt);
+      this.act(this.venmar, 'hiphop', this.L2.start - 0.1, { step: 'shrug', amp: 0.8, dur: this.L3.start - this.L2.start, fade: 0.3 });
+    }
     const runX = lerp(-420, 420, prog(t, this.L0.start - 1, this.L2.start + 1));
     this.him.group.visible = t < this.L3.start;
     this.him.group.position.set(runX, -40 + Math.abs(Math.sin(t * 11)) * 5, -520);
@@ -81,6 +88,7 @@ export default class Run extends Stage {
       // push-in on the shrug: "why is he obsessed with me?"
       const p = prog(t, shotD, f.end, ease.outCubic);
       this.orbit([0, 21, 0], 0.25, 0.02, lerp(62, 40, p), { t, hand: 0.8, fov: 36 });
+      if (V2) this.act(this.venmar, 'hiphop', shotD, { step: 'shrug', amp: 1.4 });
       this.venmar.parts.wingL?.rotation.set(0, 0.9, 0.9);
       this.venmar.parts.wingR?.rotation.set(0, -0.9, -0.9);
       slamWord(this.c, this.L3, t, { cx: 960, cy: 250, size: 130, color: rgba('bone', 1), context: true, maxW: 1500 });

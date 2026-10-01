@@ -239,6 +239,21 @@ export const MOVES: Record<string, { fn: MoveFn; cyclic?: boolean; len?: (o: Mov
       add(P, 'armL', w * hit * s, 0, 0, -0.6); add(P, 'armR', w * hit * s, 0, 0, 0.6);
     },
   },
+  /** Hold a b-boy stance (arms crossed, lean back, chin up) from t0, for dur (snaps in, eases out). */
+  stance: {
+    len: (o) => (o.dur ?? 1.5) + 0.3,
+    fn: (P, lt, _t, w, o) => HIPHOP.freeze!(P, 0, w * (1 - ease.inOutQuad(clamp((lt - (o.dur ?? 1.5)) / 0.3))), 1, clamp(lt / 0.6)),
+  },
+  /** Land from a fall: squash on impact, knees give, arms flung out, settle with overshoot. */
+  land: {
+    len: () => 0.6,
+    fn: (P, lt, _t, w) => {
+      const s = settle(lt / 0.55, 2.4);
+      P.sq -= w * 0.32 * s; P.y -= w * 2.2 * Math.max(0, s);
+      add(P, 'armL', w * Math.max(0, s), -0.3, 0, -1.1); add(P, 'armR', w * Math.max(0, s), -0.3, 0, 1.1);
+      add(P, 'torso', w * Math.max(0, s), 0.25); pairZ(P, 'earL', 'earR', w * s, 0.5, 0.5, 1);
+    },
+  },
   /** A shocked recoil: rear back, arms up, ears flat, settle. */
   recoil: {
     len: () => 0.9,

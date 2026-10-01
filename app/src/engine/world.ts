@@ -79,7 +79,7 @@ export class Sky {
     if (o.glow) (u.uGlowCol!.value as THREE.Vector3).set(...o.glow);
   }
   /** The sky is smooth: rendered at 1/3 resolution and upscaled (the heaviest per-pixel noise in the video). */
-  private low = makeRT(Math.ceil(W / 3), Math.ceil(H / 3), { depthBuffer: false });
+  low = makeRT(Math.ceil(W / 3), Math.ceil(H / 3), { depthBuffer: false });
   private blit = new FSPass(`uniform sampler2D src; void main(){ fragColor = texture(src, vUv); }`, { src: { value: null } });
   render(renderer: THREE.WebGLRenderer, out: THREE.WebGLRenderTarget, cam: THREE.PerspectiveCamera) {
     cam.updateMatrixWorld();

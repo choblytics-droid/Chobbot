@@ -4,6 +4,7 @@
 // grade swings from cyan to orange; name plates and silly stat bars in pixel font.
 import * as THREE from 'three';
 import type { Frame, PostOverrides } from '../engine/scene';
+import { V2 } from '../config';
 import { Stage } from './_stage';
 import { FSPass } from '../engine/gl';
 import { Boxes } from '../engine/voxel';
@@ -61,11 +62,17 @@ export default class Swap extends Stage {
     this.bg.u.uQ!.value = t >= this.tQ ? 1 : 0.2;
 
     // turntables
-    this.place(this.venmar, f, [-40, 0, 0], { yaw: 0.4 + Math.sin(t * 1.2) * 0.35, scale: 1, hop: 3, sing: false, energy: 1.2 });
+    this.place(this.venmar, f, [-40, 0, 0], { yaw: 0.4 + Math.sin(t * 1.2) * (V2 ? 0.15 : 0.35), scale: 1, hop: V2 ? 0 : 3, sing: false, energy: 1.2, move: 'hiphop' });
     const qy = t < this.tQ ? lerp(160, 0, q) : 0;
-    this.place(this.quest, f, [40, qy, 0], { yaw: -0.4 + Math.sin(t * 1.2 + 1) * 0.35, scale: 1 * (1 + qLand * 0.15), hop: t > this.tQ + 0.3 ? 3 : 0, sing: false, energy: 1.2 });
+    this.place(this.quest, f, [40, qy, 0], { yaw: -0.4 + Math.sin(t * 1.2 + 1) * (V2 ? 0.15 : 0.35), scale: 1 * (1 + qLand * 0.15), hop: t > this.tQ + 0.3 && !V2 ? 3 : 0, sing: false, energy: 1.2, move: V2 ? (t < this.tQ + 1.6 ? 'idle' : 'hiphop') : undefined, moveOpts: { variant: 1 } });
     this.quest.group.visible = t > this.tQ - 0.25;
-    this.quest.group.scale.set(1 + qLand * 0.25, 1 - qLand * 0.2, 1 + qLand * 0.25);
+    if (V2) {
+      // Venmar points at the newcomer as she lands; Quest lands (squash), strikes a b-boy stance, then dances
+      this.groundY = 0;
+      this.act(this.venmar, 'accuse', this.tQ + 0.05, { dur: 0.9 });
+      this.act(this.quest, 'land', this.tQ);
+      this.act(this.quest, 'stance', this.tQ + 0.45, { dur: 1.1 });
+    } else this.quest.group.scale.set(1 + qLand * 0.25, 1 - qLand * 0.2, 1 + qLand * 0.25);
     this.venmar.fx({ t, flash: pulse(t, f.start, 0.1) * 0.8 });
     this.quest.fx({ t, flash: qLand * 0.8 });
     this.look([0, 26, 150], [0, 16, 0], { t, fov: 32, hand: 1, shake: qLand * 4 });
