@@ -13,7 +13,7 @@ or asset work starts (see `PIPELINE.md`).
 | Pain points / use cases | numbers from `USE_CASES.md` |
 | The one message | one sentence the viewer must remember |
 | Length / formats | e.g. 30 s · 9:16 first, 16:9, 1:1 |
-| Audio | song with lyrics · instrumental + voice-over · instrumental + on-screen text only |
+| Audio | song with lyrics · instrumental + voice-over · instrumental + on-screen text only. The song is background: no character sings or lip-syncs; lyrics appear as text |
 | Mood / music reference | genre, tempo range, references |
 | Quality level | from `TIER_LIST.md` |
 

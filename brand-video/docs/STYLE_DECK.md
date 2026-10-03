@@ -21,6 +21,10 @@ one *home* style plus 3–5 *switch* styles, all picked from the A-tier list bel
 | **Silhouettes** from behind (hoodie, headset), rim-lit | Realistic or semi-realistic humans |
 | **The chat itself as a character**: messages, usernames, emotes, typing dots | Many characters on screen at once |
 
+**Nobody sings on screen.** The song plays in the background like a soundtrack. No character
+performs it, mouths it or lip-syncs. The lyrics reach the screen as kinetic type, chat messages or
+on-screen text timed to the words, and the picture tells the story while the song carries the mood.
+
 On the Venmar branch, four attempts at an anime cel style made no progress (its session notes say
 "diminishing returns"). That is why anime stays off the list.
 
