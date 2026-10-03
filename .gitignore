@@ -3,3 +3,8 @@ out/
 app/dist/
 __pycache__/
 *.wav
+
+# regenerated art intermediates (python bg.py / venmar_cel.py / snap.ts)
+art/anime/bg.png
+art/anime/char.png
+art/anime/*.svg
