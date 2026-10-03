@@ -36,7 +36,9 @@ film are in the media plan, tab **Story & Song**.
 
 - **Section tags** on their own lines: `[Intro]`, `[Verse]`, `[Pre-Chorus]`, `[Break]`, `[Chorus]`,
   `[Outro]`, `[End]`. Notes per section go inside the tag: `[Verse: soft vocal, piano only]`.
-- **Get to the hook fast.** No long intro, no bridge in short songs.
+- **Get to the hook fast.** No long intro, no bridge in short songs. Exception: **Streamer Stories need
+  an instrumental intro of 2 bars** (about 3–4 s) to hold the “Based on a true story” card; tag it
+  `[Intro: 2 bars, instrumental]`.
 - **`[Break]`** before the chorus gives our "silence" moment (signal lost, the freeze before the
   answer). `[End]` closes the song cleanly instead of fading on.
 - **Short, plain lines** with concrete words. They go on screen word by word, so they must read

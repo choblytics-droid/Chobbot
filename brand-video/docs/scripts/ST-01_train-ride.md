@@ -23,7 +23,8 @@
 
 | # | Time | Music | Picture | On-screen text | Lyric (background) | Style |
 |---|---|---|---|---|---|---|
-| 1 | 0:00–0:04 | Intro, 2 bars | Pixel city at night, Christmas lights in haze; the pixel streamer steps out of a door, phone up. A tiny `LIVE` badge blinks on | `LIVE · IRL` | (glockenspiel, train rhythm) | Pixel |
+| 1a | 0:00–0:03 | Intro, bars 1–1.5 | Slow push into the pixel city at night, Christmas lights glowing in haze | **`Based on a true story`** (on from frame 1, out on the beat at 0:03) | (glockenspiel, train rhythm) | Pixel |
+| 1b | 0:03–0:04 | Intro, bar 2 | The pixel streamer steps out of a door, phone up; a tiny `LIVE` badge blinks on | `LIVE · IRL` | (intro continues) | Pixel |
 | 2 | 0:04–0:08 | Verse, bars 1–2 | Snow in the lamp light; the streamer walks past lit windows | lyric as text | “Took the stream outside on Christmas night / Phone in my cold hand, city lights” | Pixel |
 | 3 | 0:08–0:12 | Verse, bars 3–4 | Close on the phone: the viewer counter climbs `1 … 2 … 3`; the streamer talks to the street | `3 watching` | “Three people watching, that’s my crowd / Talking to the street out loud” | Pixel → **neon line** on the downbeat |
 | 4 | 0:12–0:20 | Verse, bars 5–8 | **Hero shot:** the evening train; inside the carriage, rain streaks the window and the city slides past, refracted in the drops; one chat line ticks on the phone | lyric as text | “Evening train, the windows run / Rain on the glass, still on, still on” | Neon line → pixel |
@@ -32,7 +33,7 @@
 | 7 | 0:24–0:32 | Chorus, bars 1–4 | The chat appears big, typed word by word, as the hero of the frame | `that was amazing. thank you` | “You stayed till the signal died / Said it was amazing, on a train at night” | Chat (pixel font, lit) |
 | 8 | 0:32–0:40 | Chorus, bars 5–8 | Front-page burst on the beat; then back on the platform, the streamer stops and reads the phone | `3 VIEWERS. ENOUGH.` | “Three is not nothing, three is enough / Somebody was there, that’s what it was” | **Halftone** → pixel |
 | 9 | 0:40–0:48 | Outro, 4 bars | The city turns warm; in the phone’s chat a small warm spark appears next to the message (companion cameo); pull back over the lit windows | `someone was there` | “That’s why I do this / That’s why I do this” | Pixel (warm grade) |
-| 10 | 0:48–0:52 | End, 2 bars | End card | `Chobbot · never stream alone` (placeholder tagline) | (last chord + sonic logo in the edit) | Brand end card |
+| 10 | 0:48–0:52 | End, 2 bars | End card, with a small credit line under it | `Chobbot · never stream alone` (placeholder tagline) · `Story shared by a streamer on Reddit, retold with permission` | (last chord + sonic logo in the edit) | Brand end card |
 
 Style switches land on downbeats: pixel → neon line (0:08) → pixel (0:20) → glitch/black (0:20–0:24)
 → chat (0:24) → halftone (0:32) → pixel warm (0:40) → end card (0:48).

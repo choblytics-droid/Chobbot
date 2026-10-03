@@ -63,6 +63,15 @@ end card are always ours.**
 - **Where variety goes:** each episode has a **style deck** (a home style + 3–5 switch styles from
   the A tier in [`STYLE_DECK.md`](STYLE_DECK.md)) and switches styles on the music, faster in the
   chorus. People are pixel/voxel sprites or silhouettes; no anime or cartoon humans.
+- **Opening card (every Story):** the film opens on **“Based on a true story”**, set over the first
+  shot (never on a plain black card, which makes people scroll away). Timing follows the song:
+  - On screen for **1.5 bars, clamped to 2.5–3 s** (5 words ≈ 2 s to read on a phone + 0.5 s to
+    notice it). At 120 BPM that is 3 s; at 140 BPM, 2.6 s.
+  - It appears on frame 1 and leaves **on a downbeat**, where the first picture change happens.
+  - The song's intro must be **at least 2 bars**, so the card sits on music, not on the first lyric.
+  - At the end, a small credit: “Story shared by a streamer on Reddit, retold with permission” (or
+    “anonymised” if we could not reach the author).
+  - Only for real stories (section 1). The brand films are not labelled true stories.
 - **The brand:** the companion appears as a **cameo**, never a sales pitch: a spark in the chat that
   catches the moment the story turns. A 2-second end card.
 - **Rights:** stories posted online belong to their authors. Ask permission, or retell an anonymised
