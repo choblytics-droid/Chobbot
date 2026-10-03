@@ -22,5 +22,9 @@ Rules:
   style frame reopens 5–8 only.
 - **Stories: full picture first.** Before a Story script, run Story Context (post + comments +
   the poster's follow-ups). Only facts the poster stated are used; open or continued stories stay open.
+- **After the first finished film (ST-01): capture the workflow as a skill** in
+  `.claude/skills/chobbot-film/SKILL.md` (every step, rules, n8n workflow IDs, file layout, commands,
+  and the measured cost per film), so every later film follows it exactly. Update it after each film
+  with anything learned.
 - **Minimum quality level 6 for every film** (owner rule, 2026-10-03). The level (`TIER_LIST.md`)
   is chosen at step 1 (6 or higher) and confirmed at step 5. No lower-level tests or drafts for release.
