@@ -1,4 +1,4 @@
-# ST-01 · “The train ride” · script v0.4 (approved 2026-10-03; v0.4 = fact fixes; 52 s)
+# ST-01 · “The train ride” · script v0.5 (approved 2026-10-03; v0.4 fact fixes, v0.5 full picture; 52 s)
 
 **Status:** approved. v0.4 corrects lyrics and pictures to the full post text (no rain, no phone, no night; added the real details: the viewer's first train, city to farmland, the other side of the world). Next: the song.
 
@@ -10,6 +10,7 @@
 | Series | 1 · Streamer Stories (music video) |
 | Source | Reddit r/Twitch, “Did an IRL, and a viewer made me realise why it’s worthwhile” (Story Fisher, quality 9, wholesome). <https://www.reddit.com/r/Twitch/comments/1pujw7y/> |
 | Rights | Retold anonymised: no username, no channel, no real place names. Ask the author before publishing (better: they may share it). |
+| Full picture (Story Context: post + 38 comments + the poster's later posts) | **Arc: complete, and it continued.** Start: after a year of desk-bound game streaming, test streams walking to work and back, then a promised “proper” IRL. End: tearful, “it’s really made my Christmas”, eager to do more IRL. Later posts (Jan and May 2026) show they kept streaming IRL around their city. The poster added in comments that it felt “like when you show a visitor around your own town and start to feel like a tourist yourself”. Readers called it wholesome; several raised safety concerns about showing locations (we show a fictional pixel city, no real landmarks). |
 | Facts we use (only these, checked against the full post) | A desk-bound game streamer did a proper IRL: a tour of their city at Christmas (Christmas market, a castle, street food, a flea market, a lit-up carousel they let viewers watch). 3 viewers at peak. At the end they had a train to catch and meant to stop, but one chatty viewer wanted to keep watching until the connection dropped: they had **never been on a train** and were surprised how fast it moved. The view went from the city to **open farmland**. The viewer thanked them “for being so chill” and said it had been “an amazing stream”. The streamer was nearly in tears that it resonated with someone **on the other side of the world**. |
 | Persona / pains | Starter · pains 8 (loneliness), 15 (stuck small) |
 | The one message | Three viewers can be enough. Someone is there. |
@@ -32,8 +33,8 @@
 | 6 | 0:22–0:24 | **Break**, 1 bar | Freeze, `reconnecting…`, then black and silence | `signal lost` | (silence) | Black |
 | 7 | 0:24–0:32 | Chorus, bars 1–4 | The chat appears big, typed word by word, as the hero of the frame | `thanks for being so chill. amazing stream` | “You watched the city turn to fields / Your first train, it moved so fast” | Chat (pixel font, lit) |
 | 8 | 0:32–0:40 | Chorus, bars 5–8 | Front-page burst on the beat; then the streamer, stream ended, stands by the window with the fields going by | `3 VIEWERS. ENOUGH.` | “Said it was amazing, said thank you / From the other side of the world” | **Halftone** → pixel |
-| 9 | 0:40–0:48 | Outro, 4 bars | Pull back from the train across the fields and over the curve of the globe to one lit window on the other side of the world; a small warm spark next to the last chat message (companion cameo) | `the other side of the world` | “That’s why I do this / That’s why I do this” | Pixel (warm grade) |
-| 10 | 0:48–0:52 | End, 2 bars | End card, with a small credit line under it | `Chobbot · never stream alone` (placeholder tagline) · `Story shared by a streamer on Reddit, retold with permission` | (last chord + sonic logo in the edit) | Brand end card |
+| 9 | 0:40–0:48 | Outro, 4 bars | Pull back from the train across the fields and over the curve of the globe to one lit window on the other side of the world; a small warm spark next to the last chat message (companion cameo) | `the other side of the world` | “Like showing a visitor my town / I saw it like a tourist too / That’s why it’s worth it” | Pixel (warm grade) |
+| 10 | 0:48–0:52 | End, 2 bars | One line first, then the end card with a small credit line under it | `They kept streaming IRL.` → `Chobbot · never stream alone` (placeholder tagline) · `Story shared by a streamer on Reddit, retold with permission` | (last chord + sonic logo in the edit) | Brand end card |
 
 Every line above comes from the post. Style switches land on downbeats: pixel → neon line (0:08) → pixel (0:20) → glitch/black (0:20–0:24)
 → chat (0:24) → halftone (0:32) → pixel warm (0:40) → end card (0:48).
@@ -77,8 +78,9 @@ Said it was amazing, said thank you
 From the other side of the world
 
 [Outro: soft]
-That's why I do this
-That's why I do this
+Like showing a visitor my town
+I saw it like a tourist too
+That's why it's worth it
 
 [End]
 ```

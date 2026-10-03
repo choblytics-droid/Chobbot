@@ -64,6 +64,15 @@ Fisher. For every story with `status = new` and no context yet it:
 `arc_status` is `to_be_continued` or `open_ended`, the film says so (for example a "to be continued"
 card) instead of inventing an ending.
 
+### First run (2026-10-03, 12 shortlisted stories, ~5 min)
+
+- 9 complete, 3 open-ended (a regular who vanished; an accidental live stream; a TikTok viewer drop),
+  0 to be continued. 5–100 comments per story.
+- ST-01 confirmed and enriched: the test streams before the tour, the poster's own line about
+  feeling like a tourist in their town, and later posts showing they kept streaming IRL.
+- ST-02 enriched: the raid was 450 viewers, while the poster chased a personal best with 4 watching.
+- 1t4d8fc (accidental live stream) has contradictions and private content: not suitable.
+
 ## Using it
 
 Open the workflow in n8n → **Execute workflow**. Then open the data table and filter `status = new`.
