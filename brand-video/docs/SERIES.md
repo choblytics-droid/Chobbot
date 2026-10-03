@@ -41,7 +41,7 @@ companion, not a price list.
 
 | Never changes (the brand) | Always changes (the variety) |
 |---|---|
-| The companion: one design that **evolves** stage by stage (spark → spark with a memory ring → full form) | Art style per Stories episode (from the 30-style library: anime, papercut, CRT, ukiyo-e, crayon, voxel…) |
+| The companion: one design that **evolves** stage by stage (spark → spark with a memory ring → full form) | Art styles: each film mixes a style deck (home + 3–5 switch styles from the A tier in [`STYLE_DECK.md`](STYLE_DECK.md)), switching on the music; no anime/cartoon humans |
 | Palette: the brand accent is the only colour that glows | Music genre per episode or season |
 | Type system: one display font, one mono "machine voice" | Camera grammar and set per story |
 | Motion grammar: cuts on downbeats, hold then snap | Emotion: funny, cringe, wholesome, triumphant |
@@ -60,8 +60,9 @@ end card are always ours.**
   episode.
 - **The song:** written from the story (each line = one moment), with the same structure every time so
   the engine reuses the timeline logic: hook → story → twist → drop.
-- **Where variety goes:** each episode takes **one art style** from the style library (the breadth
-  path, one style per episode instead of 28 in one film).
+- **Where variety goes:** each episode has a **style deck** (a home style + 3–5 switch styles from
+  the A tier in [`STYLE_DECK.md`](STYLE_DECK.md)) and switches styles on the music, faster in the
+  chorus. People are pixel/voxel sprites or silhouettes; no anime or cartoon humans.
 - **The brand:** the companion appears as a **cameo**, never a sales pitch: a spark in the chat that
   catches the moment the story turns. A 2-second end card.
 - **Rights:** stories posted online belong to their authors. Ask permission, or retell an anonymised
