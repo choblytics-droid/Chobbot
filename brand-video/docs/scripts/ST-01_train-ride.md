@@ -1,4 +1,4 @@
-# ST-01 · “The train ride” · script v0.1 (test film)
+# ST-01 · “The train ride” · script v0.2 (first film, level 6)
 
 **Status:** draft for review. Nothing is built until you approve this script and the audio exists.
 
@@ -15,7 +15,7 @@
 | The one message | Three viewers can be enough. Someone is there. |
 | Length / format | 30 s · 9:16 first, 16:9 cut |
 | Audio | A short song, played as background. **Nobody sings on screen.** Lyrics appear as on-screen text and chat messages |
-| Quality level | **3 (test)**: one home style + 2 switch styles, lit pixel art, light rays, rain on the window, word-synced text |
+| Quality level | **6 (the minimum for every film)**: two dressed sets (the street with Christmas lights, the train carriage); lit pixel art with soft shadows and bounce light; haze and volumetric light around lamps and lights; a physical night sky; rain on the window that refracts the city; lit particles (snow, rain); 60 fps adaptive motion blur; one hero shot (beat 3: the city streaking past the rainy train window, then the signal loss) |
 | Style deck | Home: **pixel art** · switches: **neon line**, **halftone** |
 | Characters | The streamer as a small pixel sprite from behind (hood, phone in hand). The chat as the second character. The companion only as a 1-second cameo at the end |
 
@@ -65,7 +65,7 @@ That's why I do this
 1. The Story Fisher → script → song chain works on a real story.
 2. Word-synced lyrics on screen with no singer.
 3. Style switches on the beat (pixel → neon → halftone).
-4. The real cost of one level-3 film. Note your usage bar before and after: this is the
+4. The real cost of one level-6 film. Note your usage bar before and after: this is the
    calibration for the Effort Levels tab.
 
 ## Open questions for you
