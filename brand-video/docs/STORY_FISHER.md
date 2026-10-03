@@ -33,7 +33,17 @@ and the author is asked for permission or the story is anonymised (see `SERIES.m
 - Run 2: pipeline worked end to end (9 posts, full text from PullPush for 9/9, judged, saved), but
   all 9 were how-to questions from one subreddit and were correctly rejected. Cause: path-scoped
   `site:` queries. Fixed with the new query pool.
-- Run 3: see the latest execution in n8n.
+- Run 3 (new query pool): 134 Reddit posts found, full text from PullPush for 64 (70 kept the Brave
+  snippet), **12 stories shortlisted** (`status = new`, two scored 9/10), 122 rejected. Runtime about
+  10 minutes, mostly PullPush at ~4 s per post.
+
+## Next improvements
+
+- **Comments.** "Ask" threads ("Who was the viewer you can't forget?") hold the best stories in their
+  comments. Add a PullPush comment fetch (`/reddit/search/comment/?link_id=<id>&sort_type=score`)
+  for posts the judge marks as a question thread, and judge the top comments as stories.
+- **Speed.** Skip PullPush for posts whose snippet already shows a question or tip list.
+- **Freshness.** Add a Brave freshness filter once the node's parameter name is confirmed in the n8n UI.
 
 ## Using it
 
