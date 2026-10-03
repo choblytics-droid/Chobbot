@@ -1,6 +1,6 @@
-# ST-01 · “The train ride” · script v0.3 (first film, level 6, 52 s)
+# ST-01 · “The train ride” · script v0.4 (approved 2026-10-03; v0.4 = fact fixes; 52 s)
 
-**Status:** draft for review. Nothing is built until you approve this script and the audio exists.
+**Status:** approved. v0.4 corrects lyrics and pictures to the full post text (no rain, no phone, no night; added the real details: the viewer's first train, city to farmland, the other side of the world). Next: the song.
 
 ## Brief
 
@@ -10,12 +10,12 @@
 | Series | 1 · Streamer Stories (music video) |
 | Source | Reddit r/Twitch, “Did an IRL, and a viewer made me realise why it’s worthwhile” (Story Fisher, quality 9, wholesome). <https://www.reddit.com/r/Twitch/comments/1pujw7y/> |
 | Rights | Retold anonymised: no username, no channel, no real place names. Ask the author before publishing (better: they may share it). |
-| Facts we use (only these) | A streamer who usually streams games from their desk did an IRL stream around their city at Christmas. It peaked at 3 viewers. One viewer kept watching during a train ride until the connection dropped. Afterwards the viewer thanked them and called it amazing. The streamer was close to tears and saw why streaming is worth it. |
+| Facts we use (only these, checked against the full post) | A desk-bound game streamer did a proper IRL: a tour of their city at Christmas (Christmas market, a castle, street food, a flea market, a lit-up carousel they let viewers watch). 3 viewers at peak. At the end they had a train to catch and meant to stop, but one chatty viewer wanted to keep watching until the connection dropped: they had **never been on a train** and were surprised how fast it moved. The view went from the city to **open farmland**. The viewer thanked them “for being so chill” and said it had been “an amazing stream”. The streamer was nearly in tears that it resonated with someone **on the other side of the world**. |
 | Persona / pains | Starter · pains 8 (loneliness), 15 (stuck small) |
 | The one message | Three viewers can be enough. Someone is there. |
 | Length / format | 52 s (minimum 45 s) · 9:16 first, 16:9 cut |
 | Audio | A short song, played as background. **Nobody sings on screen.** Lyrics appear as on-screen text and chat messages |
-| Quality level | **6 (the minimum for every film)**: two dressed sets (the street with Christmas lights, the train carriage); lit pixel art with soft shadows and bounce light; haze and volumetric light around lamps and lights; a physical night sky; rain on the window that refracts the city; lit particles (snow, rain); 60 fps adaptive motion blur; one hero shot (beat 3: the city streaking past the rainy train window, then the signal loss) |
+| Quality level | **6 (the minimum for every film)**: two dressed sets (the street with Christmas lights, the train carriage); lit pixel art with soft shadows and bounce light; haze and volumetric light around the market lights and the carousel; a physical winter sky at dusk; window reflections and speed on the train; lit particles (market lights, sparks of the carousel bulbs); 60 fps adaptive motion blur; one hero shot (beat 4: through the train window the city falls away into open farmland, fast) |
 | Style deck | Home: **pixel art** · switches: **neon line**, **halftone** |
 | Characters | The streamer as a small pixel sprite from behind (hood, phone in hand). The chat as the second character. The companion only as a 1-second cameo at the end |
 
@@ -23,19 +23,19 @@
 
 | # | Time | Music | Picture | On-screen text | Lyric (background) | Style |
 |---|---|---|---|---|---|---|
-| 1a | 0:00–0:03 | Intro, bars 1–1.5 | Slow push into the pixel city at night, Christmas lights glowing in haze | **`Based on a true story`** (on from frame 1, out on the beat at 0:03) | (glockenspiel, train rhythm) | Pixel |
+| 1a | 0:00–0:03 | Intro, bars 1–1.5 | Slow push into the pixel city at dusk, Christmas-market lights glowing in haze | **`Based on a true story`** (on from frame 1, out on the beat at 0:03) | (glockenspiel, train rhythm) | Pixel |
 | 1b | 0:03–0:04 | Intro, bar 2 | The pixel streamer steps out of a door, phone up; a tiny `LIVE` badge blinks on | `LIVE · IRL` | (intro continues) | Pixel |
-| 2 | 0:04–0:08 | Verse, bars 1–2 | Snow in the lamp light; the streamer walks past lit windows | lyric as text | “Took the stream outside on Christmas night / Phone in my cold hand, city lights” | Pixel |
-| 3 | 0:08–0:12 | Verse, bars 3–4 | Close on the phone: the viewer counter climbs `1 … 2 … 3`; the streamer talks to the street | `3 watching` | “Three people watching, that’s my crowd / Talking to the street out loud” | Pixel → **neon line** on the downbeat |
-| 4 | 0:12–0:20 | Verse, bars 5–8 | **Hero shot:** the evening train; inside the carriage, rain streaks the window and the city slides past, refracted in the drops; one chat line ticks on the phone | lyric as text | “Evening train, the windows run / Rain on the glass, still on, still on” | Neon line → pixel |
-| 5 | 0:20–0:22 | Pre-chorus, 1 bar | The signal bars fall one by one; the picture pixelates | `signal fading` | “Signal fading” | Pixel → glitch |
+| 2 | 0:04–0:08 | Verse, bars 1–2 | The tour: market stalls, a castle on the hill, a lit carousel turning (the tripod set down in front of it) | lyric as text | “Took the stream out for Christmas in town / Market lights, a castle, a carousel” | Pixel |
+| 3 | 0:08–0:12 | Verse, bars 3–4 | The viewer counter climbs `1 … 2 … 3`; chat lines pop up beside the carousel | `3 watching` | “Three people watching, that’s my crowd / Talking to the street out loud” | Pixel → **neon line** on the downbeat |
+| 4 | 0:12–0:20 | Verse, bars 5–8 | The station; the streamer is about to end the stream. A chat line: `wait, I've never been on a train`. **Hero shot:** through the carriage window the city falls away into open farmland, fast | `wait, I've never been on a train` | “Train to catch, I'll say goodbye / ‘Wait, I’ve never been on a train’” | Neon line → pixel |
+| 5 | 0:20–0:22 | Pre-chorus, 1 bar | Fields rush past; the signal bars fall one by one; the picture pixelates | `signal fading` | “Keep it on till the signal goes” | Pixel → glitch |
 | 6 | 0:22–0:24 | **Break**, 1 bar | Freeze, `reconnecting…`, then black and silence | `signal lost` | (silence) | Black |
-| 7 | 0:24–0:32 | Chorus, bars 1–4 | The chat appears big, typed word by word, as the hero of the frame | `that was amazing. thank you` | “You stayed till the signal died / Said it was amazing, on a train at night” | Chat (pixel font, lit) |
-| 8 | 0:32–0:40 | Chorus, bars 5–8 | Front-page burst on the beat; then back on the platform, the streamer stops and reads the phone | `3 VIEWERS. ENOUGH.` | “Three is not nothing, three is enough / Somebody was there, that’s what it was” | **Halftone** → pixel |
-| 9 | 0:40–0:48 | Outro, 4 bars | The city turns warm; in the phone’s chat a small warm spark appears next to the message (companion cameo); pull back over the lit windows | `someone was there` | “That’s why I do this / That’s why I do this” | Pixel (warm grade) |
+| 7 | 0:24–0:32 | Chorus, bars 1–4 | The chat appears big, typed word by word, as the hero of the frame | `thanks for being so chill. amazing stream` | “You watched the city turn to fields / Your first train, it moved so fast” | Chat (pixel font, lit) |
+| 8 | 0:32–0:40 | Chorus, bars 5–8 | Front-page burst on the beat; then the streamer, stream ended, stands by the window with the fields going by | `3 VIEWERS. ENOUGH.` | “Said it was amazing, said thank you / From the other side of the world” | **Halftone** → pixel |
+| 9 | 0:40–0:48 | Outro, 4 bars | Pull back from the train across the fields and over the curve of the globe to one lit window on the other side of the world; a small warm spark next to the last chat message (companion cameo) | `the other side of the world` | “That’s why I do this / That’s why I do this” | Pixel (warm grade) |
 | 10 | 0:48–0:52 | End, 2 bars | End card, with a small credit line under it | `Chobbot · never stream alone` (placeholder tagline) · `Story shared by a streamer on Reddit, retold with permission` | (last chord + sonic logo in the edit) | Brand end card |
 
-Style switches land on downbeats: pixel → neon line (0:08) → pixel (0:20) → glitch/black (0:20–0:24)
+Every line above comes from the post. Style switches land on downbeats: pixel → neon line (0:08) → pixel (0:20) → glitch/black (0:20–0:24)
 → chat (0:24) → halftone (0:32) → pixel warm (0:40) → end card (0:48).
 
 ## Song (Suno, Custom mode, v5.5, Duration 0:52–1:00)
@@ -55,26 +55,26 @@ heavy reverb, autotune, rap verses, spoken word intro, long instrumental intro
 **Lyrics**
 
 ```
-[Intro: glockenspiel, train rhythm]
+[Intro: 2 bars, instrumental, glockenspiel, train rhythm]
 
 [Verse: soft vocal]
-Took the stream outside on Christmas night
-Phone in my cold hand, city lights
+Took the stream out for Christmas in town
+Market lights, a castle, a carousel
 Three people watching, that's my crowd
 Talking to the street out loud
-Evening train, the windows run
-Rain on the glass, still on, still on
+Train to catch, I'll say goodbye
+"Wait, I've never been on a train"
 
 [Pre-Chorus: almost spoken]
-Signal fading
+Keep it on till the signal goes
 
 [Break]
 
 [Chorus: warm, fuller]
-You stayed till the signal died
-Said it was amazing, on a train at night
-Three is not nothing, three is enough
-Somebody was there, that's what it was
+You watched the city turn to fields
+Your first train, it moved so fast
+Said it was amazing, said thank you
+From the other side of the world
 
 [Outro: soft]
 That's why I do this
@@ -99,3 +99,10 @@ stem if available).
 
 - The tagline on the end card (`never stream alone` is a placeholder).
 - Brand colours: until the design lands, the warm accent is a placeholder amber.
+
+## Permission message to the author (draft, send from your Reddit account)
+
+> Hi! Your post about the Christmas IRL and the viewer on their first train really stuck with us.
+> We make short animated music videos about real streamer moments and would love to retell yours
+> (anonymised: no username, no channel, no place names). Would that be OK with you? Happy to send
+> you the video before it goes out, and to credit you if you'd like.
