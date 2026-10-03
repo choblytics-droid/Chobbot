@@ -12,6 +12,8 @@ script is approved and its audio exists. The website design is still in producti
 
 - [`plan/Chobbot_Media_Plan_v0.1.xlsx`](plan/Chobbot_Media_Plan_v0.1.xlsx): **the working plan.** One tab per
   section (Streamer Stories · Brand Generic A/B · Brand Master A/B), shared assets, status dropdowns.
+- [`docs/SUNO_GUIDE.md`](docs/SUNO_GUIDE.md): how we make the songs in Suno (settings, style field, lyrics tags,
+  length ≥ 45 s, picking a take). Per-film prompts and lyrics: tab **Story & Song** in the plan.
 - [`docs/STYLE_DECK.md`](docs/STYLE_DECK.md): mixed art styles per film, only the ones we render well; characters as
   pixel/voxel sprites, silhouettes or the mascot.
 - [`docs/STORY_FISHER.md`](docs/STORY_FISHER.md): the n8n workflow that collects real streamer stories from Reddit.
