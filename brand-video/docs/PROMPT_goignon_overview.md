@@ -19,6 +19,24 @@ Rules:
   a story by its theme (e.g. "streamer's first raid, 3 viewers → 300").
 - Be concrete: paths, file counts, sizes, dates. Say "unknown" instead of guessing.
 
+**Known traces, read these first.** Earlier Claude Code sessions on this PC saved notes into the
+Claude memory folder of the `D:\APP` project and into user skills. Their index (`MEMORY.md`) names
+these files. Find each one and include it in the report (quote the method and rules in full; they are
+our own work):
+
+- `%USERPROFILE%\.claude\projects\D--APP\memory\pullpush-reddit-harvest.md`: the Reddit harvest
+  logic (reddit.com blocked the server, so stories were pulled through `api.pullpush.io`, no auth).
+  Also find the script or n8n workflow that implements it.
+- `...\memory\streamer-pain-beef-databank.md`: the streamer pain/beef databank (PAINS P1–P8, BEEF
+  B1–B10, podcast-director, the verbatim PHRASE_BANK). Find the databank file itself too.
+- `...\memory\podcast-content-no-ai-slop.md` and `...\memory\brand-podcast-build-state.md`: the
+  rules for scripts without an AI tone (voices, sourcing, writing, roast, production).
+- `...\memory\explainer-script-voice-rules.md`: the 10 script voice rules.
+- `%USERPROFILE%\.claude\skills\human-copy-voice\SKILL.md`, `...\skills\stop-slop\` (if present) and
+  `...\skills\chob-mind\SKILL.md`: the skills that remove the AI cadence and find topics.
+- Folders to check for outputs: `D:\APP\VIDEO_APP` (Reel Room app), `D:\APP\CHOB_FILM`, and any
+  `goignon` folder.
+
 Write one Markdown report with these sections:
 
 1. **Inventory.** A tree of the folder to depth 3, with file counts and total size per subfolder.
