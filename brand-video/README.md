@@ -9,6 +9,11 @@ and nothing there is changed by work here.
 
 ## Read first
 
+- [`docs/SERIES.md`](docs/SERIES.md): **the plan.** Three series (Streamer Stories MVs, Pain → Need →
+  Function explainers, the master brand film), the product model they show, and the consistency system.
+- [`docs/PROMPT_goignon_overview.md`](docs/PROMPT_goignon_overview.md): a prompt for a local model to
+  audit the earlier `goignon` project on your PC.
+
 - [`docs/RESEARCH.md`](docs/RESEARCH.md): what `mexicat/pdoom-video` is, how it reaches its quality,
   and what this repo already has from it.
 - [`docs/TIER_LIST.md`](docs/TIER_LIST.md): the quality tier list (D → S+), the rendering (渲染)
@@ -24,7 +29,10 @@ and nothing there is changed by work here.
 brand-video/
   docs/          research, tier list, concept, per-film treatments
   brand/         design tokens (colours, fonts, logo SVG) exported from the web design
+  docs/inputs/   reports and material from you (e.g. the goignon overview)
+  kit/           the shared brand kit in code: companion stages, palette, type, end card
   films/<name>/  one folder per film: audio/, data/, app/ (engine + scenes), out/ (renders, not committed)
+                 e.g. films/stories-01-*, films/pain-01-*, films/master
 ```
 
 Each film gets its own folder so cut-downs (16:9 hero, 9:16 social, 1:1) and later films never mix.
