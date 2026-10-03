@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cfe7f2"/><stop offset="1" stop-color="#f6efd9"/></linearGradient>
+  <radialGradient id="iris" cx="0.5" cy="0.62" r="0.62"><stop offset="0" stop-color="#e9b45a"/><stop offset="0.55" stop-color="#b8702c"/><stop offset="1" stop-color="#5a2e16"/></radialGradient>
+  <linearGradient id="hair" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8f5532"/><stop offset="1" stop-color="#6e3c22"/></linearGradient>
+  <filter id="soft" x="-60%" y="-120%" width="220%" height="340%"><feGaussianBlur stdDeviation="9"/></filter>
+  <clipPath id="faceClip"><path id="faceP" d="M268 380 C266 500 300 585 362 628 Q400 656 438 628 C500 585 534 500 532 380 Z"/></clipPath>
+  <clipPath id="bangClip"><path d="M262 300 Q296 380 300 430 Q324 384 342 366 Q350 404 360 426 Q380 380 398 364 Q412 396 418 410 Q430 380 450 368 Q470 400 490 428 Q500 372 540 300 Z"/></clipPath>
+</defs>
+<rect width="800" height="1000" fill="url(#bg)"/>
+<circle cx="400" cy="470" r="330" fill="#ffffff" opacity="0.35"/>
+<!-- back hair (bob) -->
+<path d="M238 330 C214 450 220 565 246 668 Q296 700 332 652 L468 652 Q504 700 556 668 C582 565 586 450 562 330 Z" fill="url(#hair)" stroke="#3e2318" stroke-width="4" stroke-linejoin="round"/>
+<!-- body: green dress, white blouse collar, apron -->
+<path d="M196 1000 C206 830 262 734 362 692 L438 692 C538 734 594 830 604 1000 Z" fill="#6f944e" stroke="#2f3a22" stroke-width="4"/>
+<path d="M226 1000 C236 900 262 840 300 806 L300 1000 Z M574 1000 C564 900 538 840 500 806 L500 1000 Z" fill="#587a3c"/>
+<path d="M332 748 L468 748 L478 1000 L322 1000 Z" fill="#fbf6ea" stroke="#3a2c24" stroke-width="4"/>
+<path d="M330 760 L346 1000 M470 760 L456 1000" stroke="#e4dac4" stroke-width="10"/>
+<path d="M348 694 L400 772 L452 694 L470 726 L400 796 L330 726 Z" fill="#ffffff" stroke="#3a2c24" stroke-width="4" stroke-linejoin="round"/>
+<path d="M386 774 L414 774 L408 796 L392 796 Z" fill="#d65f50" stroke="#3a2c24" stroke-width="3"/>
+<!-- neck -->
+<path d="M364 600 L362 694 Q400 712 438 694 L436 600 Z" fill="#ffdcbf" stroke="#4a2c22" stroke-width="4"/>
+<path d="M364 600 L436 600 L437 648 Q400 676 363 648 Z" fill="#f2b896"/>
+<!-- face -->
+<path d="M268 380 C266 500 300 585 362 628 Q400 656 438 628 C500 585 534 500 532 380 Z" fill="#ffdcbf" stroke="#4a2c22" stroke-width="4"/>
+<!-- cel shadow under the bangs and at the jaw -->
+<g clip-path="url(#faceClip)">
+  <path d="M250 300 Q296 400 302 450 Q326 404 344 388 Q352 424 362 446 Q382 400 398 386 Q412 416 420 432 Q432 402 452 390 Q472 420 492 448 Q504 396 560 300 Z" fill="#f2b896"/>
+  <path d="M268 470 C276 560 320 612 400 640 C346 600 306 540 296 470 Z" fill="#f4bf9f" opacity="0.8"/>
+</g>
+<!-- blush -->
+<ellipse cx="318" cy="548" rx="34" ry="16" fill="#f7949a" opacity="0.55" filter="url(#soft)"/>
+<ellipse cx="482" cy="548" rx="34" ry="16" fill="#f7949a" opacity="0.55" filter="url(#soft)"/>
+<path d="M300 546 l8 -10 M314 548 l8 -10 M328 550 l8 -10 M466 550 l8 -10 M480 548 l8 -10 M494 546 l8 -10" stroke="#e8707a" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
+<!-- eyes -->
+<g id="eyeL">
+  <path d="M296 478 Q300 440 340 436 Q380 438 386 476 Q378 520 340 522 Q302 520 296 478 Z" fill="#ffffff"/>
+  <ellipse cx="342" cy="482" rx="30" ry="39" fill="url(#iris)" stroke="#3a1c10" stroke-width="3"/>
+  <ellipse cx="343" cy="486" rx="13" ry="19" fill="#2a120a"/>
+  <path d="M318 500 Q342 518 366 500" stroke="#f3cf86" stroke-width="5" fill="none" opacity="0.8"/>
+  <ellipse cx="331" cy="466" rx="10" ry="12" fill="#ffffff"/>
+  <circle cx="356" cy="500" r="4.5" fill="#ffffff"/>
+  <path d="M284 474 Q292 436 340 432 Q376 432 386 458 Q372 444 340 444 Q300 446 296 478 Z" fill="#2a160e"/><path d="M386 458 Q388 466 388 474" stroke="#2a160e" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M287 466 L272 456 M290 456 L280 440" stroke="#2a160e" stroke-width="5" stroke-linecap="round"/>
+  <path d="M318 522 Q340 528 362 522" stroke="#7a4a36" stroke-width="3" fill="none" stroke-linecap="round"/>
+</g>
+<use href="#eyeL" transform="translate(800 0) scale(-1 1)"/>
+<!-- nose, mouth -->
+<path d="M404 536 L398 552 L406 553" stroke="#c98a6c" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M378 586 Q400 606 422 586 Q400 596 378 586 Z" fill="#b5483e" stroke="#4a2c22" stroke-width="3" stroke-linejoin="round"/>
+<path d="M392 596 Q400 600 408 596" stroke="#f08c86" stroke-width="3" fill="none"/>
+<!-- side locks -->
+<path d="M262 318 C246 430 254 540 290 616 C292 540 290 450 300 380 Z" fill="url(#hair)" stroke="#3e2318" stroke-width="4" stroke-linejoin="round"/>
+<path d="M538 318 C554 430 546 540 510 616 C508 540 510 450 500 380 Z" fill="url(#hair)" stroke="#3e2318" stroke-width="4" stroke-linejoin="round"/>
+<!-- bangs with cel shadow and an angel-ring highlight -->
+<path d="M262 300 Q296 380 300 430 Q324 384 342 366 Q350 404 360 426 Q380 380 398 364 Q412 396 418 410 Q430 380 450 368 Q470 400 490 428 Q500 372 540 300 Z" fill="url(#hair)" stroke="#3e2318" stroke-width="4" stroke-linejoin="round"/>
+<g clip-path="url(#bangClip)">
+  <path d="M338 300 Q348 360 360 426 Q354 360 360 300 Z M440 300 Q446 350 450 368 Q458 340 460 300 Z" fill="#5c321c"/>
+  <path d="M282 372 Q400 344 518 372" stroke="#b9774a" stroke-width="10" fill="none" opacity="0.85"/>
+  <path d="M304 378 l16 -6 M352 364 l20 -4 M424 362 l20 2 M476 370 l16 6" stroke="#f0c08e" stroke-width="5" stroke-linecap="round"/>
+</g>
+<path d="M300 414 Q334 398 370 408 M500 414 Q466 398 430 408" stroke="#6b3c22" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.85"/>
+<!-- headscarf -->
+<path d="M226 336 C222 168 578 168 574 336 Q400 290 226 336 Z" fill="#fbf8f0" stroke="#3a2c24" stroke-width="5" stroke-linejoin="round"/>
+<path d="M300 300 Q360 220 470 214 M260 312 Q300 250 360 222 M520 304 Q520 250 480 226" stroke="#ddd5c2" stroke-width="5" fill="none" stroke-linecap="round"/>
+<path d="M232 326 Q400 282 568 326" stroke="#5f8cb8" stroke-width="16" fill="none" stroke-linecap="round"/>
+<path d="M232 326 Q400 282 568 326" stroke="#3a2c24" stroke-width="2" fill="none" transform="translate(0 9)"/>
+<path d="M566 316 Q612 300 626 336 Q600 344 586 336 Q600 372 580 392 Q562 360 566 316 Z" fill="#fbf8f0" stroke="#3a2c24" stroke-width="4" stroke-linejoin="round"/>
+<circle cx="572" cy="324" r="13" fill="#fbf8f0" stroke="#3a2c24" stroke-width="4"/>
+</svg>
