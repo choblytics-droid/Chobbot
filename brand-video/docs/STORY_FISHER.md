@@ -45,6 +45,25 @@ and the author is asked for permission or the story is anonymised (see `SERIES.m
 - **Speed.** Skip PullPush for posts whose snippet already shows a question or tip list.
 - **Freshness.** Add a Brave freshness filter once the node's parameter name is confirmed in the n8n UI.
 
+## Story Context (the full picture)
+
+Workflow **"Story Context · comments + follow-ups"** (`ZaJiPe77HucfhKC1`), run manually after the
+Fisher. For every story with `status = new` and no context yet it:
+
+1. fetches the post, its **top 100 comments**, and the **poster's own posts from 60 days before to
+   one year after** (backstory and follow-ups), all from PullPush;
+2. marks the poster's replies as **OP** and anonymises everyone else (usernames are used only inside
+   the run, to recognise the poster, and are never stored);
+3. has DeepSeek write the full picture into the same table row: `story_start`, `story_end`,
+   `arc_status` (complete / to_be_continued / open_ended / unknown), `op_additions` (facts the poster
+   added in comments), `follow_ups`, `audience_reaction`, `script_facts` (each with its source:
+   post, OP comment, follow-up post) and `doubts`.
+
+**Rule:** no Story is scripted until its full picture is checked. Only facts the poster stated
+(post, OP comments, follow-up posts) go into lyrics and pictures; commenters' guesses never do. If
+`arc_status` is `to_be_continued` or `open_ended`, the film says so (for example a "to be continued"
+card) instead of inventing an ending.
+
 ## Using it
 
 Open the workflow in n8n → **Execute workflow**. Then open the data table and filter `status = new`.

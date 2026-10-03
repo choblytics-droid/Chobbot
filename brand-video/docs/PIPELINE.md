@@ -20,5 +20,7 @@ Rules:
   message leads and the music serves it.
 - **Changes flow down, never up.** A change to an approved script reopens steps 3–8; a change to a
   style frame reopens 5–8 only.
+- **Stories: full picture first.** Before a Story script, run Story Context (post + comments +
+  the poster's follow-ups). Only facts the poster stated are used; open or continued stories stay open.
 - **Minimum quality level 6 for every film** (owner rule, 2026-10-03). The level (`TIER_LIST.md`)
   is chosen at step 1 (6 or higher) and confirmed at step 5. No lower-level tests or drafts for release.

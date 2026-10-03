@@ -16,6 +16,7 @@ or asset work starts (see `PIPELINE.md`).
 | Audio | song with lyrics · instrumental + voice-over · instrumental + on-screen text only. The song is background: no character sings or lip-syncs; lyrics appear as text |
 | Mood / music reference | genre, tempo range, references |
 | Quality level | from `TIER_LIST.md` (minimum 6) |
+| Arc status (Stories) | From Story Context: complete · to be continued · open ended · unknown. Never invent an ending |
 | Opening card | Streamer Stories only: “Based on a true story”, 1.5 bars (2.5–3 s), over the first shot, out on a downbeat |
 
 ## Beat sheet
