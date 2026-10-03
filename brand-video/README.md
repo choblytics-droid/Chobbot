@@ -10,6 +10,9 @@ script is approved and its audio exists. The website design is still in producti
 
 ## Read first
 
+- [`plan/Chobbot_Media_Plan_v0.1.xlsx`](plan/Chobbot_Media_Plan_v0.1.xlsx): **the working plan.** One tab per
+  section (Streamer Stories · Brand Generic A/B · Brand Master A/B), shared assets, status dropdowns.
+- [`docs/STORY_FISHER.md`](docs/STORY_FISHER.md): the n8n workflow that collects real streamer stories from Reddit.
 - [`docs/SERIES.md`](docs/SERIES.md): **the plan.** Three series (Streamer Stories MVs, Pain → Need →
   Function explainers, the master brand film), the parallel Vision track (majestic, score instead of
   song), the product model they show, and the consistency system.
@@ -36,6 +39,7 @@ script is approved and its audio exists. The website design is still in producti
 brand-video/
   docs/          research, tier list, concept, pipeline
   docs/scripts/  one approved script per film
+  plan/          the media plan spreadsheet
   brand/         design tokens (colours, fonts, logo SVG) exported from the web design
   docs/inputs/   reports and material from you (e.g. the goignon overview)
   kit/           the shared brand kit in code: companion stages, palette, type, end card

@@ -1,5 +1,16 @@
 # Content plan: three series, one system
 
+## Confirmed structure (2026-10-03)
+
+| # | Section | Versions | Method |
+|---|---|---|---|
+| 1 | **Streamer Stories** | Music video | Reddit story (n8n Story Fisher, [`STORY_FISHER.md`](STORY_FISHER.md)) → script → music → video |
+| 2 | **Brand · Generic** (pain → need → function) | **A** majestic technical (score + statements) · **B** music video (song) | Script first ([`PIPELINE.md`](PIPELINE.md)) |
+| 3 | **Brand · Master** (one film) | **A** majestic technical · **B** music video | Script first; built last |
+
+The working plan is the spreadsheet [`../plan/Chobbot_Media_Plan_v0.1.xlsx`](../plan/Chobbot_Media_Plan_v0.1.xlsx):
+one tab per section, plus shared assets. The "Vision track" below is what the A versions are.
+
 ## The product as the videos will show it (working model)
 
 Chobbot is a full AI streamer companion system:
