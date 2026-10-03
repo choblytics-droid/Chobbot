@@ -65,12 +65,9 @@ end card are always ours.**
 - **What:** one pain point per episode, turned into a need, answered by one product function.
 - **Structure (20–45 s):** the pain (cold, glitch, 2–3 words on screen) → the need, said plainly →
   the function, shown in the product (warm, clean) → the stage of the companion it belongs to → end card.
-- **First candidates** (to replace with the real list):
-  - Live: dead chat at the start of a stream → engagement prompts; chat too fast to read while
-    playing → the bot catches questions; spam and toxicity → moderation.
-  - Insights: "Why did viewers leave at 1:12?" → retention report; "Which games work?" → dashboard;
-    "What should I change?" → ask the analyst bot.
-  - Companion: "Every stream starts from zero" → it remembers regulars, running jokes, milestones.
+- **Episodes:** one per use case U1–U8 in [`USE_CASES.md`](USE_CASES.md), ordered by the
+  validated pain-point ranking. Each follows the six persuasion steps there (recognition → cost →
+  need → use case → proof → ease).
 - **Look:** the depth path (one consistent look, Level 5–6). UI shots are code stand-ins that read
   the brand tokens, so they switch to the real design when it's ready.
 - **Can start now:** the pain and need halves, yes. The function halves wait for the design, or ship

@@ -11,9 +11,11 @@ and nothing there is changed by work here.
 
 - [`docs/SERIES.md`](docs/SERIES.md): **the plan.** Three series (Streamer Stories MVs, Pain → Need →
   Function explainers, the master brand film), the product model they show, and the consistency system.
+- [`docs/USE_CASES.md`](docs/USE_CASES.md): **why streamers need it.** Personas, 16 pain points
+  across the streamer's journey, needs, 8 use cases as scenes, objections, proof to collect, and how
+  to validate the pain points.
 - [`docs/PROMPT_goignon_overview.md`](docs/PROMPT_goignon_overview.md): a prompt for a local model to
   audit the earlier `goignon` project on your PC.
-
 - [`docs/RESEARCH.md`](docs/RESEARCH.md): what `mexicat/pdoom-video` is, how it reaches its quality,
   and what this repo already has from it.
 - [`docs/TIER_LIST.md`](docs/TIER_LIST.md): the quality tier list (D → S+), the rendering (渲染)
