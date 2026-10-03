@@ -30,11 +30,7 @@ then run one command on a GPU machine for the 4K60 master:
 bun scripts/render.ts video --scale 2 --samples auto --shutter 0.2 --out ../out/hero-4k.mp4
 ```
 
-## Order of work once you say go
+## Order of work
 
-1. Song analysis + lyric alignment → beat grid and word timings.
-2. Brand palette file + the type system.
-3. **Calibration:** scene 6 (the drop) at full depth, as stills. You approve the look and the real cost.
-4. The remaining scenes; checkpoint at half.
-5. Full 1080p cut; your timestamp notes.
-6. 4K60 master on the GPU machine + the 9:16 and 1:1 cut-downs.
+See [`PIPELINE.md`](PIPELINE.md): brief → script → music → analysis → style frames → assets →
+animatic → build. Nothing is built before the script is approved and the audio exists.

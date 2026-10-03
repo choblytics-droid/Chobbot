@@ -82,10 +82,45 @@ end card are always ours.**
 - **Level:** 6–8 (the concept in `CONCEPT.md`, extended with the evolution arc).
 - **Waits for:** the final design, the product structure decision and the song.
 
+## Parallel track: Vision films (majestic, score instead of song)
+
+Every master and product film also gets a **Vision** version alongside the song version: same
+approved script beats and the same assets, but a different sound and pace.
+
+- **What it says:** not one pain point but the innovation itself. A new era: everyone gets a second
+  brain, a real companion, a supporter.
+- **Sound:** an instrumental score (orchestral + electronic, building to one peak) with sparse
+  statements on screen and optionally a voice-over. No lyrics.
+- **Look:** majestic, technical, universal. Slow, precise camera moves; scale shifts from one desk to a
+  planet of lit windows; technical cutaways of the system (exploded, blueprint-like views of
+  Live → stream data → Insights → memory → companion); lots of negative space; one light, the
+  companion's. The depth path, level 7–8 (light, atmosphere, film pipeline, 1–2 hero shots).
+- **Avoid:** AI clichés (brains made of circuits, robots, code rain). The "second brain" is the
+  companion's memory ring growing into a constellation, not a literal brain.
+- **Keep it true:** every promise ("remembers", "supports", "grows with you") has to match what the
+  product actually does at launch.
+
+### Draft structure (60–90 s, five movements, for discussion)
+
+| Movement | Picture | Statement (draft) |
+|---|---|---|
+| 1. Alone | One streamer, one screen in the dark; pull back through the window to a city, then a planet of lit windows | "Every night, millions create alone." |
+| 2. The spark | One window gets a warm light: the companion is born, free and open to everyone | "Until now." |
+| 3. The architecture | A majestic flythrough of the system: the live chat, the stream's data, the reports, the memory | "It listens. It learns. It remembers." |
+| 4. The second brain | The memory ring grows into a constellation around the streamer, years of streams in it | "Not a tool. A second brain." |
+| 5. A new era | The planet again: window after window lights warm; the logo | "A companion for every creator." |
+
+The same five movements can be cut per product: **Live** (the spark, free and open), **Insights**
+(the second brain), **Companion** (the supporter that grows with you).
+
 ## Order of work
 
+Every film follows [`PIPELINE.md`](PIPELINE.md): brief → script → music → analysis → style frames →
+assets → animatic → build. **Nothing is built before its script is approved and its audio exists.**
+
 1. `goignon` overview (your local model, prompt in `PROMPT_goignon_overview.md`).
-2. **Brand kit in code:** the companion's three stages, palette, type, end card and sonic logo
-   placeholder. Every series uses it, so it comes first.
-3. Series 1, episode 1 (calibration of cost and look) and series 2, episode 1, in parallel.
-4. More episodes; then the master film once the design lands.
+2. Briefs for a first slate of three: `stories-01` (from the goignon report), `pain-01-hello` (use case
+   U1), `vision-01-second-brain`.
+3. Scripts for the slate ([`SCRIPT_TEMPLATE.md`](SCRIPT_TEMPLATE.md)), for your approval.
+4. Music written to the approved scripts.
+5. Then style frames, assets, animatic and build, film by film.

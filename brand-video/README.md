@@ -5,12 +5,17 @@ streamers, cut to our own song. This folder is separate from the Venmar × Quest
 (branch `claude/zealous-newton-7zpeja`) and from any other experiment: nothing here depends on them,
 and nothing there is changed by work here.
 
-**Status:** research and planning. No song yet, and the website design is still in production.
+**Status:** planning. Next step: briefs and scripts (`docs/PIPELINE.md`). Nothing is built until a
+script is approved and its audio exists. The website design is still in production.
 
 ## Read first
 
 - [`docs/SERIES.md`](docs/SERIES.md): **the plan.** Three series (Streamer Stories MVs, Pain → Need →
-  Function explainers, the master brand film), the product model they show, and the consistency system.
+  Function explainers, the master brand film), the parallel Vision track (majestic, score instead of
+  song), the product model they show, and the consistency system.
+- [`docs/PIPELINE.md`](docs/PIPELINE.md): **the work order.** Brief → script → music → analysis →
+  style frames → assets → animatic → build, with an approval gate at each step.
+- [`docs/SCRIPT_TEMPLATE.md`](docs/SCRIPT_TEMPLATE.md): the two-column script every film starts from.
 - [`docs/USE_CASES.md`](docs/USE_CASES.md): **why streamers need it.** Personas, 16 pain points
   across the streamer's journey, needs, 8 use cases as scenes, objections, proof to collect, and how
   to validate the pain points.
@@ -29,7 +34,8 @@ and nothing there is changed by work here.
 
 ```
 brand-video/
-  docs/          research, tier list, concept, per-film treatments
+  docs/          research, tier list, concept, pipeline
+  docs/scripts/  one approved script per film
   brand/         design tokens (colours, fonts, logo SVG) exported from the web design
   docs/inputs/   reports and material from you (e.g. the goignon overview)
   kit/           the shared brand kit in code: companion stages, palette, type, end card
