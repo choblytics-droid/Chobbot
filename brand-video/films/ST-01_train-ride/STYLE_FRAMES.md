@@ -7,7 +7,7 @@ Re-render any frame: `cd app && CHROME=<chromium> bun scripts/render.ts stills -
 ## Owner rules applied (2026-10-04)
 
 - **Level 6 minimum.**
-- **No people on screen.** The phone is the protagonist (on its tripod, propped at the train window,
+- **No people on screen** (this film's choice; the series rule allows blank humans or simple pixel art). The phone is the protagonist (on its tripod, propped at the train window,
   the stream's own screen); scenes explain the situation through objects, the stream UI and the chat.
   The companion appears only as a simple mascot (a warm spark), never as a character.
 - **Only facts from the post.** The two real chat lines are used word for word; other chat activity is

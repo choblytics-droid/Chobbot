@@ -17,13 +17,15 @@ one *home* style plus 3–5 *switch* styles, all picked from the A-tier list bel
 | Use | Avoid |
 |---|---|
 | **The companion**: a simple mascot shape (spark → ring → bubble with two eyes) | Anime / cartoon humans |
-| **Pixel or voxel people** (32×32 or 64×64 sprites, the proven Venmar × Quest approach) | Faces, hands, lip-sync, expressive acting |
-| **Silhouettes** from behind (hoodie, headset), rim-lit | Realistic or semi-realistic humans |
+| **Blank humans**: faceless figures, mannequin-like, flat shapes; no face, no expression | Faces, hands, lip-sync, expressive acting |
+| **Simple pixel-art people** (small sprites, readable at a glance) | 3D human models; realistic or semi-realistic humans |
+| **Silhouettes** from behind (hoodie, headset), rim-lit | Cartoon or anime humans |
 | **The chat itself as a character**: messages, usernames, emotes, typing dots | Many characters on screen at once |
 
-**Owner rule (2026-10-04): no people unless they are simple.** If a human figure can't be drawn
-well, use none: the object is the protagonist (ST-01: the phone on its tripod, at the train window,
-the stream's own screen), or a simple pixel prop or the mascot. Scenes explain the situation through
+**Owner rule (2026-10-04): humans only when presented smartly.** People may appear as **blank
+humans** (faceless, featureless figures) or **simple pixel art**, never as 3D models or in a cartoon or
+anime style. Another strong option is no people at all: the object is the protagonist (ST-01, our
+first film: the phone on its tripod, at the train window, the stream's own screen). Scenes explain the situation through
 objects, the stream UI and the chat. In the brand films the companion is always a simple mascot (a warm
 spark), never a character; Streamer Stories have no companion and no brand at all.
 
