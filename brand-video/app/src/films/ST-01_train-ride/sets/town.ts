@@ -50,6 +50,8 @@ export function paintTown(pc: PixelCanvas, o: TownOpts) {
   const cx = o.camX ?? 0, cy = o.camY ?? 0;
   const lay = (depth: number) => { pc.ox = -cx * (1 - depth); pc.oy = -cy * (1 - depth); };
   pc.clear();
+  pc.names = { 2: 'hill', 3: 'hill trees', 4: 'castle', 5: 'cobbles', 60: 'string lights', 70: 'hut L', 71: 'hut M', 72: 'hut R', 80: 'carousel canopy', 81: 'carousel valance', 82: 'carousel drum', 84: 'carousel platform', 91: 'tripod', 92: 'phone', 93: 'phone screen' };
+  for (let k = 11; k < 30; k++) pc.names[k] = `house ${k - 10}`;
   const R = mulberry32(7);
 
   // ---- far: hills, trees, the castle

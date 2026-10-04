@@ -13,6 +13,7 @@ const P = {
 export function paintDesk(pc: PixelCanvas, o: { t: number; k: number }) {
   const { t, k } = o;
   pc.clear();
+  pc.names = { 1: 'back wall', 2: 'poster', 3: 'window frame', 4: 'outside', 5: 'hallway', 6: 'door', 7: 'floor', 10: 'desk', 11: 'monitor', 12: 'monitor stand', 13: 'keyboard', 17: 'plant', 18: 'phone', 20: 'chair back', 21: 'chair seat', 22: 'chair base' };
   // back wall with a faint panel pattern, a poster, the window with snow outside
   for (let y = 0; y < 330; y++) for (let x = 0; x < AW; x++) pc.px(x, y, { a: (x % 46 === 0 || y % 80 === 0) ? P.wallD : P.wall, d: 0.6, id: 1 });
   pc.rect(170, 92, 52, 70, { a: P.poster, d: 0.59, id: 2 });

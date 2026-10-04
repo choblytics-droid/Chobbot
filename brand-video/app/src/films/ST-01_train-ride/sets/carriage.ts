@@ -111,6 +111,7 @@ function outside(pc: PixelCanvas, o: CarriageOpts) {
 
 export function paintCarriage(pc: PixelCanvas, o: CarriageOpts) {
   pc.clear();
+  pc.names = { 1: 'carriage wall', 2: 'window frame', 3: 'ceiling', 4: 'lamp strip', 5: 'luggage rack', 6: 'bag', 7: 'table', 8: 'cup', 50: 'seat R', 51: 'headrest R', 52: 'seat L', 53: 'headrest L', 63: 'phone', 64: 'phone screen', 23: 'snow field', 21: 'hedges', 22: 'farmhouse', 30: 'platform', 40: 'catenary' };
   outside(pc, o);
   const { x0, x1, y0, y1 } = WIN;
   const D = 0.2;

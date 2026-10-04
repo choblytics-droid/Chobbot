@@ -56,8 +56,43 @@ export class PixelCanvas {
     this.tex = { alb: mk(this.alb), nrm: mk(this.nrm), emi: mk(this.emi) };
   }
 
+  /** Names for object ids (QA reports). */
+  names: Record<number, string> = {};
+  /** The canvas uploaded last (the shot on screen), for QA. */
+  static last: PixelCanvas | null = null;
+
   clear() { this.alb.fill(0); this.nrm.fill(0); this.emi.fill(0); }
-  upload() { for (const t of Object.values(this.tex)) t.needsUpdate = true; }
+  upload() { for (const t of Object.values(this.tex)) t.needsUpdate = true; PixelCanvas.last = this; }
+
+  /**
+   * QA (docs/QA.md, QA-2): per object id, its area, bounding box, distinct albedo tones and internal
+   * detail (share of neighbouring pixel pairs inside the object whose albedo or facing differ).
+   * A big object with few tones and little internal detail is a flat, lazy shape.
+   */
+  qaStats() {
+    const st = new Map<number, { area: number; pairs: number; diff: number; tones: Set<number>; x0: number; y0: number; x1: number; y1: number }>();
+    const A = this.alb, N = this.nrm;
+    for (let y = 0; y < AH; y++) for (let x = 0; x < AW; x++) {
+      const i = (y * AW + x) * 4;
+      if (N[i + 3]! < 128) continue;
+      const id = A[i + 3]!;
+      let o = st.get(id);
+      if (!o) st.set(id, (o = { area: 0, pairs: 0, diff: 0, tones: new Set(), x0: x, y0: y, x1: x, y1: y }));
+      o.area++; o.tones.add(((A[i]! << 16) | (A[i + 1]! << 8) | A[i + 2]!) ^ (this.emi[i]! * 131 + this.emi[i + 1]! * 7 + this.emi[i + 3]! * 1031));
+      o.x0 = Math.min(o.x0, x); o.x1 = Math.max(o.x1, x); o.y0 = Math.min(o.y0, y); o.y1 = Math.max(o.y1, y);
+      for (const j of [x + 1 < AW ? i + 4 : -1, y + 1 < AH ? i + AW * 4 : -1]) {
+        if (j < 0 || N[j + 3]! < 128 || A[j + 3] !== id) continue;
+        o.pairs++;
+        const E = this.emi;
+        if (A[j] !== A[i] || A[j + 1] !== A[i + 1] || A[j + 2] !== A[i + 2] || N[j] !== N[i] || N[j + 1] !== N[i + 1] || E[j] !== E[i] || E[j + 3] !== E[i + 3]) o.diff++;
+      }
+    }
+    return [...st.entries()].map(([id, o]) => ({
+      id, name: this.names[id] ?? '', area: o.area, tones: o.tones.size, detail: o.pairs ? +(o.diff / o.pairs).toFixed(3) : 0,
+      // bbox in screen px (top-left origin)
+      box: [o.x0 * PIX, (AH - 1 - o.y1) * PIX, (o.x1 + 1) * PIX, (AH - o.y0) * PIX],
+    })).sort((a, b) => b.area - a.area);
+  }
 
   private enc(m: Mat) {
     const key = `${m.a}|${m.n}|${m.d}|${m.e}|${m.ei}|${m.id}`;

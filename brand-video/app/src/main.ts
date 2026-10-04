@@ -1,5 +1,6 @@
 // Entry: preview player (default) or export mode (?export=1, driven by scripts/render.ts).
 import { Engine, type AdaptiveSampling } from './engine/engine';
+import { PixelCanvas } from './kit/pixel';
 import { PW, PH, W, H, SCALE } from './engine/gl';
 import { FILM, FILM_DIR } from './engine/scale';
 import type { TimelineEntry } from './engine/engine';
@@ -51,8 +52,10 @@ function setupExport() {
     width: PW,
     height: PH,
     timeline: TIMELINE.map(({ id, start, end }) => ({ id, start, end })),
+    /** QA: object stats of the pixel-art G-buffer on screen after the last render (docs/QA.md). */
+    qaStats() { return PixelCanvas.last ? PixelCanvas.last.qaStats() : []; },
     /** Render a single frame at t (seeks as needed). */
-    still(t: number, samples: number | AdaptiveSampling = 1, shutter = 0.5) { return engine.render(t, 1 / 60, true, samples, shutter); },
+    still(t: number, samples: number | AdaptiveSampling = 1, shutter = 0.5) { PixelCanvas.last = null; return engine.render(t, 1 / 60, true, samples, shutter); },
     /** The last rendered frame as a full-resolution (PW x PH) PNG, base64 (for stills at scale > 1). */
     async png() {
       const px = await engine.readPixelsAsync(), row = PW * 4;

@@ -12,6 +12,7 @@ const P = {
 export function paintStation(pc: PixelCanvas, o: { t: number; camX?: number }) {
   const t = o.t;
   pc.clear();
+  pc.names = { 2: 'hills', 3: 'canopy', 4: 'girders', 5: 'lamps', 6: 'departure board', 7: 'clock', 10: 'train body', 11: 'train windows', 12: 'train door', 13: 'track bed', 14: 'platform' };
   const lay = (d: number) => { pc.ox = -(o.camX ?? 0) * (1 - d); };
 
   // far: a hill and a few town lights under the sky (seen past the canopy's edge)

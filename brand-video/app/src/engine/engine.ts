@@ -91,6 +91,8 @@ export class Engine {
   errors: string[] = [];
   /** Suppress the HUD (captions, crop marks) — used when rendering plate thumbnails. */
   hudOff = false;
+  /** QA renders (`?qa=1`): no grain, no chromatic aberration, so flat areas and detail can be measured. */
+  qa = typeof location !== 'undefined' && new URLSearchParams(location.search).has('qa');
 
   timeline: TimelineEntry[] = [];
 
@@ -297,6 +299,7 @@ export class Engine {
       outTex = this.avgRT.texture;
     }
     this.lastSamples = n;
+    if (this.qa) post = { ...post, grain: 0, ca: 0 };
     this.post.render(r, outTex, this.noHud, this.finalRT, post, t);
     this.lastPost = post;
     if (toScreen) {
