@@ -64,9 +64,10 @@ of independent review (final verdict: level 6, see `QA.md`). Times are seconds i
 ## Open points for you
 
 1. The permission message to the Reddit author (draft in the script); `retold with permission` goes into the credit only after a yes.
-2. "Reddit" in the credit: keep (a source credit) or drop (no-brand rule)?
-3. `can you keep it on?` on the phone is the approved script's line, but the post only says the viewer wanted to keep watching: keep it as the viewer's message, or show it only as the sung lyric?
-4. The front-page body copy sits under TikTok's caption (page texture): keep, or soften it?
+2. Defaults taken on the owner's "go" (2026-10-04), each easy to change: "Reddit" stays in the
+   credit as a source credit (the no-brand rule covers our own brand); `can you keep it on?` stays as
+   the viewer's message (approved script v0.9); the front-page body copy is set soft and grey so it
+   reads as page texture under the platform caption.
 
 ## Change after approval (owner, 2026-10-04)
 

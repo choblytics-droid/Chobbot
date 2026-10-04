@@ -102,11 +102,14 @@ export default class FrontPage extends Scene {
     const bf = F.serif(600), bs = 19, colW = 300, rows = 9;
     const lines = wrap(body, bf, bs, colW);
     c.font = font(bf, bs);
+    // the body sits under the platform caption: set it soft and grey, page texture rather than something to read
+    c.save(); c.filter = 'blur(1.1px)'; c.globalAlpha = 0.6;
     for (let col = 0; col < 3; col++) {
       const x = 60 + col * 330;
       if (col) c.fillRect(x - 14, PHOTO.y + PHOTO.h + 44, 1, 180);
       lines.slice(col * rows, col * rows + rows).forEach((l, k) => c.fillText(l, x, PHOTO.y + PHOTO.h + 60 + k * 20));
     }
+    c.restore();
   }
 
   render(f: Frame, out: THREE.WebGLRenderTarget) {
