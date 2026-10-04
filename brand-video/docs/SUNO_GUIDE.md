@@ -91,7 +91,7 @@ accurate) and send it in the chat, or upload it to `brand-video/films/<film-id>/
 ## House rules
 
 - The song plays in the background. **Nobody sings on screen.**
-- The brand's sonic logo is added at the end in the edit, so every film ends on the same sound.
+- Brand films only: the brand's sonic logo is added at the end in the edit. Streamer Stories end on the song's own ending (no brand).
 
 ## Sources
 

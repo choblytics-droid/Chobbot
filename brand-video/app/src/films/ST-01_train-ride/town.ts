@@ -3,6 +3,7 @@ import type * as THREE from 'three';
 import { Scene, type Frame } from '../../engine/scene';
 import { PixelCanvas, PixelLight } from '../../kit/pixel';
 import { Overlay } from '../../kit/overlay';
+import { F, font } from '../../engine/type';
 import { loadLyrics, type Lyrics } from '../../engine/lyrics';
 import { paintTown, townLights, type TownOpts } from './sets/town';
 import { clamp, ease } from '../../engine/util';
@@ -38,21 +39,26 @@ export default class Town extends Scene {
     if (shot === 'tour') ov.hook('Based on a true story', t, 0.05, this.ctx.params.hookEnd ?? 0);
     if (shot === 'tour' || shot === 'outro' || (shot === 'newday' && t < (this.ctx.params.keptAt ?? 1e9))) ov.lyric(this.ly.lineAt(t, 0.35, 0.3), t, { y: H * 0.2 });
     if (shot === 'outro') {
-      // the last chat message, remembered; the companion's first glimpse beside it (≈1 s)
-      const at = this.ctx.params.msgAt ?? 1e9, sp = this.ctx.params.sparkAt ?? 1e9;
+      // the last chat message, remembered (no brand, no companion: a Story is not a brand video)
+      const at = this.ctx.params.msgAt ?? 1e9;
       const a = clamp((t - at) / 0.3);
       if (a > 0) {
-        const r = ov.chat('viewer_3', 'thanks for being so chill. amazing stream', t, W * 0.12, H * 0.3, { a: a * 0.95, size: 32, w: W * 0.66, hot: true });
-        ov.spark(W * 0.12 + W * 0.66 + 34, H * 0.3 + (r?.h ?? 100) / 2, 16, t, clamp((t - sp) / 0.15) * (1 - clamp((t - sp - 1.0) / 0.3)));
+        ov.chat('viewer_3', 'thanks for being so chill. amazing stream', t, W * 0.12, H * 0.3, { a: a * 0.95, size: 32, w: W * 0.66, hot: true });
       }
     }
     if (shot === 'newday') {
       const a = clamp((t - (this.ctx.params.keptAt ?? 1e9)) / 0.3);
       if (a > 0) ov.title('They kept streaming IRL.', W / 2, H * 0.2, { a });
+      // the credit, small, at the bottom; then the film fades out with the song's last note
+      const c = ov.c;
+      c.save(); c.font = font(F.mono(400), 24); c.textAlign = 'center'; c.fillStyle = `rgba(241,238,232,${0.85 * a})`;
+      c.shadowColor = 'rgba(0,0,0,0.7)'; c.shadowBlur = 12;
+      c.fillText('Story shared by a streamer on Reddit, retold with permission', W / 2, H * 0.94); c.restore();
       ov.caption('LIVE · IRL', W * 0.08, H * 0.07, { size: 30, dot: '#ff3b3b', a: clamp((t - f.start - 0.4) / 0.2) });
     }
     ov.draw(this.ctx.renderer, this.ctx.comp, out);
-    return { grain: 0.045, vignette: 0.4, bloom: 0.7, halation: 0.35, ca: 1.0 };
+    const fade = shot === 'newday' ? clamp((t - (f.end - 0.6)) / 0.6) : 0;
+    return { grain: 0.045, vignette: 0.4, bloom: 0.7, halation: 0.35, ca: 1.0, fade };
   }
 
   /** Frame 3: the market as neon lines; the viewer counter climbs 1, 2, 3 and the chat pops up by the carousel. */

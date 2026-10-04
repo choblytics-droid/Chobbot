@@ -69,3 +69,9 @@ The spliced intro is gone: the song starts at once and frames 1a + 1b merge into
 (the desk), with **“Based on a true story” popping on as a sticker** over it (0.05–2.75 s, carried
 across the first cut into the town). Frame 9 lost its invented `· reconnected ·` line. Timings:
 script v0.8.
+
+## Change: no brand (owner, 2026-10-04)
+
+A Story is not a brand video: frame 13 (end card) and the companion spark in frame 11 are removed.
+The film ends on frame 12 with `They kept streaming IRL.`, the credit line and a fade with the song
+(54.8 s). Brand placeholders (tagline, colours, sonic logo) no longer apply to this film.

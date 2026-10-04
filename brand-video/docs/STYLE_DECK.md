@@ -24,8 +24,8 @@ one *home* style plus 3–5 *switch* styles, all picked from the A-tier list bel
 **Owner rule (2026-10-04): no people unless they are simple.** If a human figure can't be drawn
 well, use none: the object is the protagonist (ST-01: the phone on its tripod, at the train window,
 the stream's own screen), or a simple pixel prop or the mascot. Scenes explain the situation through
-objects, the stream UI and the chat. The companion is always a simple mascot (a warm spark), never a
-character.
+objects, the stream UI and the chat. In the brand films the companion is always a simple mascot (a warm
+spark), never a character; Streamer Stories have no companion and no brand at all.
 
 **Nobody sings on screen.** The song plays in the background like a soundtrack. No character
 performs it, mouths it or lip-syncs. The lyrics reach the screen as kinetic type, chat messages or
@@ -50,7 +50,7 @@ On the Venmar branch, four attempts at an anime cel style made no progress (its 
 | Pre-chorus | Every 2 bars | Build tension |
 | Chorus | Every bar, bursts of one style per beat on the hook | The switching is the energy |
 | Drop / biggest hit | Mosaic: every style of the deck at once, then back to home | The "wall of styles" moment |
-| Outro / end card | Home style | The end card is always the same brand style |
+| Outro / end card | Home style | Brand films: the end card is always the same brand style. Stories: no end card, they end on the story |
 
 Transitions are made of material (burn, ink bleed, shatter, print, glitch, pixel dissolve), timed to
 kicks and snares, with the brightest point aligned across the cut.

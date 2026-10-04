@@ -30,15 +30,16 @@ Three viewers can be enough.
 ```
 Story: shared by a streamer on Reddit, retold with permission. Names and places left out; the town is a pixel-art stand-in.
 Song: "The Train Ride", an original song made for this film with Suno.
-Film: Chobbot, made in code.
 ```
 
 The Reddit link and the author's name go in only if the author says yes (permission message in the script).
 
+(No brand in the post either: the channel's avatar and name already carry it.)
+
 ## Hashtags
 
 ```
-#truestory #streamer #livestream #irl #christmas #pixelart #musicvideo #chobbot
+#truestory #streamer #livestream #irl #christmas #pixelart #musicvideo
 ```
 
 ## Checks before publishing

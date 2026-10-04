@@ -28,10 +28,9 @@ export function makeTimeline(au: AudioData): TimelineEntry[] {
     // the front page slams in on the hook's downbeat (its own slam: a hard cut)
     { id: 'front', load: () => import('./frontpage'), start: B(19), end: B(20) },
     { id: 'globe', load: () => import('./globe'), start: B(20), end: B(21), trans: 'ink', inBeats: 1 },
-    { id: 'outro', load: town, start: B(21), end: B(25), params: { shot: 'outro', msgAt: B(23), sparkAt: B(24) }, trans: 'pixel', inBeats: 1 },
+    { id: 'outro', load: town, start: B(21), end: B(25), params: { shot: 'outro', msgAt: B(23) }, trans: 'pixel', inBeats: 1 },
+    // the film ends on the story (no brand end card): the last shot fades with the song
     { id: 'newday', load: town, start: B(25), end: au.duration, params: { shot: 'newday', keptAt: B(27) }, trans: 'ink', inBeats: 2 },
-    // the end card holds 2.5 s past the song, over the sonic logo (added in the edit)
-    { id: 'endcard', load: () => import('./endcard'), start: au.duration, end: au.duration + 2.5, trans: 'dip', inBeats: 1 },
   ];
   // centre each transition on its cut: the outgoing shot runs on, the incoming one starts early
   for (let i = 1; i < E.length; i++) {

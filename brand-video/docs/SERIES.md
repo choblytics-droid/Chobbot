@@ -45,12 +45,12 @@ companion, not a price list.
 | Palette: the brand accent is the only colour that glows | Music genre per episode or season |
 | Type system: one display font, one mono "machine voice" | Camera grammar and set per story |
 | Motion grammar: cuts on downbeats, hold then snap | Emotion: funny, cringe, wholesome, triumphant |
-| Sonic logo: a 2-second sound that ends every video | Platform format: 16:9, 9:16, 1:1 |
-| End card and frame template (safe areas, title position, episode tag) | |
+| Sonic logo: a 2-second sound that ends every **brand** video | Platform format: 16:9, 9:16, 1:1 |
+| End card (brand films only) and frame template (safe areas, title position, episode tag) | |
 | Pain = cold, broken, glitch; solution = warm, clean, spring | |
 
 Rule of thumb: **the world can be anything; the companion, the colour that glows, the type and the
-end card are always ours.**
+end card are always ours** (in the brand films; Streamer Stories carry no brand, see below).
 
 ## Series 1: Streamer Stories (music videos)
 
@@ -73,12 +73,13 @@ end card are always ours.**
   - At the end, a small credit: “Story shared by a streamer on Reddit, retold with permission” (or
     “anonymised” if we could not reach the author).
   - Only for real stories (section 1). The brand films are not labelled true stories.
-- **The brand:** the companion appears as a **cameo**, never a sales pitch: a spark in the chat that
-  catches the moment the story turns. A 2-second end card.
+- **No brand (owner rule, 2026-10-04): a Story is not a brand video.** No end card, no logo, no
+  tagline, no sonic logo, no companion cameo. The film ends on the story itself (its last fact) with
+  the small credit line, and the song's own ending. The channel it is posted on is the only link to us.
 - **Rights:** stories posted online belong to their authors. Ask permission, or retell an anonymised
   version; never show usernames, platform logos or a copy of the site's UI.
 - **Level:** Level 3–4 per episode (one deep style, ~5–7 agent-hours for the first, ~2–3 h for later
-  episodes because the engine, type and end card are reused).
+  episodes because the engine, sets and type are reused).
 - **Can start now:** yes. Inputs: 3–5 stories (the `goignon` report will list candidates) and a song
   per story.
 

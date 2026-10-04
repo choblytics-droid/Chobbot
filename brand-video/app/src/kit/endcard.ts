@@ -1,11 +1,11 @@
-// Frame 13: the end card (the same brand card closes every film), held over the sonic logo.
+// The brand end card (brand films only; Streamer Stories carry no brand), held over the sonic logo.
 import type * as THREE from 'three';
-import { Scene, type Frame } from '../../engine/scene';
-import { clearRT, W, H } from '../../engine/gl';
-import { Overlay } from '../../kit/overlay';
-import { F, font } from '../../engine/type';
-import { rgba } from '../../engine/palette';
-import { clamp, ease } from '../../engine/util';
+import { Scene, type Frame } from '../engine/scene';
+import { clearRT, W, H } from '../engine/gl';
+import { Overlay } from './overlay';
+import { F, font } from '../engine/type';
+import { rgba } from '../engine/palette';
+import { clamp, ease } from '../engine/util';
 
 export default class EndCard extends Scene {
   ov = new Overlay();
