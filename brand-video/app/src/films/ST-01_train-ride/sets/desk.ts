@@ -133,7 +133,8 @@ export function paintDesk(pc: PixelCanvas, o: { t: number; k: number }) {
     // quilted rows: each puffs up between stitch lines (lit top, a shadow under the seam), a leather sheen
     const ry = ((y - cy) % 14 + 14) % 14;
     const sheen = Math.exp(-(((x - (cx - 6 + (y - cy) * 0.05)) / 3.5) ** 2)) * (vnoise(x * 0.3, y * 0.08, 5) > 0.35 ? 1 : 0.4);
-    const v = 2 + (side ? -0.9 : 0) + (vnoise(x * 0.12, y * 0.12, 2) - 0.5) * 0.9 + (y < cy - 60 ? 0.6 : 0) + (ry === 1 ? -0.9 : ry < 5 ? 0.35 : ry > 11 ? -0.35 : 0) + sheen * 1.4;
+    const fall = (cx + 10 - x) / 40 + (cy - y) / 160;   // lit from the monitor (upper left), falling off to the lower right
+    const v = 1.8 + fall * 0.9 + (side ? -0.7 : 0) + (vnoise(x * 0.12, y * 0.12, 2) - 0.5) * 0.9 + (y < cy - 60 ? 0.6 : 0) + (ry === 1 ? -1.1 : ry < 5 ? 0.5 : ry > 11 ? -0.45 : 0) + sheen * 1.6;
     return { a: stitch ? CH[3]! : CH[Math.max(0, Math.min(4, dither(v, x, y)))]!, d: 0.2, id: 20, n: [(x - cx) / 50, y < cy - 66 ? 0.6 : ry < 5 ? 0.45 : 0.1] };
   });
   pc.rect(cx - 14, cy - 64, 26, 12, (x, y) => ({ a: y === cy - 64 ? CH[3]! : y === cy - 53 ? CH[0]! : (x + y) % 9 === 0 ? CH[3]! : CH[2]!, d: 0.198, id: 23, n: [0, 0.4] }));

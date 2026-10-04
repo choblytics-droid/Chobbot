@@ -70,9 +70,9 @@ export default class Chat extends Scene {
       const l = this.ly.get('Said it was amazing');
       // the chat log (no live header, no input box: the stream is over; the post doesn't say when it came)
       let y = 300;
-      for (const [u, m] of [...HIST, ['viewer_3', 'can you keep it on?']] as const) y = msg(u, m, y, { size: 44, a: 0.3 });
+      for (const [u, m] of [...HIST, ['viewer_3', 'can you keep it on?']] as const) y = msg(u, m, y, { size: 54, a: 0.32 });
       const k = pop(f.start + 0.15);
-      if (k > 0) { c.save(); c.translate(80, y + 60); c.scale(0.85 + 0.15 * k, 0.85 + 0.15 * k); c.translate(-80, -(y + 60)); msg('viewer_3', 'thanks for being so chill. amazing stream', y + 60, { size: 96, a: clamp(k), hot: true }); c.restore(); }
+      if (k > 0) { c.save(); c.translate(80, y + 60); c.scale(0.85 + 0.15 * k, 0.85 + 0.15 * k); c.translate(-80, -(y + 60)); msg('viewer_3', 'thanks for being so chill. amazing stream', y + 60, { size: 100, a: clamp(k), hot: true }); c.restore(); }
       focusY = 1 - (y + 320) / H;
     }
     if (shot === 'keep') {
@@ -84,13 +84,13 @@ export default class Chat extends Scene {
     // keep: close on the top of the screen, the room barely there; thanks: the phone low in frame
     // under the lyric, a big move (push in and a turn) across the shot
     const e = ease.inOutCubic(f.p);
-    const zoom = shot === 'keep' ? 1.08 : 1.55 - 0.4 * e;
-    const pan: [number, number] = shot === 'keep' ? [-0.03, 0.07] : [0.03 - 0.06 * e, 0.07 + 0.09 * e];
+    const zoom = shot === 'keep' ? 1.08 : 1.55 - 0.3 * e;
+    const pan: [number, number] = shot === 'keep' ? [-0.03, 0.07] : [0.03 - 0.06 * e, 0.09 + 0.04 * e];
     this.mc.render(this.ctx.renderer, out, { t, focusY, zoom, pan, tilt: shot === 'keep' ? -0.05 + 0.02 * f.p : 0.16 - 0.24 * e, blur: shot === 'keep' ? 0.005 : 0.012, warm: shot === 'thanks' ? 1 : 0 });
     // the sung lyric (subtitle) over the macro, low
     const ov = this.ov;
     ov.begin();
-    if (shot === 'thanks') ov.lyric(this.ly.lineAt(t, 0.35, 0.3), t, { y: H * 0.15, plate: 0.7 });   // above the phone
+    if (shot === 'thanks') ov.lyric(this.ly.lineAt(t, 0.35, 0.3), t, { y: H * 0.125, plate: 0.7 });   // above the phone
     ov.draw(this.ctx.renderer, this.ctx.comp, out);
     const punch = shot === 'keep' ? 1 + 0.03 * ease.outCubic(clamp((t - f.start) / 1.8)) : 1;
     return { grain: 0.05, vignette: 0.5, bloom: 0.8, halation: 0.35, ca: 1.6, zoom: punch };

@@ -53,7 +53,7 @@ void main() {
   vec2 d = (ap - C) / R;
   float r2 = dot(d, d);
   mat3 M = rotX(tilt) * rotY(spin);
-  vec3 sun = normalize(vec3(-0.9, -0.15, -0.42));
+  vec3 sun = normalize(vec3(0.6, -0.2, -0.77));   // night over the train's side; day on the far side of the world
   vec3 c = vec3(0.0);
   // stars
   c += vec3(0.7, 0.8, 1.0) * step(0.997, hash12(floor(ap))) * 0.5;
@@ -84,6 +84,7 @@ void main() {
       // lights crowd the coasts and the dense regions; interiors stay dark
       float coast = landAt(normalize(g + vec3(0.02, 0.0, 0.0))) < 0.0 || landAt(normalize(g - vec3(0.02, 0.0, 0.0))) < 0.0 || landAt(normalize(g + vec3(0.0, 0.02, 0.0))) < 0.0 || landAt(normalize(g + vec3(0.0, 0.0, 0.02))) < 0.0 ? 1.0 : 0.0;
       float home = exp(-distance(g, A) * 14.0);   // the train's own region: towns along the line
+      city *= step(-0.8, g.y);   // nobody lives on the ice
       city *= (0.3 + coast * 0.7 + home * 3.0) * min(dense(g) + home, 1.6) * step(0.45, hash12(floor(ll * 9.0) + 3.0) + coast * 0.6 + home);
       lit += vec3(1.0, 0.72, 0.38) * min(city, 1.0) * 1.6 * smoothstep(0.3, 0.0, day);
     }
@@ -92,7 +93,7 @@ void main() {
     cl = floor(cl * 3.0 + bayer4(ap) * 0.9) / 3.0;   // pixel cloud: three flat steps
     lit = mix(lit, vec3(0.06, 0.07, 0.09) * (0.3 + 1.2 * sat(day + 0.2)) + lit * 0.45, cl * 0.55);
     // dawn on the terminator, and the ocean's glint
-    if (!isLand) lit += vec3(1.0, 0.8, 0.6) * pow(sat(dot(reflect(-sun, n), vec3(0, 0, 1))), 40.0) * 0.8;
+    if (!isLand) lit += vec3(1.0, 0.8, 0.6) * pow(sat(dot(reflect(-sun, n), vec3(0, 0, 1))), 60.0) * 0.25;
     // posterise with an ordered dither (pixel art)
     lit *= expo;
     float lv = max(max(lit.r, lit.g), lit.b), bands = 7.0;
@@ -155,7 +156,7 @@ export default class Globe extends Scene {
     u.C!.value = [start[0] + (end[0] - start[0]) * z, start[1] + (end[1] - start[1]) * z];
     u.expo!.value = 1.9 - 0.9 * z;
     u.R!.value = R; u.spin!.value = spin; u.t!.value = f.t;
-    u.link!.value = clamp((f.p - 0.25) / 0.6);
+    u.link!.value = clamp((f.p - 0.2) / 0.48);   // the link lands while the end marker is in view
     u.A!.value = A; u.B!.value = B;
     this.pass.render(this.ctx.renderer, out);
     this.ov.begin();

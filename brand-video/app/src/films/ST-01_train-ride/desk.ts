@@ -30,7 +30,7 @@ export default class Desk extends Scene {
     ov.caption('first real IRL', W / 2, H * 0.105, { size: 36, align: 'center', a: 1 - clamp((t - sw) / 0.08) });
     ov.caption('LIVE · IRL', W / 2, H * 0.105, { size: 36, align: 'center', dot: '#ff3b3b', a: clamp((t - sw) / 0.08) });
     ov.hook('Based on a true story', t, 0.05, this.ctx.params.hookEnd ?? 2.75);
-    ov.lyric(this.ly.lineAt(t, 0.35, 0.3), t, { y: H * 0.2 }); // same place as in the next shot (clear of the top bar)
+    ov.lyric(this.ly.lineAt(t, 0.35, 0.3), t, { y: H * 0.2, plate: 0.75 }); // same place as in the next shot (clear of the top bar)
     ov.draw(this.ctx.renderer, this.ctx.comp, out);
     return { grain: 0.05, vignette: 0.45, bloom: 0.7, halation: 0.3, ca: 1.0 };
   }

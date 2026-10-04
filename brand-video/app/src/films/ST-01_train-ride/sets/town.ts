@@ -133,8 +133,9 @@ export function paintTown(pc: PixelCanvas, o: TownOpts) {
         const sy0 = Math.round(top - (s + 1) * (gh / steps));
         pc.rect(x + inset, sy0, 3, 2, stone(STN, { d, id, bw: 3, bh: 2, seed: s }));               // coping stones
         pc.rect(x + w - inset - 3, sy0, 3, 2, stone(STN, { d, id, bw: 3, bh: 2, seed: s + 9 }));
-        pc.rect(x + inset, sy0 - 1, 3, 1, { a: P.snow, d, id, n: [0, 0.9] });
-        pc.rect(x + w - inset - 3, sy0 - 1, 3, 1, { a: P.snow, d, id, n: [0, 0.9] });
+        const cap: Mat = day > 0.5 ? { a: '#eef3fa', d, id, n: [0, 0.9], e: '#dbe6fa', ei: 0.3 } : { a: P.snow, d, id, n: [0, 0.9] };   // fresh snow caps in the morning
+        pc.rect(x + inset - (day > 0.5 ? 1 : 0), sy0 - (day > 0.5 ? 2 : 1), 3 + (day > 0.5 ? 1 : 0), day > 0.5 ? 2 : 1, cap);
+        pc.rect(x + w - inset - 3, sy0 - (day > 0.5 ? 2 : 1), 3 + (day > 0.5 ? 1 : 0), day > 0.5 ? 2 : 1, cap);
       }
       // attic: a round window (sometimes lit) and the hoist beam
       const ax = Math.round(x + w / 2), ay = Math.round(top - gh * 0.45);
@@ -147,7 +148,7 @@ export function paintTown(pc: PixelCanvas, o: TownOpts) {
       // snow on the roof edges
       for (let k = 0; k <= gh; k++) {
         const fx = k / gh;
-        pc.px(x - 2 + fx * (w / 2 + 2), top - k, { a: P.snow, d, id, n: [-0.4, 0.8] });
+        pc.px(x - 2 + fx * (w / 2 + 2), top - k, day > 0.5 ? { a: '#eef3fa', d, id, n: [-0.4, 0.8], e: '#dbe6fa', ei: 0.3 } : { a: P.snow, d, id, n: [-0.4, 0.8] });
         pc.px(x + w + 2 - fx * (w / 2 + 2), top - k, { a: P.snowS, d, id, n: [0.4, 0.8] });
         pc.px(x - 2 + fx * (w / 2 + 2), top - k + 1, { a: P.snowS, d, id, n: [-0.4, 0.8] });
       }
@@ -284,14 +285,15 @@ export function paintTown(pc: PixelCanvas, o: TownOpts) {
         const drift = vnoise(gx * (0.07 + day * 0.1), yy * (0.2 + day * 0.2), 21) + Math.max(0, Math.abs(gx - 135) / 135 - 0.45) * 1.4 + (yy < GROUND + 5 ? 0.3 : 0);
         const snowy = day > 0.5 || drift > 0.95;   // the next morning: fresh snow almost everywhere
         // footprints through the snow toward the tripod
-        const fp = snowy && Math.abs(gx - (20 + (yy - GROUND) * 0.6)) < 1.5 && (yy % 4 === 0);
+        const fp = snowy && Math.abs(gx - (day > 0.5 ? (o.sx ?? 70) + 6 - (yy - GROUND) * 0.8 : 20 + (yy - GROUND) * 0.6)) < 1.5 && (yy % 4 === 0);   // footprints to the tripod
         const C = snowy ? [P.snowS, '#c6d2e3', P.snow, '#eef3fa'] : [P.cobD, P.cob, '#4d505c', P.cobL];
         if (day > 0.5) {
           // fresh snow over the whole square: soft drifts, blue hollows, cobbles only hinted, the odd sparkle
           const dv = vnoise(gx * 0.05, yy * 0.22, 31) * 0.7 + vnoise(gx * 0.2, yy * 0.6, 32) * 0.3;
           const hint = joint && vnoise(gx * 0.1, yy * 0.3, 33) > 0.72 ? -0.8 : 0;
           const sv = 1.4 + dv * 1.8 + hint + (hash01(gx, yy) > 0.985 ? 1.2 : 0);
-          pc.px(gx, yy, { a: fp ? '#8a96ad' : C[Math.max(0, Math.min(3, dither(sv, gx, yy)))]!, d, n: [-0.5 + (dv - 0.5) * 0.5, 0.75], id: 5, e: fp ? undefined : '#dbe6fa', ei: 0.12 + dv * 0.12 });   // a cool lift: fresh snow reads blue-white, not beige   // tilted toward the low sun on the left: fresh snow catches it
+          const shade = yy < GROUND + 7 ? 0.9 * (1 - (yy - GROUND) / 7) : 0;   // blue drift shadow along the hut bases
+          pc.px(gx, yy, { a: fp ? '#8a96ad' : C[Math.max(0, Math.min(3, dither(sv - shade, gx, yy)))]!, d: 0.38 - ((yy - GROUND) / 75) * 0.36, n: [-0.5 + (dv - 0.5) * 0.5, 0.75], id: 5, e: fp ? undefined : '#dbe6fa', ei: 0.12 + dv * 0.12 });   // a cool lift: fresh snow reads blue-white, not beige   // tilted toward the low sun on the left: fresh snow catches it
           continue;
         }
         const v = joint ? 0 : 1 + round * 1.6 + (rnd - 0.5) * 0.8;

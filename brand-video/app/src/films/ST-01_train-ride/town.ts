@@ -27,7 +27,8 @@ export default class Town extends Scene {
     if (shot === 'tour') { o.streamer = 'tripod'; o.sx = 74; o.camX = -4 + 8 * p; }
     if (shot === 'neon') { o.streamer = 'tripod'; o.sx = 74; o.camX = 4 + 4 * p; }
     if (shot === 'outro') { o.streamer = 'none'; o.camX = -20 + 40 * p; o.camY = 1.5 * Math.sin(t * 4.1); sky = { ...sky, sunEl: -0.1, skyExp: 4.5, clouds: 0.3 }; }   // full night now, a closer framing (below)
-    if (shot === 'newday') { o.streamer = 'none'; o.day = 1; sky = { sunEl: 0.07, sunAz: -1.95, skyExp: 0.9, ambient: 1.2, stars: 0, clouds: 0.45 }; haze = 0.18; wet = 0.15; snow = 0; }   // dawn: pale sky above, low warm sun from the left
+    if (shot === 'newday') { o.streamer = 'tripod'; o.sx = 200; o.day = 1;   // the phone is back on its tripod: still streaming
+      sky = { sunEl: 0.07, sunAz: -1.95, skyExp: 0.9, ambient: 1.2, stars: 0, clouds: 0.45 }; haze = 0.18; wet = 0.15; snow = 0; }   // dawn: pale sky above, low warm sun from the left
     paintTown(this.pc, o);
     if (shot === 'neon') return this.neon(f, out);
     this.pl.render(this.ctx.renderer, out, {
@@ -38,13 +39,13 @@ export default class Town extends Scene {
     const ov = this.ov;
     ov.begin();
     if (shot === 'tour') ov.hook('Based on a true story', t, 0.05, this.ctx.params.hookEnd ?? 0);
-    if (shot === 'tour' || shot === 'outro' || (shot === 'newday' && t < (this.ctx.params.keptAt ?? 1e9))) ov.lyric(this.ly.lineAt(t, 0.35, 0.3), t, { y: H * 0.2 });
+    if (shot === 'tour' || shot === 'outro' || (shot === 'newday' && t < (this.ctx.params.keptAt ?? 1e9))) ov.lyric(this.ly.lineAt(t, 0.35, 0.3), t, { y: H * 0.2, plate: 0.7 });
     if (shot === 'outro') {
       // the last chat message, remembered (no brand, no companion: a Story is not a brand video)
       const at = this.ctx.params.msgAt ?? 1e9;
       const a = clamp((t - at) / 0.3);
       if (a > 0) {
-        ov.chat('viewer_3', 'thanks for being so chill. amazing stream', t, W * 0.05, H * 0.27, { a: a * 0.95, size: 30, w: W * 0.6, hot: true });   // left of the castle
+        ov.chat('viewer_3', 'thanks for being so chill. amazing stream', t, W * 0.05, H * 0.27, { a: a * 0.95, size: 30, w: W * 0.44, hot: true });   // in the sky left of the castle
       }
     }
     if (shot === 'newday') {
@@ -55,7 +56,7 @@ export default class Town extends Scene {
       c.save(); c.font = font(F.mono(500), 26); c.textAlign = 'center';
       // ("retold with permission" is added only once the author has said yes: DESCRIPTION.md)
       const credit = 'Story shared by a streamer on Reddit', cw = c.measureText(credit).width + 56;
-      c.fillStyle = `rgba(6,7,11,${0.7 * a})`; roundRect(c, W / 2 - cw / 2, H * 0.25 - 30, cw, 46, 14); c.fill();
+      c.fillStyle = `rgba(6,7,11,${0.85 * a})`; roundRect(c, W / 2 - cw / 2, H * 0.25 - 30, cw, 46, 14); c.fill();
       c.fillStyle = `rgba(241,238,232,${0.95 * a})`;
       c.shadowColor = 'rgba(0,0,0,0.9)'; c.shadowBlur = 18;
       c.fillText(credit, W / 2, H * 0.25); c.restore();   // under the closing line, clear of the caption zone
@@ -72,12 +73,12 @@ export default class Town extends Scene {
     this.pl.renderNeon(this.ctx.renderer, out, t, 405);
     const ov = this.ov;
     ov.begin();
-    ov.lyric(this.ly.lineAt(t, 0.35, 0.3), t, { y: H * 0.2 });
+    ov.lyric(this.ly.lineAt(t, 0.35, 0.3), t, { y: H * 0.2, plate: 0.7 });
     const three = this.ly.get('Three people').words[0]!.start;
     const n = t >= three ? 3 : t >= three - 0.5 ? 2 : 1;   // 3 on the sung word "Three"
     ov.caption(`${n} watching`, W / 2, H * 0.31, { size: 44, align: 'center', dot: '#ff3b3b' });
     // (only neutral reactions: the post doesn't say what the chat wrote, so no invented lines)
-    const msgs: [string, string, number][] = [['viewer_1', 'o/', 0.08], ['viewer_1', '<3', 0.3], ['viewer_2', ':)', 0.5], ['viewer_1', '<3 <3', 0.72]];
+    const msgs: [string, string, number][] = [['viewer_1', '<3', 0.15], ['viewer_2', ':)', 0.45]];   // the same reactions, in the same order, as the station chat
     let y = H * 0.4;
     for (const [u, m, at] of msgs) {
       const a = clamp((f.p - at) / 0.04);

@@ -180,7 +180,7 @@ export class Overlay {
     const size = 34, lh = size * 1.45, x0 = 44, yb = H - 530;   // the chat ends above the platform caption zone
     c.save();
     const g = c.createLinearGradient(0, yb - 320, 0, yb + 140);
-    g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(0.6, 'rgba(0,0,0,0.62)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+    g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(0.3, 'rgba(0,0,0,0.6)'); g.addColorStop(0.65, 'rgba(0,0,0,0.78)'); g.addColorStop(1, 'rgba(0,0,0,0)');
     c.fillStyle = g; c.fillRect(0, yb - 320, 930, 460);
     // fade the scrim out before the platform's buttons column
     c.globalCompositeOperation = 'destination-out';

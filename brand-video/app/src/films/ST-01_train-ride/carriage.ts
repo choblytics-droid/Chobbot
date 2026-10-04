@@ -54,7 +54,7 @@ export default class Carriage extends Scene {
     if (!black) ov.lyric(this.ly.lineAt(t, 0.35, 0.3), t, { y: H * 0.165, maxW: view === 'fields' ? W * 0.66 : undefined, plate: 0.7 }); // upper third, over the ceiling (docs/QA.md)
     if (!black && view !== 'phone' && view !== 'wide') this.signal(frozen ? 0 : bars, 70, 225);   // top left, clear of the lyric and the top bar
     if (view === 'phone' && !black) this.phoneUI(frozen ? 0 : bars, t);
-    if (frozen && !black) ov.caption('reconnecting…', W / 2, H * 0.36, { size: 38, align: 'center' });
+    if (frozen && !black && view !== 'phone') ov.caption('reconnecting…', W / 2, H * 0.36, { size: 38, align: 'center' });
     if (black) ov.caption('signal lost', W / 2, H * 0.5, { size: 60, align: 'center' });
     ov.draw(this.ctx.renderer, this.ctx.comp, out);
     return { grain: 0.05, vignette: 0.45, bloom: 0.7, halation: 0.3, ca: 1.0 };
@@ -64,13 +64,13 @@ export default class Carriage extends Scene {
   phoneUI(n: number, t: number) {
     const c = this.ov.c, k = 4, x0 = (PHONE_CU.x + 4) * k, y0 = (PHONE_CU.y + 10) * k, w = (PHONE_CU.w - 8) * k;
     c.save();
-    c.fillStyle = 'rgba(229,72,77,0.95)'; roundRect(c, x0 + 24, y0 + 24, 92, 40, 10); c.fill();
+    c.fillStyle = n === 0 ? 'rgba(120,120,128,0.9)' : 'rgba(229,72,77,0.95)'; roundRect(c, x0 + 24, y0 + 24, 92, 40, 10); c.fill();   // LIVE greys out when the signal goes
     c.font = font(F.mono(700), 26); c.textBaseline = 'middle'; c.fillStyle = '#fff'; c.fillText('LIVE', x0 + 40, y0 + 45);
     c.fillStyle = 'rgba(241,238,232,0.95)'; c.font = font(F.mono(500), 26); c.fillText('3 watching', x0 + 132, y0 + 45);
     for (let i = 0; i < 4; i++) { c.fillStyle = i < n ? 'rgba(241,238,232,0.95)' : 'rgba(241,238,232,0.25)'; c.fillRect(x0 + w - 110 + i * 22, y0 + 60 - (12 + i * 9), 14, 12 + i * 9); }
     if (n === 0) {
       c.strokeStyle = 'rgba(229,72,77,0.95)'; c.lineWidth = 4; c.beginPath(); c.moveTo(x0 + w - 116, y0 + 66); c.lineTo(x0 + w - 18, y0 + 14); c.stroke();
-      if (Math.floor(t * 2.5) % 2 === 0) { c.font = font(F.mono(700), 30); c.textAlign = 'center'; c.fillStyle = 'rgba(241,238,232,0.95)'; c.fillText('No signal', x0 + w / 2, y0 + 130); }
+      if (Math.floor(t * 2.5) % 2 === 0) { c.font = font(F.mono(700), 30); c.textAlign = 'center'; c.fillStyle = 'rgba(241,238,232,0.95)'; c.fillText('reconnecting…', x0 + w / 2, y0 + 130); }
     }
     c.restore();
   }

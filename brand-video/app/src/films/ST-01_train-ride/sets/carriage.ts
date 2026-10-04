@@ -177,7 +177,7 @@ function outside(pc: PixelCanvas, o: CarriageOpts) {
     for (let y = hor - 8; y < hor + 2; y++) for (let x = x0; x < x1; x++) {
       const bx = x + o.scroll * 0.55;
       const board = Math.floor(bx / 160) !== Math.floor((bx + 40) / 160) && y >= hor - 3;
-      if (board) { const inb = (bx + 40) % 160; put(x, y, { a: y === hor - 3 || y === hor + 1 || inb < 1 || inb > 38 ? '#101a33' : (y === hor - 1 && Math.floor(bx) % 3 !== 0 && inb > 5 && inb < 34) ? '#e8e2d6' : '#1c2a4a', d: 0.555, id: 75 }); continue; }
+      if (board) { const inb = (bx + 40) % 160; put(x, y, { a: y === hor - 3 || y === hor + 1 || inb < 1 || inb > 38 ? '#101a33' : ((y === hor - 1 || y === hor) && inb > 5 && inb < 34 && Math.floor(inb) % 4 !== 3 && hashI(Math.floor(inb) * 13 + y) < 0.65) ? '#e8e2d6' : '#1c2a4a', d: 0.555, id: 75 }); continue; }
       put(x, y, y === hor - 8 ? { a: '#dfe7f2', d: 0.56, id: 31, n: [0, 0.9] } : y === hor + 1 ? { a: '#4a3a32', d: 0.56, id: 31 } : { a: RF[dither(2 + ((y - hor) % 3 === 0 ? -1 : 0) + (hashI(Math.floor(bx / 4) + y * 7) - 0.5) * 1.2 + (y < hor - 5 ? 0.8 : 0), Math.floor(bx), y)]!, d: 0.56, id: 31 });
     }
   }
@@ -225,7 +225,8 @@ function outside(pc: PixelCanvas, o: CarriageOpts) {
         if (o.scroll + ((house - seed) * bw - rs) * 2.5 > cityEnd + 60) continue;      // whole houses drop out where the city ends
         const ridge = base + Math.floor(hashI(house + 71) * vary);
         if (hx >= hw) {
-          for (let y = ridge + 4; y < y1; y++) { const pool = Math.exp(-(((y - (ridge + wallH)) / 8) ** 2)); put(x, y, { a: pool > 0.4 ? '#3a3026' : (y + Math.floor(wx)) % 9 === 0 ? '#1e1b18' : '#16141a', d, id: 90, e: pool > 0.4 ? '#ffb45a' : undefined, ei: pool * 0.8 }); }
+          const gc = hw + (bw - hw) / 2, ph = ridge + wallH + Math.floor(hashI(house + 76) * 12) - 6;
+          for (let y = ridge + 4; y < y1; y++) { const pool = Math.exp(-(((y - ph) / 7) ** 2)) * Math.exp(-(((hx - gc) / 2.2) ** 2)) * (hashI(house + 77) < 0.7 ? 1 : 0); put(x, y, { a: pool > 0.4 ? '#3a3026' : (y + Math.floor(wx)) % 9 === 0 ? '#1e1b18' : '#16141a', d, id: 90, e: pool > 0.4 ? '#ffb45a' : undefined, ei: pool * 0.8 }); }
           continue;
         }
         // every house its own roof: pitch, colour (slate, red tile, green copper) or a flat roof
@@ -235,7 +236,7 @@ function outside(pc: PixelCanvas, o: CarriageOpts) {
         for (let y = top; y < y1; y++) {
           if (y < eave) { put(x, y, y === top ? { a: '#eef3fa', d, id: 91, n: [0, 0.9] } : roof(Math.floor(wx), y)); continue; }
           if (y === eave) { put(x, y, { a: '#1a1612', d, id: 92 }); continue; }
-          const fl = Math.round(16 * sc), wy = (y - eave - 4) % fl, cw = Math.round(11 * sc), wxx = Math.floor(hx) % cw;
+          const fl = Math.round((13 + Math.floor(hashI(house + 78) * 6)) * sc), wy = (y - eave - 4) % fl, cw = Math.round((8 + Math.floor(hashI(house + 79) * 6)) * sc), wxx = Math.floor(hx) % cw;
           const win = wy >= 0 && wy < Math.round(6 * sc) && wxx >= Math.round(4 * sc) && wxx < Math.round(7 * sc) && hx > 2 && hx < hw - 3;
           const lit = win && hashI(house * 13 + Math.floor(hx / cw) * 5 + Math.floor((y - eave) / fl)) < 0.35;
           put(x, y, win ? { a: WIN2[lit ? 1 : 0]!, d: d + 0.001, id: 92, e: lit ? '#ffcf8a' : undefined, ei: lit ? 1.6 : 0 } : plaster(ramp(['#6a5a4c', '#7a6a5a', '#5a4c48', '#6a6058'][house % 4]!, 0.6), { d: d + 0.001, id: 92, seed: house })(Math.floor(wx), y));
@@ -261,7 +262,7 @@ function outside(pc: PixelCanvas, o: CarriageOpts) {
       const cxp = Math.round(k * 70 + 35 - mid + x0);
       for (let y = hor - 30; y < hor + 26; y++) for (let dx = 0; dx < 3; dx++) put(cxp + dx, y, { a: dx === 0 ? '#5a5f6a' : dx === 2 ? '#1a1c22' : (y % 7 === 0 ? '#4a4d56' : '#3a3d46'), d: 0.55, id: 73 });
       if (k % 2 === 0) for (let dx = -8; dx < 9; dx++) for (let dy = 0; dy < 3; dy++) put(cxp + 18 + dx, hor + 13 + dy, { a: dy === 0 ? '#6b4a32' : '#3a2a20', d: 0.54, id: 74 });   // bench
-      if (k % 3 === 0) for (let dx = -10; dx < 11; dx++) for (let dy = 0; dy < 6; dy++) put(cxp + dx, hor - 26 + dy, { a: dy === 0 || dy === 5 || Math.abs(dx) === 10 ? '#1c2a4a' : (dy === 2 || dy === 3) && Math.abs(dx) < 7 && dx % 3 !== 0 ? '#e8e2d6' : '#2a3e6a', d: 0.545, id: 75 });   // station name sign (blank glyphs)
+      if (k % 3 === 0) for (let dx = -10; dx < 11; dx++) for (let dy = 0; dy < 6; dy++) put(cxp + dx, hor - 26 + dy, { a: dy === 0 || dy === 5 || Math.abs(dx) === 10 ? '#1c2a4a' : (dy >= 1 && dy <= 4) && Math.abs(dx) < 8 && (dx + 8) % 4 !== 3 && hashI((dx + 8) * 5 + dy * 17 + k * 3) < 0.62 ? '#e8e2d6' : '#2a3e6a', d: 0.545, id: 75 });   // station name sign (blank glyphs)
     }
   }
   // station lamps (frame 5)
@@ -362,7 +363,7 @@ export function paintCarriage(pc: PixelCanvas, o: CarriageOpts) {
   };
   if (view === 'wide') {
     // the aisle floor between the seat backs: ribbed rubber, a table post down to it, the far seat behind
-    pc.rect(0, 428, AW, 52, (x, y) => ({ a: (y - 428) % 4 === 0 ? '#16151a' : y < 434 ? '#2e2c30' : (x + y) % 7 === 0 ? '#2a282d' : '#222125', d: D + 0.05, id: 94, n: [0, 0.9] }));
+    pc.rect(0, 428, AW, 52, (x, y) => ({ a: (y - 428) % 4 === 0 ? '#201e24' : (y - 428) % 4 === 1 ? '#5a5660' : y < 434 ? '#4a4650' : (x + y) % 7 === 0 ? '#3a3840' : '#34323a', d: D + 0.05, id: 94, n: [0, 0.9] }));   // ribbed rubber floor, lit ridges
     const PM = ['#22242a', '#3a3d46', '#5f636c', '#8d929c', '#c4c8d0'];
     pc.rect(100, y1 + 18, 4, 110, (x, y) => ({ a: PM[Math.max(0, Math.min(4, dither([3.4, 2.4, 1.6, 0.6][x - 100]! + (vnoise(x, y * 0.15, 41) - 0.5) * 0.9 - (y > 400 ? (y - 400) * 0.03 : 0), x, y)))]!, d: D - 0.035, id: 95, n: [(x - 101.5) / 2, 0] }));
     pc.rect(94, 426, 16, 3, { a: '#3a3d46', d: D - 0.035, id: 95 });
@@ -379,11 +380,11 @@ export function paintCarriage(pc: PixelCanvas, o: CarriageOpts) {
     seat(150, 110, 50); seat(-30, 100, 52);
   }
   // the carriage reflected in the glass: the lamp strip and the headrest tops, faint
-  const rk = view === 'city' ? 2.2 : 1;
+  const rk = 1;
   for (let x = Math.max(0, x0 + 6); x < Math.min(AW, x1 - 6); x++) {
     if (view !== 'wide' && x % 3 !== 0) pc.glow(x, Math.max(2, y0 + 14), '#fff1d0', 0.3 * rk);
     const hr = (x - x0) % 70;
-    if (hr > 12 && hr < 40) for (let k = 0; k < (view === 'city' ? 6 : 1); k++) pc.glow(x, y1 - 26 + k + (hr === 13 || hr === 39 ? 1 : 0), '#d8d2c4', 0.12 * rk / (k + 1));
+    if (view === 'wide' && hr > 12 && hr < 40) for (let k = 0; k < 1; k++) pc.glow(x, y1 - 26 + k + (hr === 13 || hr === 39 ? 1 : 0), '#d8d2c4', 0.12 * rk / (k + 1));
   }
   if (view === 'fields') {
     // frost growing in from the edges of the glass: feathery, brighter at the rim
@@ -409,8 +410,6 @@ export function paintCarriage(pc: PixelCanvas, o: CarriageOpts) {
   const ph = o.phone ?? 1;
   if (view === 'phone') {
     const pw = PHONE_CU.w, phh = PHONE_CU.h, px0 = PHONE_CU.x, py0 = PHONE_CU.y;
-    // its contact shadow on the sill
-    for (let x = -6; x < pw + 6; x++) for (let k = 0; k < 3; k++) pc.px(px0 + x, py0 + phh + k, { a: k === 0 ? '#120f0c' : '#2a231d', d: 0.065, id: 7 });
     // the screen first (it copies the view behind the phone, before the phone covers it)
     pc.screen(x0 + 50, y0 + 140, 150, 260, px0 + 4, py0 + 10, pw - 8, phh - 16, { ei: 1.15, d: 0.058, id: 64, glare: 0.1 });
     for (let y = 0; y < phh; y++) for (let x = 0; x < pw; x++) {
@@ -426,7 +425,10 @@ export function paintCarriage(pc: PixelCanvas, o: CarriageOpts) {
     // the stream's own UI on the phone: LIVE pill, viewer dots, the signal bars going down
     // (the screen's UI, LIVE, viewers and the signal, is drawn crisp by the scene's overlay)
     // the ledge it leans on, lit by the screen
-    pc.rect(0, py0 + phh, AW, 480 - py0 - phh, (x, y) => (y === py0 + phh ? { a: '#8a7f6c', d: 0.07, id: 7, n: [0, 0.9] } : wood(ramp(P.table, 0.8), { d: 0.07, id: 7, pw: 3, seed: 4, n: [0, 0.9] })(x, y)));
+    pc.rect(0, py0 + phh, AW, 480 - py0 - phh, (x, y) => (y === py0 + phh ? { a: '#8a7f6c', d: 0.07, id: 7, n: [0, 0.9] } : wood(ramp('#4a3c30', 0.9), { d: 0.07, id: 7, pw: 14, seed: 4, n: [0, 0.9] })(x, y)));
+    // its contact shadow on the sill, and the screen's cold light pooling in front of it
+    for (let x = -6; x < pw + 6; x++) for (let k = 0; k < 4; k++) pc.px(px0 + x, py0 + phh + k, { a: k === 0 ? '#0e0c0a' : k === 1 ? '#1a1612' : '#2a231d', d: 0.065, id: 7 });
+    for (let x = 0; x < pw; x++) for (let k = 5; k < 22; k++) if (hashI(x * 7 + k) < 0.5 * (1 - k / 22)) pc.glow(px0 + x, py0 + phh + k, '#9ab8ff', 0.25 * (1 - k / 22));
   } else if (ph > 0) {
     const pw = 30, phh = 52, px0 = 52, py0 = y1 + 10 - phh + Math.round((1 - ph) * 60);
     const blk: Mat = { a: P.phone, d: 0.1, id: 63 };

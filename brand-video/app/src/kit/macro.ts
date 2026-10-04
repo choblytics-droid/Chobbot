@@ -27,7 +27,14 @@ export class Macro {
       c += vec3(1.0, 0.82, 0.55) * 0.55 * exp(-pow((v.y - 0.93) / 0.035, 2.0));                 // lamp strip
       float wnd = smoothstep(0.30, 0.36, v.y) * smoothstep(0.74, 0.68, v.y);
       c = mix(c, vec3(0.05, 0.08, 0.15), wnd * 0.85);                                              // the window
-      c = mix(c, vec3(0.09, 0.11, 0.2), smoothstep(0.24, 0.0, v.y) * 0.6);                         // seat backs
+      // frost creeping in from the window's edges, soft (out of focus)
+      float fe = min(abs(v.y - 0.33), abs(v.y - 0.71));
+      c += vec3(0.5, 0.58, 0.72) * wnd * smoothstep(0.05, 0.0, fe) * (0.25 + 0.2 * fbm(v * vec2(14.0, 6.0), 3));
+      // the carriage table the phone rests on: warm wood, grain running across, the screen's glow on it
+      float tb = smoothstep(0.22, 0.2, v.y);
+      vec3 wood = vec3(0.16, 0.1, 0.06) * (0.8 + 0.3 * sin(v.x * 40.0 + fbm(v * vec2(3.0, 30.0), 3) * 4.0));
+      wood += vec3(0.25, 0.3, 0.4) * 0.25 * exp(-pow((v.x - 0.5) / 0.25, 2.0)) * smoothstep(0.0, 0.2, v.y);
+      c = mix(c, wood, tb);
       for (int i = 0; i < 7; i++) {
         float fi = float(i);
         vec2 bp = vec2(fract(hash11(fi * 3.1) - t * (0.05 + 0.08 * hash11(fi + 4.0))), 0.38 + 0.3 * hash11(fi * 7.7));
