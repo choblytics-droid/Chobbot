@@ -2,6 +2,7 @@
 // dark, the empty chair is turned away, the door stands open on the light outside, and the phone on
 // the desk wakes up with LIVE.
 import { PixelCanvas, type Light, type Mat, AW } from '../../../kit/pixel';
+import { ramp, plaster, wood, snow, mix, vnoise, dither } from '../../../kit/materials';
 
 const P = {
   wall: '#2a2d3a', wallD: '#22242f', floor: '#3a2f2a', floorL: '#45372f', desk: '#4a3a2e', deskL: '#5a4636', deskD: '#33281f',
@@ -13,70 +14,100 @@ const P = {
 export function paintDesk(pc: PixelCanvas, o: { t: number; k: number }) {
   const { t, k } = o;
   pc.clear();
-  pc.names = { 1: 'back wall', 2: 'poster', 3: 'window frame', 4: 'outside', 5: 'hallway', 6: 'door', 7: 'floor', 10: 'desk', 11: 'monitor', 12: 'monitor stand', 13: 'keyboard', 17: 'plant', 18: 'phone', 20: 'chair back', 21: 'chair seat', 22: 'chair base' };
-  // back wall with a faint panel pattern, a poster, the window with snow outside
-  for (let y = 0; y < 330; y++) for (let x = 0; x < AW; x++) pc.px(x, y, { a: (x % 46 === 0 || y % 80 === 0) ? P.wallD : P.wall, d: 0.6, id: 1 });
-  pc.rect(170, 92, 52, 70, { a: P.poster, d: 0.59, id: 2 });
-  pc.rect(176, 100, 40, 40, { a: '#5b6f99', d: 0.59, id: 2 });
-  pc.disc(196, 120, 12, { a: '#e0b04a', d: 0.585, id: 2 });
-  // window (left): night, snow, a lamp post
-  const fr: Mat = { a: P.frame, d: 0.58, id: 3 };
-  pc.rect(14, 70, 70, 4, fr); pc.rect(14, 176, 70, 4, fr); pc.rect(14, 70, 4, 110, fr); pc.rect(80, 70, 4, 110, fr);
+  pc.names = { 1: 'back wall', 2: 'poster', 3: 'window frame', 4: 'outside', 5: 'hallway', 6: 'door', 7: 'floor', 10: 'desk', 11: 'monitor', 12: 'monitor stand', 13: 'keyboard', 17: 'plant', 18: 'phone', 20: 'chair back', 21: 'chair seat', 22: 'chair base', 23: 'headrest', 24: 'rug', 14: 'mouse', 15: 'headset', 16: 'mug' };
+  // back wall: painted plaster with a skirting board; the poster in a frame
+  const WR = ramp(P.wall, 0.6);
+  pc.rect(0, 0, AW, 330, plaster(WR, { d: 0.6, id: 1, gy: 322, seed: 4 }));
+  pc.rect(0, 322, AW, 8, (x, y) => ({ a: y === 322 ? '#4a4d5c' : y === 329 ? '#15161c' : '#2f3240', d: 0.599, id: 1, n: [0, y === 322 ? 0.6 : 0] }));
+  pc.rect(168, 90, 56, 74, (x, y) => ({ a: x === 168 || y === 90 ? '#4a3a2a' : x === 223 || y === 163 ? '#1f1812' : '#33281f', d: 0.59, id: 2 }));
+  pc.rect(172, 94, 48, 66, (x, y) => {
+    // a pixel landscape print: sky, sun, hills, a title strip
+    const sky = y < 128, hill = y > 122 + Math.round(5 * Math.sin((x - 172) * 0.2)), sun = (x - 205) ** 2 + (y - 112) ** 2 < 60;
+    const a = y > 150 ? (x % 4 < 2 && y === 154 ? '#c9c2b4' : '#e8e2d6') : sun ? '#f0c060' : hill ? (y % 3 ? '#2f5a4a' : '#3d6b56') : sky ? (y < 110 ? '#4a6fb0' : '#7a9fd0') : '#2f5a4a';
+    return { a, d: 0.589, id: 2 };
+  });
+  // window (left): a frame with depth (lit inner lip, dark outer edge), night and snow outside
+  const FR = ramp(P.frame, 0.7);
+  const frame = (x: number, y: number, w: number, h: number) => pc.rect(x, y, w, h, (xx, yy) => ({ a: (xx === x || yy === y) ? FR[4]! : (xx === x + w - 1 || yy === y + h - 1) ? FR[0]! : FR[2]!, d: 0.58, id: 3 }));
+  frame(14, 70, 70, 4); frame(14, 176, 70, 4); frame(14, 70, 4, 110); frame(80, 70, 4, 110);
+  pc.rect(10, 180, 78, 4, (xx, yy) => ({ a: yy === 180 ? '#5a5d6a' : '#2a2c36', d: 0.579, id: 3, n: [0, 0.8] }));   // sill
   for (let y = 74; y < 176; y++) for (let x = 18; x < 80; x++) {
-    if (x === 48 || y === 124) { pc.px(x, y, { a: P.frame, d: 0.58, id: 3 }); continue; }
-    if (y > 160) pc.px(x, y, { a: P.snow, d: 0.9, id: 4, n: [0, 0.8] });
-    else if (y > 146 && y < 161 - Math.round(4 * Math.sin(x * 0.2))) pc.px(x, y, { a: '#1a2130', d: 0.9, id: 4, e: (x * 37) % 11 === 0 && y === 150 ? '#ffcc80' : undefined, ei: 2.2 });
+    if (x === 48 || y === 124) { pc.px(x, y, { a: x === 48 ? FR[3]! : FR[1]!, d: 0.58, id: 3 }); continue; }
+    if (y > 160) pc.px(x, y, snow(['#7d8aa3', '#a3b1c8', '#c6d2e3', '#dfe7f2', '#f4f8ff'], { d: 0.9, id: 4, seed: 2 })(x, y));
+    else if (y > 146 && y < 161 - Math.round(4 * Math.sin(x * 0.2))) pc.px(x, y, { a: (x + y) % 3 ? '#1a2130' : '#232b3d', d: 0.9, id: 4, e: (x * 37) % 11 === 0 && y === 150 ? '#ffcc80' : undefined, ei: 2.2 });
     else pc.erase(x, y); // sky: the physical sky fills it
   }
-  // the door (right), opening: a widening strip of warm light
+  // the doorway (right): a lit hallway with patterned wallpaper, a coat on a hook, a light switch
   const open = Math.round(4 + 30 * k);
-  pc.rect(222, 120, 48, 210, { a: P.frame, d: 0.58, id: 5 });
+  pc.rect(222, 120, 48, 210, (xx, yy) => ({ a: xx === 222 || yy === 120 ? FR[4]! : FR[1]!, d: 0.58, id: 5 }));
   for (let y = 124; y < 330; y++) for (let x = 226; x < 270; x++) {
-    // the hallway beyond: a lit wall, a coat on a hook, the light falling off toward the floor
     const coat = x > 246 && x < 258 && y > 170 && y < 230 && !(y < 176 && Math.abs(x - 252) > 2);
-    pc.px(x, y, { a: coat ? '#3b4a6b' : '#8a7a66', d: 0.66, id: 5, e: coat ? undefined : '#ffd9a0', ei: coat ? 0 : (0.25 + 1.05 * k) * (1 - (y - 124) / 400) });
+    const paper = (x + Math.floor(y / 6) * 3) % 7 === 0 && y % 6 < 3;
+    const base = y > 316;
+    const a = coat ? (x === 252 || y % 9 === 0 ? '#2c3a56' : '#3b4a6b') : base ? '#5a4a3a' : paper ? '#9a8870' : '#8a7a66';
+    pc.px(x, y, { a, d: 0.66, id: 5, e: coat ? undefined : '#ffd9a0', ei: coat ? 0 : (0.25 + 1.05 * k) * (1 - (y - 124) / 400) });
   }
-  pc.poly([[226 + open, 124], [270, 118], [270, 336], [226 + open, 330]], (x) => ({ a: x < 232 + open ? P.doorL : P.door, d: 0.55, id: 6, n: [-0.5, 0] }));
-  // the floor, and the light from the door across it
-  for (let y = 330; y < 480; y++) for (let x = 0; x < AW; x++) pc.px(x, y, { a: (y - 330) % 10 === 0 ? P.floor : (Math.floor(x / 30) + Math.floor((y - 330) / 10)) % 2 ? P.floor : P.floorL, d: 0.5 - (y - 330) / 400, n: [0, 0.9], id: 7 });
-  // the desk
-  pc.rect(10, 270, 210, 8, { a: P.deskL, d: 0.42, id: 10, n: [0, 0.9] });
-  pc.rect(10, 278, 210, 6, { a: P.desk, d: 0.42, id: 10 });
-  pc.rect(16, 284, 6, 70, { a: P.deskD, d: 0.43, id: 10 });
-  pc.rect(208, 284, 6, 70, { a: P.deskD, d: 0.43, id: 10 });
-  // the monitor: a game on it, fading out
-  pc.rect(60, 176, 110, 66, { a: P.mon, d: 0.44, id: 11 });
+  pc.rect(229, 200, 3, 5, { a: '#d8d2c4', d: 0.655, id: 5 });
+  // the door leaf: panelled wood, swinging open
+  pc.poly([[226 + open, 124], [270, 118], [270, 336], [226 + open, 330]], (x, y) => {
+    const lx = x - (226 + open), panel = (y > 140 && y < 220) || (y > 236 && y < 316);
+    const edge = lx < 2 ? 'L' : '';
+    const wd = wood(ramp(P.door, 0.7), { d: 0.55, id: 6, pw: 4, vertical: true, seed: 2, n: [-0.5, 0] })(x, y);
+    return edge ? { a: P.doorL, d: 0.55, id: 6, n: [-0.8, 0] } : panel && lx > 5 ? { ...wd, a: mix(wd.a, '#000000', 0.18) } : wd;
+  });
+  pc.rect(230 + open, 226, 3, 3, { a: '#d4a24a', d: 0.548, id: 6 });                      // handle
+  // the floor: wooden planks in perspective, grain, and the door's light across it
+  pc.rect(0, 330, AW, 150, (x, y) => ({ ...wood(ramp(P.floorL, 0.8), { d: 0.5 - (y - 330) / 400, id: 7, pw: 5 + Math.floor((y - 330) / 30), vertical: false, seed: 5 })(x, y), n: [0, 0.9] }));
+  // a rug under the chair
+  pc.poly([[60, 420], [240, 420], [262, 476], [40, 476]], (x, y) => ({ a: y < 423 || y > 472 ? '#c8a878' : (y - 420) % 8 < 1 || x % 16 === 0 ? '#4a2c2c' : (x + y) % 7 === 0 ? '#8a5048' : (x + y) % 2 ? '#6a3a36' : '#5e3430', d: 0.205, id: 24, n: [0, 0.9] }));
+  // the desk: wood top with a lit front edge, a drawer unit, legs, a cable tray
+  const DW = ramp(P.desk, 0.8);
+  pc.rect(10, 270, 210, 8, (x, y) => (y === 270 ? { a: DW[4]!, d: 0.42, id: 10, n: [0, 0.9] } : wood(DW, { d: 0.42, id: 10, pw: 8, seed: 3, n: [0, 0.9] })(x, y)));
+  pc.rect(10, 278, 210, 6, (x, y) => ({ a: y === 278 ? DW[1]! : DW[2]!, d: 0.42, id: 10 }));
+  pc.rect(16, 284, 6, 70, (x) => ({ a: x === 16 ? DW[2]! : DW[0]!, d: 0.43, id: 10 }));
+  pc.rect(208, 284, 6, 70, (x) => ({ a: x === 208 ? DW[2]! : DW[0]!, d: 0.43, id: 10 }));
+  pc.rect(160, 284, 46, 40, (x, y) => ({ a: (y - 284) % 13 === 0 ? DW[0]! : (y - 284) % 13 === 1 ? DW[3]! : (x === 183 && (y - 284) % 13 === 6) ? '#b8bcc4' : DW[2]!, d: 0.425, id: 10 }));
+  pc.rect(40, 286, 100, 3, (x, y) => ({ a: y === 286 ? '#3a3d46' : '#1b1c21', d: 0.43, id: 10 }));
+  // the monitor: bezel with a lit top edge, a webcam, the game on screen fading out
+  pc.rect(60, 176, 110, 66, (x, y) => ({ a: y === 176 || x === 60 ? '#3a3d46' : y === 241 || x === 169 ? '#0b0c10' : P.mon, d: 0.44, id: 11 }));
+  pc.rect(111, 173, 8, 3, { a: '#24262d', d: 0.439, id: 11 }); pc.px(115, 174, { a: '#1a1a1f', d: 0.438, id: 11, e: '#7dd3ff', ei: 0.8 });
   const on = Math.max(0, 1 - k * 1.6);
   for (let y = 180; y < 238; y++) for (let x = 64; x < 166; x++) {
-    const sky = y < 210, hill = y > 214 + Math.sin(x * 0.12) * 4;
-    const col = sky ? '#4a6fb0' : hill ? '#2e6b4a' : '#7aa6d8';
+    const sky = y < 210, hill = y > 214 + Math.sin(x * 0.12) * 4, cloud = sky && vnoise(x * 0.1, y * 0.25, 1) > 0.7;
+    const col = cloud ? '#c8d8f0' : sky ? (y < 195 ? '#3f62a6' : '#4a6fb0') : hill ? ((x + y) % 5 ? '#2e6b4a' : '#3a7a56') : '#7aa6d8';
     pc.px(x, y, { a: P.black, d: 0.44, id: 11, e: col, ei: 1.6 * on });
   }
-  pc.rect(108, 242, 14, 18, { a: P.monL, d: 0.45, id: 12 });
-  pc.rect(96, 258, 38, 4, { a: P.monL, d: 0.45, id: 12 });
-  // keyboard with RGB, mouse, headset, mug, a plant
-  pc.rect(70, 262, 74, 7, { a: P.key, d: 0.41, id: 13, n: [0, 0.8] });
-  for (let x = 72; x < 142; x += 3) pc.px(x, 264, { a: P.key, d: 0.405, id: 13, e: ['#ff4d6d', '#ffb224', '#4dd2ff', '#9b6bff'][Math.floor(x / 18) % 4], ei: 1.4 * on });
-  pc.rect(152, 263, 6, 6, { a: P.key, d: 0.41, id: 14 });
-  pc.disc(40, 254, 9, (x, y, dx, dy) => (dy < 0.2 && dx * dx + dy * dy > 0.45 ? { a: '#24252c', d: 0.41, id: 15 } : { a: P.wall, d: 0.6, id: 1 }));
-  pc.rect(182, 254, 9, 14, { a: P.mug, d: 0.41, id: 16 });
-  pc.rect(196, 248, 12, 20, { a: '#6b4a32', d: 0.41, id: 17 });
-  for (let i = 0; i < 9; i++) pc.line(202, 248, 194 + i * 2, 234 + (i % 3) * 3, { a: P.plant, d: 0.41, id: 17 });
+  pc.rect(108, 242, 14, 18, (x, y) => ({ a: x === 108 ? '#4a4d56' : x === 121 ? '#1b1c21' : y === 250 ? '#15161b' : x === 109 ? '#33363e' : P.monL, d: 0.45, id: 12 }));
+  pc.rect(96, 258, 38, 4, (x, y) => ({ a: y === 258 ? '#4a4d56' : P.monL, d: 0.45, id: 12 }));
+  // keyboard with keys and RGB, a mouse on its pad, a headset, the mug, the plant
+  pc.rect(70, 262, 74, 7, (x, y) => ({ a: y === 262 ? '#2a2c33' : (x - 70) % 3 === 2 || y === 265 ? '#0f1014' : P.key, d: 0.41, id: 13, n: [0, 0.8] }));
+  for (let x = 72; x < 142; x += 3) pc.px(x, 268, { a: P.key, d: 0.405, id: 13, e: ['#ff4d6d', '#ffb224', '#4dd2ff', '#9b6bff'][Math.floor(x / 18) % 4], ei: 1.4 * on });
+  pc.rect(148, 264, 18, 6, { a: '#1a1b20', d: 0.412, id: 14 });
+  pc.rect(152, 263, 6, 6, (x, y) => ({ a: y === 263 ? '#4a4d56' : x === 155 ? '#0f1014' : P.key, d: 0.41, id: 14 }));
+  pc.disc(40, 254, 9, (x, y, dx, dy) => (dy < 0.2 && dx * dx + dy * dy > 0.45 ? { a: dy < -0.5 ? '#3a3c45' : '#24252c', d: 0.41, id: 15 } : { a: P.wall, d: 0.6, id: 1 }));
+  pc.rect(182, 254, 9, 14, (x, y) => ({ a: x === 182 ? '#f4efe6' : x === 190 ? '#a8a296' : y === 254 ? '#3a2418' : P.mug, d: 0.41, id: 16 }));
+  pc.rect(191, 257, 2, 6, { a: '#c8c2b5', d: 0.41, id: 16 });
+  pc.rect(196, 248, 12, 20, (x, y) => ({ a: y === 248 ? '#8a603e' : x === 207 ? '#4a3222' : '#6b4a32', d: 0.41, id: 17 }));
+  for (let i = 0; i < 9; i++) pc.line(202, 248, 194 + i * 2, 234 + (i % 3) * 3, { a: ['#2f5a3e', '#3d6b4a', '#24472f'][i % 3]!, d: 0.41, id: 17 });
   // the phone on the desk, propped up; it wakes with LIVE
   const ph = { x: 26, y: 238 };
-  pc.rect(ph.x, ph.y, 14, 26, { a: P.black, d: 0.4, id: 18 });
-  pc.rect(ph.x + 1, ph.y + 1, 12, 24, { a: P.black, d: 0.4, id: 18, e: '#ffd9a0', ei: 0.9 * k });
+  pc.rect(ph.x, ph.y, 14, 26, (x, y) => ({ a: x === ph.x || y === ph.y ? '#3a3d46' : x === ph.x + 13 || y === ph.y + 25 ? '#0b0c10' : x === ph.x + 1 ? '#24262d' : P.black, d: 0.4, id: 18 }));
+  pc.rect(ph.x + 1, ph.y + 1, 12, 24, (x, y) => ({ a: Math.abs((x - ph.x) - (y - ph.y) * 0.5 - 2) < 1 ? '#2c2f38' : P.black, d: 0.4, id: 18, e: '#ffd9a0', ei: (0.9 - (y - ph.y) * 0.015) * k }));   // a dim reflection on the glass
   if (k > 0.5) for (let x = 0; x < 6; x++) for (let y = 0; y < 3; y++) pc.px(ph.x + 3 + x, ph.y + 3 + y, { a: '#b0343a', d: 0.395, id: 19, e: '#ff3b3b', ei: 4 * (Math.sin(t * 6) > -0.3 ? 1 : 0.4) });
-  // the empty gaming chair in the foreground, turned toward the door
+  // the empty gaming chair, turned toward the door: stitched leather panels, red stripes, a headrest cushion
   const cx = 150, cy = 330;
-  // the backrest: rounded top, side bolsters, a headrest cushion
-  pc.poly([[cx - 30, cy - 62], [cx - 22, cy - 74], [cx + 18, cy - 78], [cx + 26, cy - 68], [cx + 30, cy + 40], [cx - 30, cy + 44]], (x, y) => ({ a: x < cx - 24 || x > cx + 24 ? P.chairS : P.chair, d: 0.2, id: 20, n: [(x - cx) / 50, y < cy - 66 ? 0.6 : 0.1] }));
-  pc.rect(cx - 14, cy - 64, 26, 12, { a: '#33353f', d: 0.198, id: 23, n: [0, 0.4] });
-  pc.poly([[cx - 22, cy - 66], [cx - 14, cy - 67], [cx - 10, cy + 38], [cx - 18, cy + 39]], { a: P.chairR, d: 0.195, id: 20 });
-  pc.poly([[cx + 6, cy - 69], [cx + 14, cy - 70], [cx + 16, cy + 37], [cx + 8, cy + 37]], { a: P.chairR, d: 0.195, id: 20 });
-  pc.rect(cx - 28, cy + 40, 56, 12, { a: P.chairS, d: 0.19, id: 21, n: [0, 0.6] });
-  pc.rect(cx - 2, cy + 52, 5, 40, { a: P.metal, d: 0.18, id: 22 });
-  for (const dx of [-36, -14, 12, 34]) pc.line(cx, cy + 92, cx + dx, cy + 104, { a: P.metal, d: 0.17, id: 22 });
+  const CH = ramp(P.chair, 0.9), CR = ramp(P.chairR, 0.8);
+  pc.poly([[cx - 30, cy - 62], [cx - 22, cy - 74], [cx + 18, cy - 78], [cx + 26, cy - 68], [cx + 30, cy + 40], [cx - 30, cy + 44]], (x, y) => {
+    const side = x < cx - 24 || x > cx + 24, stitch = (x === cx - 24 || x === cx + 24 || (y - cy) % 14 === 0) && (x + y) % 2 === 0;
+    const v = 2 + (side ? -0.9 : 0) + (vnoise(x * 0.12, y * 0.12, 2) - 0.5) * 0.9 + (y < cy - 60 ? 0.6 : 0);
+    return { a: stitch ? CH[3]! : CH[Math.max(0, Math.min(4, dither(v, x, y)))]!, d: 0.2, id: 20, n: [(x - cx) / 50, y < cy - 66 ? 0.6 : 0.1] };
+  });
+  pc.rect(cx - 14, cy - 64, 26, 12, (x, y) => ({ a: y === cy - 64 ? CH[3]! : y === cy - 53 ? CH[0]! : (x + y) % 9 === 0 ? CH[3]! : CH[2]!, d: 0.198, id: 23, n: [0, 0.4] }));
+  pc.poly([[cx - 22, cy - 66], [cx - 14, cy - 67], [cx - 10, cy + 38], [cx - 18, cy + 39]], (x, y) => ({ a: CR[x === cx - 21 ? 3 : (y % 7 === 0 ? 1 : 2)]!, d: 0.195, id: 20 }));
+  pc.poly([[cx + 6, cy - 69], [cx + 14, cy - 70], [cx + 16, cy + 37], [cx + 8, cy + 37]], (x, y) => ({ a: CR[x === cx + 7 ? 3 : (y % 7 === 0 ? 1 : 2)]!, d: 0.195, id: 20 }));
+  pc.rect(cx - 28, cy + 40, 56, 12, (x, y) => ({ a: y === cy + 40 ? CH[4]! : y === cy + 51 ? CH[0]! : y === cy + 41 ? CH[3]! : CH[(x + y) % 11 === 0 ? 2 : 1]!, d: 0.19, id: 21, n: [0, 0.6] }));
+  pc.rect(cx - 2, cy + 52, 5, 40, (x) => ({ a: x === cx - 2 ? '#8d929c' : x === cx + 2 ? '#2a2c33' : P.metal, d: 0.18, id: 22 }));
+  for (const dx of [-36, -14, 12, 34]) { pc.line(cx, cy + 92, cx + dx, cy + 104, { a: P.metal, d: 0.17, id: 22 }); pc.disc(cx + dx, cy + 105, 2, { a: '#1a1b20', d: 0.169, id: 22 }); }
 }
 
 export function deskLights(k: number): Light[] {

@@ -133,9 +133,9 @@ export class PixelCanvas {
     const i = ((AH - 1 - y) * AW + x) * 4, c = hex(e);
     this.emi[i] = c[0]; this.emi[i + 1] = c[1]; this.emi[i + 2] = c[2]; this.emi[i + 3] = Math.round((ei / 8) * 255);
   }
-  rect(x: number, y: number, w: number, h: number, m: Mat) {
+  rect(x: number, y: number, w: number, h: number, m: Mat | ((x: number, y: number) => Mat)) {
     const x0 = Math.round(x), y0 = Math.round(y), x1 = Math.round(x + w), y1 = Math.round(y + h);
-    for (let yy = y0; yy < y1; yy++) for (let xx = x0; xx < x1; xx++) this.px(xx, yy, m);
+    for (let yy = y0; yy < y1; yy++) for (let xx = x0; xx < x1; xx++) this.px(xx, yy, typeof m === 'function' ? m(xx, yy) : m);
   }
   /** Filled polygon (scanline, pixel centres). */
   poly(pts: [number, number][], m: Mat | ((x: number, y: number) => Mat)) {
@@ -353,6 +353,18 @@ void main() {
     if (No.a < 0.5 || No.b > d + 0.02 || abs(Ao.a * 255.0 - id) > 0.5) { n = normalize(n + vec3(o, 0.0) * 0.55); if (No.a < 0.5 || No.b > d + 0.02) edge = 1.0; }
   }
 
+  // ambient occlusion: nearer geometry close by darkens this pixel (contact, crevices, under ledges)
+  float occ = 0.0;
+  for (int k = 0; k < 8; k++) {
+    float a = float(k) * 0.785398;
+    for (int r = 1; r <= 3; r++) {
+      vec2 q = ap + vec2(cos(a), sin(a)) * float(r);
+      vec4 Nq = texture(nrm, (q + 0.5) / art);
+      if (Nq.a > 0.5 && Nq.b < d - 0.01) occ += (1.0 / float(r)) / 8.0;
+    }
+  }
+  float ao = 1.0 - sat(occ * 0.55);
+
   // sky ambient by facing, plus the sky's horizon glow on surfaces that face it
   vec3 s = sunDir();
   vec3 zen = skyCol(vec3(0.0, 1.0, 0.0), s) * skyExp;
@@ -360,7 +372,7 @@ void main() {
   float ambK = ambient * mix(ambNear, 1.0, smoothstep(0.4, 0.6, d));
   vec3 amb = mix(zen * 0.35, zen, n.y * 0.5 + 0.5) * ambK * ambTint;
   amb += hor * 0.25 * ambK * sat(dot(n.xz, normalize(s.xz)) * 0.5 + 0.5) * (1.0 - abs(n.y));
-  vec3 lit = amb;
+  vec3 lit = amb * ao;
   // direct sun (day shots): a warm key from the sun's side, soft
   if (sunEl > 0.0) {
     vec3 sc = skyCol(normalize(s + vec3(0.0, 0.02, 0.0)), s) * skyExp * 0.004;
