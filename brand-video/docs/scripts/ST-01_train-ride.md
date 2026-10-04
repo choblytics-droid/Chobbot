@@ -1,4 +1,4 @@
-# ST-01 · “The train ride” · script v0.5 (approved 2026-10-03; v0.4 fact fixes, v0.5 full picture; 52 s)
+# ST-01 · “The train ride” · script v0.6 (approved 2026-10-03; v0.4 fact fixes, v0.5 full picture, v0.6 catchier song; 52 s)
 
 **Status:** approved. v0.4 corrects lyrics and pictures to the full post text (no rain, no phone, no night; added the real details: the viewer's first train, city to farmland, the other side of the world). Next: the song.
 
@@ -24,15 +24,15 @@
 
 | # | Time | Music | Picture | On-screen text | Lyric (background) | Style |
 |---|---|---|---|---|---|---|
-| 1a | 0:00–0:03 | Intro, bars 1–1.5 | Slow push into the pixel city at dusk, Christmas-market lights glowing in haze | **`Based on a true story`** (on from frame 1, out on the beat at 0:03) | (glockenspiel, train rhythm) | Pixel |
+| 1a | 0:00–0:03 | Intro, bars 1–1.5 | Slow push into the pixel city at dusk, Christmas-market lights glowing in haze | **`Based on a true story`** (on from frame 1, out on the beat at 0:03) | (glockenspiel hook from second 0, train-rhythm drums) | Pixel |
 | 1b | 0:03–0:04 | Intro, bar 2 | A pixel desk with a gaming monitor goes dark; the streamer stands up and steps out of the door, a tiny `LIVE` badge blinks on | `first real IRL` → `LIVE · IRL` | (intro continues) | Pixel |
 | 2 | 0:04–0:08 | Verse, bars 1–2 | The tour: market stalls, a castle on the hill, a lit carousel turning (the tripod set down in front of it) | lyric as text | “Took the stream out for Christmas in town / Market lights, a castle, a carousel” | Pixel |
 | 3 | 0:08–0:12 | Verse, bars 3–4 | The viewer counter climbs `1 … 2 … 3`; chat lines pop up beside the carousel, one name lighting up again and again (the regular who chats for an hour) | `3 watching` | “Three people watching, that’s my crowd / Talking to the street out loud” | Pixel → **neon line** on the downbeat |
 | 4 | 0:12–0:20 | Verse, bars 5–8 | The station; the streamer is about to end the stream. A chat line: `wait, I've never been on a train`. **Hero shot:** through the carriage window the city falls away into open farmland, fast | `wait, I've never been on a train` | “Train to catch, I'll say goodbye / ‘Wait, I’ve never been on a train’” | Neon line → pixel |
-| 5 | 0:20–0:22 | Pre-chorus, 1 bar | Fields rush past; the signal bars fall one by one; the picture pixelates | `signal fading` | “Keep it on till the signal goes” | Pixel → glitch |
+| 5 | 0:20–0:22 | Pre-chorus, 1 bar | Fields rush past; the signal bars fall one by one; the picture pixelates | `signal fading` | “Can you keep it on?” | Pixel → glitch |
 | 6 | 0:22–0:24 | **Break**, 1 bar | Freeze, `reconnecting…`, then black and silence | `signal lost` | (silence) | Black |
-| 7 | 0:24–0:32 | Chorus, bars 1–4 | The chat appears big, typed word by word, as the hero of the frame | `thanks for being so chill. amazing stream` | “You watched the city turn to fields / Your first train, it moved so fast” | Chat (pixel font, lit) |
-| 8 | 0:32–0:40 | Chorus, bars 5–8 | Front-page burst on the beat; then the streamer, stream ended, stands by the window with the fields going by | `3 VIEWERS. ENOUGH.` | “Said it was amazing, said thank you / From the other side of the world” | **Halftone** → pixel |
+| 7 | 0:24–0:32 | Chorus, bars 1–4 | The chat appears big, typed word by word, as the hero of the frame | `thanks for being so chill. amazing stream` | “Keep it on, keep it on, till the signal’s gone / You watched the city turn to fields / Your first train, it moved so fast” | Chat (pixel font, lit) |
+| 8 | 0:32–0:40 | Chorus, bars 5–8 | Front-page burst on the beat; then the streamer, stream ended, stands by the window with the fields going by | `3 VIEWERS. ENOUGH.` | “Keep it on, keep it on, till the signal’s gone / Said it was amazing, from the other side of the world” | **Halftone** → pixel |
 | 9 | 0:40–0:48 | Outro, 4 bars | Pull back from the train across the fields and over the curve of the globe to one lit window on the other side of the world; a small warm spark next to the last chat message (companion cameo) | `the other side of the world` | “Like showing a visitor my town / I saw it like a tourist too / That’s why it’s worth it” | Pixel (warm grade) |
 | 10 | 0:48–0:52 | End, 2 bars | One line first, then the end card with a small credit line under it | `They kept streaming IRL.` → `Chobbot · never stream alone` (placeholder tagline) · `Story shared by a streamer on Reddit, retold with permission` | (last chord + sonic logo in the edit) | Brand end card |
 
@@ -52,10 +52,10 @@ story). **Song** = what is sung. **Picture** = what is shown.
 | Only 3 viewers | ✓ verse 3 | ✓ `3 watching` | ✓ counter |
 | One regular chats for an hour | — | — | ✓ one name lighting up again and again |
 | Train to catch, about to end the stream | ✓ verse 5 | ✓ (lyrics) | ✓ the station |
-| The viewer has never been on a train, wants to keep watching | ✓ verse 6, pre-chorus | ✓ chat line | ✓ chat line |
+| The viewer has never been on a train, wants to keep watching | ✓ verse 6, pre-chorus, the chorus hook “keep it on” | ✓ chat line | ✓ chat line |
 | City turns to farmland until the signal drops | ✓ chorus 1–2 | ✓ `signal lost` | ✓ hero shot, freeze |
-| “Thanks for being so chill… amazing stream” | ✓ chorus 3 | ✓ the chat, full frame | ✓ |
-| Someone on the other side of the world; nearly tearful | ✓ chorus 4, outro | ✓ `the other side of the world` | ✓ globe pull-back |
+| “Thanks for being so chill… amazing stream” | ✓ chorus 5 | ✓ the chat, full frame | ✓ |
+| Someone on the other side of the world; nearly tearful | ✓ chorus 5 | ✓ `the other side of the world` | ✓ globe pull-back |
 | What it meant: a tourist in your own town; worthwhile | ✓ outro | ✓ (lyrics) | ✓ warm city |
 | After: they kept streaming IRL | — | ✓ `They kept streaming IRL.` | — |
 | Left out on purpose: the test streams to work, the setup details, safety talk in the comments | | | |
@@ -72,7 +72,7 @@ story). **Song** = what is sung. **Picture** = what is shown.
 **Style of Music**
 
 ```
-warm lo-fi indie pop, gentle and hopeful, glockenspiel and felt piano, soft synth pads, brushed train-rhythm percussion, soft clear vocal up front, intimate dry production, 120 BPM
+catchy upbeat indie pop, warm and hopeful, glockenspiel hook from the first second, train-rhythm drums with handclaps, bright felt piano, clear warm vocal up front, singalong chorus, crisp modern production, 120 BPM
 ```
 
 **Exclude**
@@ -84,7 +84,7 @@ heavy reverb, autotune, rap verses, spoken word intro, long instrumental intro
 **Lyrics**
 
 ```
-[Intro: 2 bars, instrumental, glockenspiel, train rhythm]
+[Intro: 2 bars, glockenspiel hook, train-rhythm drums]
 
 [Verse: soft vocal]
 Took the stream out for Christmas in town
@@ -94,24 +94,29 @@ Talking to the street out loud
 Train to catch, I'll say goodbye
 "Wait, I've never been on a train"
 
-[Pre-Chorus: almost spoken]
-Keep it on till the signal goes
+[Pre-Chorus: rising]
+"Can you keep it on?"
 
 [Break]
 
-[Chorus: warm, fuller]
+[Chorus: catchy singalong, full drums, glockenspiel hook]
+Keep it on, keep it on, till the signal's gone
 You watched the city turn to fields
 Your first train, it moved so fast
-Said it was amazing, said thank you
-From the other side of the world
+Keep it on, keep it on, till the signal's gone
+Said it was amazing, from the other side of the world
 
-[Outro: soft]
+[Outro: soft, glockenspiel hook returns]
 Like showing a visitor my town
 I saw it like a tourist too
 That's why it's worth it
 
 [End]
 ```
+
+Why it is catchy (and still true): the glockenspiel hook plays from second 0 (TikTok decides in the first
+3 s), the break before the chorus is the "hook moment", and the repeated line “keep it on, keep it on,
+till the signal's gone” is the viewer's real wish to keep watching until the connection dropped.
 
 Pick the take by the checklist in `docs/SUNO_GUIDE.md` (clear vocal, steady tempo, the break before
 the chorus, every line sung as written, clean ending, at least 45 s). Send the WAV (and the vocal

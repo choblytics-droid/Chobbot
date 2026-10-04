@@ -48,6 +48,22 @@ film are in the media plan, tab **Story & Song**.
   notes (`[Intro: solo felt piano]`, `[Build: strings enter]`, `[Climax: full orchestra]`), and the
   film's statements appear as on-screen text, not in the song.
 
+## Making it catchy (what works on TikTok now), without leaving the story
+
+- **Hook in the first 3 seconds**, often before any lyric: start with an instrumental hook melody
+  (Stories: it plays under the “Based on a true story” card) and bring it back in the chorus and outro.
+- **120–140 BPM, plain 4/4.**
+- **One “hook moment”**: a drop after a short break. Ours is the `[Break]` before the chorus.
+- **A short repeated phrase** people can sing back, taken from the story itself (ST-01: “keep it on,
+  keep it on, till the signal's gone”, the viewer's real wish). Never a slogan the story doesn't hold.
+- Style words that help: `catchy`, `singalong chorus`, `hook from the first second`, `handclaps`,
+  `crisp modern production`. Words that slow it down: `lo-fi`, `ambient`, `slow build`.
+
+Sources: [TikTok 2026: hook-first songs](https://www.inspiredbybeatz.com/en/hook-first-2026-songs-for-the-first-15-seconds/),
+[TikTok dance songs 2026 (BPM, 4/4)](https://deeka.ai/blog/tiktok-dance-songs-2026),
+[What makes songs go viral (WSU)](https://cas.wsu.edu/?p=29240),
+[Trending songs on TikTok, Sept 2026](https://buffer.com/resources/trending-songs-tiktok/).
+
 ## Making sure the song tells the story
 
 - The lyrics come from the script's **story coverage table**: song structure follows the story
