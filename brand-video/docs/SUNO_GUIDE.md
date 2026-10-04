@@ -70,7 +70,9 @@ Sources: [TikTok 2026: hook-first songs](https://www.inspiredbybeatz.com/en/hook
   (intro = setup, verse = what happened, pre-chorus = the turn, break = the held breath, chorus =
   the payoff, outro = what it meant). Facts the song can't fit go to on-screen text or the picture.
 - After picking a take, the vocal is **transcribed during word timing and compared line by line**
-  with the lyrics. Any skipped or changed line → generate a new take.
+  with the lyrics. A **skipped line** or a change that **alters the meaning** → new take. A word that
+  is mumbled or slightly different (meaning intact) → keep the take; the subtitle shows the written
+  lyric (standard rule, `PIPELINE.md` step 4).
 
 ## Picking a take (checklist)
 
@@ -78,11 +80,14 @@ Sources: [TikTok 2026: hook-first songs](https://www.inspiredbybeatz.com/en/hook
 2. The **tempo is steady** (cuts land on the beat grid).
 3. The structure matches the script: the break where the script needs silence, the chorus where
    the answer lands.
-4. Every lyric line is sung **as written** (no skipped or invented words).
+4. Every lyric line is sung, in order, and means what was written (small word slips are fixed by
+   the subtitles).
 5. It ends cleanly (`[End]` respected) and is at least 45 s.
+6. No need to reject a take for a missing intro: Suno often ignores `[Intro]`, and we splice the
+   song's own hook in front (standard rule, `PIPELINE.md` step 4).
 
 Download the **WAV** (and stems if your plan has them: the vocal stem makes word timing much more
-accurate) and upload it to `brand-video/films/<film-id>/audio/` on GitHub (Add file → Upload files) as `song.wav` and `vocals.wav`. Each film folder has a README there that names the files.
+accurate) and send it in the chat, or upload it to `brand-video/films/<film-id>/audio/` on GitHub (Add file → Upload files) as `song.wav` and `vocals.wav`. Each film folder has a README there that names the files.
 
 ## House rules
 

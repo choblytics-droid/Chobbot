@@ -28,3 +28,23 @@ Rules:
   with anything learned.
 - **Minimum quality level 6 for every film** (owner rule, 2026-10-03). The level (`TIER_LIST.md`)
   is chosen at step 1 (6 or higher) and confirmed at step 5. No lower-level tests or drafts for release.
+
+## Standard workflow: step 4, audio analysis (set after ST-01, owner 2026-10-04)
+
+1. **Store the song.** The owner sends the Suno WAV in the chat (or uploads it on GitHub). It is
+   saved as `films/<film-id>/audio/song.wav` and pushed straight away, so it outlives the session.
+   The owner downloads everything later with **Code → Download ZIP** on the branch.
+2. **Analyse.** `python3 tools/analyze_audio.py films/<film-id>/audio/song.wav films/<film-id>/data/ --models <dir>`
+   gives the vocal stem, word timings (`words.json`) and the beat grid (`beats.json`). Then
+   `data/ANALYSIS.md`: tempo, sections, and the sung-as-written table, line by line.
+3. **Missing intro → splice, don't regenerate.** If Suno skips the instrumental intro (the opening card
+   needs about 3–4 s), put the song's own wordless hook (or another instrumental passage) in front,
+   exactly 2 bars, cut on downbeats so the beat grid runs on, and check the join for clicks.
+   Result: `audio/song_with_intro.wav`. The owner listens to a short clip (`check_new_intro.mp3`) and
+   approves.
+4. **Changed or unclear words → keep the song, correct with subtitles.** If a line is sung
+   differently (mumbled, a word swapped, a tense changed) but the meaning stays close to the written
+   lyric, the take is accepted and the **on-screen subtitle shows the written lyric**. A new take
+   is needed only when a line is missing or the sung words change the story's meaning.
+5. **Master timing.** The approved audio is the master; every line's start and end in master time
+   goes to `data/lyrics_master.json`, and the script's beat sheet is retimed to the real bars.

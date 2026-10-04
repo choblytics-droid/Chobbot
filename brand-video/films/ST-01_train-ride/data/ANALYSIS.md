@@ -18,7 +18,8 @@ Proposed fix, no new take needed: `audio/song_with_intro.wav` (58.26 s). The son
 "oh-oh" hook (37.50–40.96 s, after the chorus) is placed in front of the song, so the film opens on
 its catchiest sound and the verse starts exactly 2 bars later (3.90 s). Checked: the beat grid runs
 on without a jump across the splice, and the splice is no louder than a normal transient (no click).
-**Owner to listen and approve** (`check_new_intro.mp3`). With it, add **+3.46 s** to every time below.
+**Approved by the owner (2026-10-04): `song_with_intro.wav` is the master audio.** Add **+3.46 s**
+to every time below; master times are in `lyrics_master.json`.
 
 ## Sung-as-written check
 
@@ -35,8 +36,8 @@ Every line is sung, in order. Two lines differ or are unclear on both models:
 | — | *[Break]* | 17.3–19.6 | instrumental | ✓ |
 | 7 | "Can you keep it on?" | 19.60–21.2 | as written | ✓ |
 | 8 | Keep it on, keep it on, till the signal's gone | 21.60–25.2 | as written | ✓ |
-| 9 | You watched the city turn to **fields** | 25.36–27.2 | both models hear "fuse" | **owner to listen** |
-| 10 | Your first train, it **moved** so fast | 27.36–29.3 | "it moves so fast" | on-screen text follows the vocal: "moves" |
+| 9 | You watched the city turn to **fields** | 25.36–27.2 | both models hear "fuse" | accepted: subtitle shows "fields" |
+| 10 | Your first train, it **moved** so fast | 27.36–29.3 | "it moves so fast" | accepted: subtitle shows "moved" |
 | 11 | Keep it on, keep it on, till the signal's gone | 29.52–33.0 | as written | ✓ |
 | 12 | Said it was amazing, from the other side of the world | 33.12–37.0 | as written | ✓ |
 | — | *wordless "oh-oh" hook (added by Suno)* | 37.5–41.2 | no lyrics | becomes the intro too |
@@ -59,4 +60,4 @@ Every line is sung, in order. Two lines differ or are unclear on both models:
 | Ending | 53.4–54.8 | tail | end card |
 
 Takes checklist (`SUNO_GUIDE.md`): vocal clear ✓ · tempo steady ✓ · structure ✓ (except the
-missing intro, fixed above) · sung as written: 13 of 15 lines ✓, 2 to confirm · ≥ 45 s ✓.
+missing intro, fixed above) · sung as written: 13 of 15 lines ✓, 2 accepted with the written lyric as subtitle (owner, 2026-10-04) · ≥ 45 s ✓.

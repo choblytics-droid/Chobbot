@@ -1,0 +1,131 @@
+{
+ "audio": "audio/song_with_intro.wav",
+ "offset_from_song_wav": 3.46,
+ "bpm": 123.05,
+ "beat": 0.4876,
+ "first_downbeat": 3.9,
+ "note": "Times are in the master audio. Subtitles show the written lyric even where the take differs (line 9 sung like 'fuse', line 10 'moves').",
+ "sections": {
+  "intro": [
+   0,
+   3.9
+  ],
+  "verse": [
+   3.9,
+   21.45
+  ],
+  "break": [
+   21.45,
+   23.4
+  ],
+  "pre_chorus": [
+   23.06,
+   25.06
+  ],
+  "chorus": [
+   25.06,
+   40.5
+  ],
+  "hook": [
+   40.95,
+   44.66
+  ],
+  "outro": [
+   44.66,
+   56.9
+  ],
+  "end": 58.26
+ },
+ "lines": [
+  {
+   "n": 1,
+   "text": "Took the stream out for Christmas in town",
+   "start": 4.26,
+   "end": 7.36
+  },
+  {
+   "n": 2,
+   "text": "Market lights, a castle, a carousel",
+   "start": 8.18,
+   "end": 11.06
+  },
+  {
+   "n": 3,
+   "text": "Three people watching, that's my crowd",
+   "start": 12.02,
+   "end": 14.16
+  },
+  {
+   "n": 4,
+   "text": "Talking to the street out loud",
+   "start": 14.42,
+   "end": 16.06
+  },
+  {
+   "n": 5,
+   "text": "Train to catch, I'll say goodbye",
+   "start": 16.26,
+   "end": 18.06
+  },
+  {
+   "n": 6,
+   "text": "\"Wait, I've never been on a train\"",
+   "start": 18.56,
+   "end": 20.76
+  },
+  {
+   "n": 7,
+   "text": "\"Can you keep it on?\"",
+   "start": 23.06,
+   "end": 24.66
+  },
+  {
+   "n": 8,
+   "text": "Keep it on, keep it on, till the signal's gone",
+   "start": 25.06,
+   "end": 28.66
+  },
+  {
+   "n": 9,
+   "text": "You watched the city turn to fields",
+   "start": 28.82,
+   "end": 30.66
+  },
+  {
+   "n": 10,
+   "text": "Your first train, it moved so fast",
+   "start": 30.82,
+   "end": 32.76
+  },
+  {
+   "n": 11,
+   "text": "Keep it on, keep it on, till the signal's gone",
+   "start": 32.98,
+   "end": 36.46
+  },
+  {
+   "n": 12,
+   "text": "Said it was amazing, from the other side of the world",
+   "start": 36.58,
+   "end": 40.46
+  },
+  {
+   "n": 13,
+   "text": "Like showing a visitor my town",
+   "start": 44.66,
+   "end": 48.26
+  },
+  {
+   "n": 14,
+   "text": "I saw it like a tourist too",
+   "start": 50.58,
+   "end": 54.06
+  },
+  {
+   "n": 15,
+   "text": "That's why it's worth it",
+   "start": 54.98,
+   "end": 56.86
+  }
+ ]
+}
