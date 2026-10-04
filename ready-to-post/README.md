@@ -25,8 +25,8 @@ The folder is called `<ID>_<name>`, the same as the film's working folder in `fi
 
 ## The cover (one series design, only number and title change)
 
-"STORY TIME", the episode number in yellow, the title on a yellow bar, "Based on a true story", pixel
-Chob in the streamer's room. Everything sits inside TikTok's 3:4 grid crop. Make a new one with:
+"STORY TIME", the episode number in yellow, the title on a yellow bar, "Based on a true story", the
+empty chair in the streamer's room (no character). Everything sits inside TikTok's 3:4 grid crop. Make a new one with:
 
 ```
 cd brand-video

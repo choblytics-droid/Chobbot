@@ -4,7 +4,8 @@
   python tools/cover.py --make-chob D:/APP/heroes/CHOB_CANONICAL.png      (only if Chob's art changes)
 
 Layers: the series plate (the streamer's desk room from the film engine, rendered with --notext),
-pixel Chob (made from the locked canonical art by tools/cover.py --make-chob), the title block.
+the title block. No character (owner, 2026-10-05); `--chob` puts pixel Chob back (made from the
+locked canonical art by --make-chob).
 Everything sits inside TikTok's 3:4 grid crop (y 240-1680 of 1080x1920).
 """
 import argparse
@@ -85,7 +86,7 @@ def font(name, size):
     return ImageFont.truetype(str(FONTS / name), size)
 
 
-def cover(num: str, title: str, out: Path):
+def cover(num: str, title: str, out: Path, with_chob=False):
     plate = Image.open(KIT / 'plate_desk.png').convert('RGB').resize((W, H))
     img = plate.convert('RGBA')
 
@@ -97,14 +98,15 @@ def cover(num: str, title: str, out: Path):
         d.line([(0, y), (W, y)], fill=v)
     img = Image.composite(Image.new('RGBA', (W, H), (12, 12, 16, 255)), img, wash)
 
-    # pixel Chob on the rug, with a soft contact shadow
-    chob = Image.open(KIT / 'chob_pixel.png')
-    cx, foot = 300, 1650
-    shadow = Image.new('L', (W, H), 0)
-    ImageDraw.Draw(shadow).ellipse([cx - 210, foot - 26, cx + 230, foot + 22], fill=150)
-    shadow = shadow.filter(ImageFilter.GaussianBlur(14))
-    img = Image.composite(Image.new('RGBA', (W, H), (0, 0, 0, 255)), img, shadow)
-    img.alpha_composite(chob, (cx - chob.width // 2, foot - chob.height))
+    # pixel Chob on the rug, with a soft contact shadow (off by default: owner removed him, 2026-10-05)
+    if with_chob:
+        chob = Image.open(KIT / 'chob_pixel.png')
+        cx, foot = 300, 1650
+        shadow = Image.new('L', (W, H), 0)
+        ImageDraw.Draw(shadow).ellipse([cx - 210, foot - 26, cx + 230, foot + 22], fill=150)
+        shadow = shadow.filter(ImageFilter.GaussianBlur(14))
+        img = Image.composite(Image.new('RGBA', (W, H), (0, 0, 0, 255)), img, shadow)
+        img.alpha_composite(chob, (cx - chob.width // 2, foot - chob.height))
 
     d = ImageDraw.Draw(img)
     big = font('Archivo-w1250-900.ttf', 200)
@@ -132,10 +134,11 @@ if __name__ == '__main__':
     p = argparse.ArgumentParser()
     p.add_argument('--num'); p.add_argument('--title'); p.add_argument('--out')
     p.add_argument('--make-chob', metavar='CANONICAL_PNG')
+    p.add_argument('--chob', action='store_true', help='put pixel Chob back on the cover')
     a = p.parse_args()
     if a.make_chob:
         KIT.mkdir(parents=True, exist_ok=True)
         make_chob(Path(a.make_chob), KIT / 'chob_pixel.png')
         print(KIT / 'chob_pixel.png')
     else:
-        cover(a.num, a.title, Path(a.out))
+        cover(a.num, a.title, Path(a.out), a.chob)

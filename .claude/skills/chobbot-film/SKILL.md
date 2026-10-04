@@ -23,7 +23,7 @@ Everything lives in `brand-video/` (never mixed with other projects). Read first
 5. **Nobody sings on screen.** The song is background; lyrics appear as subtitles, chat, kinetic type.
 6. **Streamer Stories carry no brand:** no end card, logo, tagline, sonic logo or companion. The
    channel's avatar and name already carry the brand. Brand films use the end card (`app/src/kit/endcard.ts`).
-   **Exception (owner, 2026-10-04): the series cover** carries pixel Chob ("STORY TIME" + number), see step 9.
+   The series cover ("STORY TIME" + number + title, step 9) has no character either (owner, 2026-10-05: Chob removed).
 7. **Stories open on the song at once** (no intro, no splice), with the hook sticker
    **"Based on a true story"** popping on over the first shot for 2.5–3 s, across the first cut.
 8. **Subtitles show the written lyric.** Small sung slips are accepted; a new take only if a line is

@@ -95,9 +95,9 @@ cost is CPU-bound (one Chrome thread; the GPU idles at 10–40 %), so `--scale 2
 
 - **ST-01 is final at 1080p60** (owner, 2026-10-04): no level-8 polish, no 4K.
 - **One series cover for all Streamer Stories** (owner, 2026-10-04): "STORY TIME" + episode number +
-  title, pixel Chob in the streamer's room (`tools/cover.py`; plate and pixel Chob in
-  `assets/cover/`, Chob pixelated from the locked `CHOB_CANONICAL.png`, not redrawn). The cover is the
-  one place a Story shows Chob; the film itself stays brand-free.
+  title over the streamer's room with the empty chair (`tools/cover.py`, plate in `assets/cover/`).
+  **No character on it (owner, 2026-10-05: Chob removed)**, so Stories stay brand-free on the cover
+  too. Pixel Chob is kept in `assets/cover/chob_pixel.png`; `--chob` puts him back if ever wanted.
 - **Posting package** = `ready-to-post/<ID>_<name>/` at the repo root (owner moved it out of `brand-video/`) with `_video.mp4`, `_cover.png`,
   `_description.txt` (`ready-to-post/README.md`). No AI watermark on the video (owner turned it off
   2026-08-08); the description credits Suno and TikTok's AI-content switch goes on.
