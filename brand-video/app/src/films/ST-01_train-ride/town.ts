@@ -26,11 +26,11 @@ export default class Town extends Scene {
     if (shot === 'tour') { o.streamer = 'tripod'; o.sx = 74; o.camX = -4 + 8 * p; }
     if (shot === 'neon') { o.streamer = 'tripod'; o.sx = 74; o.camX = 4 + 4 * p; }
     if (shot === 'outro') { o.streamer = 'none'; o.camX = -30 + 60 * p; o.camY = 1.5 * Math.sin(t * 4.1); sky = { ...sky, sunEl: -0.04, skyExp: 3.6 }; }
-    if (shot === 'newday') { o.streamer = 'none'; o.day = 1; sky = { sunEl: 0.12, sunAz: 2.3, skyExp: 0.42, ambient: 1.3, stars: 0, clouds: 0.6 }; haze = 0.25; wet = 0.35; snow = 0.4; }
+    if (shot === 'newday') { o.streamer = 'none'; o.day = 1; sky = { sunEl: 0.09, sunAz: -1.95, skyExp: 0.5, ambient: 1.25, stars: 0, clouds: 0.55 }; haze = 0.22; wet = 0.2; snow = 0.25; }
     paintTown(this.pc, o);
     if (shot === 'neon') return this.neon(f, out);
     this.pl.render(this.ctx.renderer, out, {
-      lights: townLights(o), t, ...sky, bands: 9, horizonY: 262, fov: 300, haze, snow, wet, groundY: 405,
+      lights: townLights(o), t, ...sky, bands: shot === 'newday' ? 6 : 9, horizonY: 262, fov: 300, haze, snow, wet, groundY: 405,
       hazeCol: shot === 'newday' ? [0.06, 0.05, 0.05] : [0.015, 0.022, 0.05],
     });
     // text
@@ -43,7 +43,7 @@ export default class Town extends Scene {
       const at = this.ctx.params.msgAt ?? 1e9;
       const a = clamp((t - at) / 0.3);
       if (a > 0) {
-        ov.chat('viewer_3', 'thanks for being so chill. amazing stream', t, W * 0.12, H * 0.3, { a: a * 0.95, size: 32, w: W * 0.66, hot: true });
+        ov.chat('viewer_3', 'thanks for being so chill. amazing stream', t, W * 0.05, H * 0.27, { a: a * 0.95, size: 30, w: W * 0.6, hot: true });   // left of the castle
       }
     }
     if (shot === 'newday') {
@@ -52,7 +52,7 @@ export default class Town extends Scene {
       // the credit, small, at the bottom; then the film fades out with the song's last note
       const c = ov.c;
       c.save(); c.font = font(F.mono(400), 24); c.textAlign = 'center'; c.fillStyle = `rgba(241,238,232,${0.85 * a})`;
-      c.shadowColor = 'rgba(0,0,0,0.7)'; c.shadowBlur = 12;
+      c.shadowColor = 'rgba(0,0,0,0.9)'; c.shadowBlur = 18;
       c.fillText('Story shared by a streamer on Reddit, retold with permission', W / 2, H * 0.25); c.restore();   // under the closing line, clear of the caption zone
       ov.caption('LIVE · IRL', W * 0.08, H * 0.1, { size: 30, dot: '#ff3b3b', a: clamp((t - f.start - 0.4) / 0.2) });
     }
@@ -64,11 +64,12 @@ export default class Town extends Scene {
   /** Frame 3: the market as neon lines; the viewer counter climbs 1, 2, 3 and the chat pops up by the carousel. */
   neon(f: Frame, out: THREE.WebGLRenderTarget) {
     const t = f.t;
-    this.pl.renderNeon(this.ctx.renderer, out, t);
+    this.pl.renderNeon(this.ctx.renderer, out, t, 405);
     const ov = this.ov;
     ov.begin();
     ov.lyric(this.ly.lineAt(t, 0.35, 0.3), t, { y: H * 0.2 });
-    const n = 1 + Math.min(2, Math.floor(f.p * 3.2));
+    const three = this.ly.get('Three people').words[0]!.start;
+    const n = t >= three ? 3 : t >= three - 0.5 ? 2 : 1;   // 3 on the sung word "Three"
     ov.caption(`${n} watching`, W / 2, H * 0.31, { size: 44, align: 'center', dot: '#ff3b3b' });
     // (only neutral reactions: the post doesn't say what the chat wrote, so no invented lines)
     const msgs: [string, string, number][] = [['viewer_1', 'o/', 0.08], ['viewer_1', '<3', 0.3], ['viewer_2', ':)', 0.5], ['viewer_1', '<3 <3', 0.72]];
@@ -80,6 +81,6 @@ export default class Town extends Scene {
       y += 66;
     }
     ov.draw(this.ctx.renderer, this.ctx.comp, out);
-    return { grain: 0.05, vignette: 0.45, bloom: 1.1, bloomThreshold: 0.6, halation: 0.5, ca: 1.8 };
+    return { grain: 0.05, vignette: 0.45, bloom: 0.8, bloomThreshold: 0.75, halation: 0.35, ca: 1.6 };
   }
 }

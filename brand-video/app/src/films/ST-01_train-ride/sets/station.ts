@@ -54,19 +54,28 @@ export function paintStation(pc: PixelCanvas, o: { t: number; camX?: number }) {
   pc.rect(148, 118, 96, 30, (x, y) => ({ a: y === 118 || x === 148 ? '#4a4d56' : y === 147 || x === 243 ? '#16171c' : '#2a2c33', d: 0.451, id: 6 }));
   pc.rect(150, 120, 92, 26, (x, y) => ({ a: (x + y) % 2 ? P.board : '#0c0d10', d: 0.45, id: 6 }));
   pc.line(152, 121, 166, 121, { a: '#2a2e3a', d: 0.449, id: 6 });
-  const msg = [0b11101110, 0b10101010, 0b11101110];
-  for (let k = 0; k < 40; k++) for (let r = 0; r < 3; r++) if ((msg[r]! >> (k % 8)) & 1 && (k % 9) < 7) pc.px(154 + k * 2, 125 + r * 3, { a: P.board, d: 0.45, id: 6, e: P.amber, ei: 3 });
-  for (let k = 0; k < 28; k++) if ((k * 13) % 7 < 4) pc.px(154 + k * 3, 138, { a: P.board, d: 0.45, id: 6, e: P.amber, ei: 2.4 });
+  const amber = (x: number, y: number, k = 3) => pc.px(x, y, { a: P.board, d: 0.45, id: 6, e: P.amber, ei: k });
+  const TRAIN = ['.####.', '#.##.#', '######', '.#..#.'];
+  for (let line = 0; line < 2; line++) {
+    const by = 124 + line * 10, dim = line ? 2.2 : 3.2;
+    TRAIN.forEach((r, j) => [...r].forEach((ch, i) => { if (ch === '#') amber(154 + i, by + j, dim); }));
+    for (let i = 0; i < 4; i++) amber(163 + i, by + 2, dim); amber(166, by + 1, dim); amber(166, by + 3, dim);   // arrow
+    let x = 171, k = line * 5 + 1;
+    while (x < 236) { const w = 3 + ((k * 7) % 4) * 2; for (let i = 0; i < w && x + i < 238; i += 2) for (let j = 0; j < 5; j++) if (((i + j + k) % 3) !== 0) amber(x + i, by + j - 1, dim); x += w + 3; k++; }
+  }
   pc.line(196, 98, 196, 120, { a: P.girder, d: 0.46, id: 6 });
-  // clock
+  // clock: case ring first, then the face
+  pc.disc(60, 140, 12.5, (x, y, dx, dy) => ({ a: dy < 0 ? '#6a6d76' : '#2a2c33', d: 0.452, id: 7, n: [dx * 0.8, -dy * 0.8] }));
   pc.disc(60, 140, 11, (x, y, dx, dy) => {
     const r2 = dx * dx + dy * dy, ang = Math.atan2(dy, dx), tick = r2 > 0.55 && r2 < 0.72 && Math.abs(((ang / (Math.PI / 6)) % 1 + 1) % 1 - 0.5) > 0.38;
     if (r2 > 0.75) return { a: dy < 0 ? '#5a5d66' : GR[1]!, d: 0.45, id: 7, n: [dx * 0.7, -dy * 0.7] };
-    return { a: tick ? '#2a2a30' : '#ece6da', d: 0.45, id: 7, e: tick ? undefined : '#fff4dc', ei: tick ? 0 : 0.6 - r2 * 0.3 };
+    return { a: tick ? '#2a2a30' : '#ece6da', d: 0.45, id: 7, e: tick ? undefined : '#fff4dc', ei: tick ? 0 : 0.22 - r2 * 0.1 };
   });
   pc.line(60, 140, 60, 132, { a: '#1a1a1f', d: 0.44, id: 7 });
   pc.line(60, 140, 65, 142, { a: '#1a1a1f', d: 0.44, id: 7 });
   pc.line(60, 98, 60, 129, { a: P.girder, d: 0.46, id: 7 });
+  pc.rect(57, 126, 7, 3, (x, y) => ({ a: y === 126 ? '#5a5d66' : '#2a2c33', d: 0.455, id: 7 }));   // bracket
+
 
   // the train: a regional double-length carriage alongside the platform
   lay(0.35);
@@ -130,7 +139,8 @@ export function paintStation(pc: PixelCanvas, o: { t: number; camX?: number }) {
       for (let x = -20; x < AW + 20; x++) {
         const edge = row < 2;
         const joint = yy === gy || (x + (row % 2) * 9 + 400) % Math.round(10 + u * 14) === 0;
-        const sn = Math.sin(x * 12.9898 + row * 78.233) * 43758.5453, rnd = sn - Math.floor(sn);
+        const slab = Math.floor((x + (row % 2) * 9 + 400) / Math.round(10 + u * 14));
+        const sn = Math.sin(slab * 12.9898 + row * 78.233) * 43758.5453, rnd = sn - Math.floor(sn);
         pc.px(x, yy, { a: edge ? (row === 0 ? P.snow : P.yellow) : joint ? P.platD : rnd < 0.06 ? P.snowS : rnd < 0.5 ? P.plat : P.platL, d: 0.3 - u * 0.25, n: [0, 0.9], id: 14 });
       }
     gy += rh; row++;

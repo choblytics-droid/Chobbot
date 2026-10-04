@@ -32,7 +32,7 @@ export default class Carriage extends Scene {
     const frozen = t >= gone;
     const tp = frozen ? gone : t;
     const s = travel(tp, P.t0);
-    const o = { t: tp, scroll: s, cityEnd: 1500, station: s < 160 ? 1 : 0, phone: P.shot === 'board' ? clamp((t - f.start) / 1.2) : 1 };
+    const o = { t: tp, scroll: s, cityEnd: 1500, station: s < 160 ? 1 : 0, phone: P.shot === 'board' ? clamp((t - f.start) / 1.2) : 1, pov: P.shot !== 'board' };
     paintCarriage(this.pc, o);
     this.pl.render(this.ctx.renderer, out, {
       lights: carriageLights(o), t: tp, sunEl: -0.11, sunAz: -0.4, skyExp: 4.5, ambient: 0.8, ambNear: 0.6, stars: 1, clouds: 0.35,
@@ -47,9 +47,9 @@ export default class Carriage extends Scene {
     const ov = this.ov;
     ov.begin();
     const black = t >= (P.black ?? 1e9);
-    if (!black) ov.lyric(this.ly.lineAt(t, 0.35, 0.3), t, { y: H * 0.72 }); // above the platform caption zone (docs/QA.md)
+    if (!black) ov.lyric(this.ly.lineAt(t, 0.35, 0.3), t, { y: H * 0.165 }); // upper third, over the ceiling (docs/QA.md)
     const bars = P.shot === 'board' ? 4 : Math.max(0, 4 - Math.floor(clamp((t - P.t0 - 4) / 9) * 4.999));
-    if (!black) this.signal(frozen ? 0 : bars, W - 170, 300);
+    if (!black) this.signal(frozen ? 0 : bars, 70, 225);   // top left, clear of the lyric and the top bar
     if (frozen && !black) ov.caption('reconnecting…', W / 2, H * 0.36, { size: 38, align: 'center' });
     if (black) ov.caption('signal lost', W / 2, H * 0.5, { size: 40, align: 'center', box: false, col: 'rgba(241,238,232,0.9)' });
     ov.draw(this.ctx.renderer, this.ctx.comp, out);

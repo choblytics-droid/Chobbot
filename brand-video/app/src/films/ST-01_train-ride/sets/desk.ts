@@ -33,10 +33,17 @@ export function paintDesk(pc: PixelCanvas, o: { t: number; k: number }) {
   pc.rect(10, 180, 78, 4, (xx, yy) => ({ a: yy === 180 ? '#5a5d6a' : '#2a2c36', d: 0.579, id: 3, n: [0, 0.8] }));   // sill
   for (let y = 74; y < 176; y++) for (let x = 18; x < 80; x++) {
     if (x === 48 || y === 124) { pc.px(x, y, { a: x === 48 ? FR[3]! : FR[1]!, d: 0.58, id: 3 }); continue; }
+    const house = x > 22 && x < 44 && y > 112 && y < 162, roof = x > 19 && x < 47 && y > 100 && y <= 112 && Math.abs(x - 33) < (y - 100) * 1.2 + 2;
+    const lamp = (x === 64 && y > 120 && y < 164) || (x >= 62 && x <= 66 && y >= 118 && y <= 120);
     if (y > 160) pc.px(x, y, snow(['#7d8aa3', '#a3b1c8', '#c6d2e3', '#dfe7f2', '#f4f8ff'], { d: 0.9, id: 4, seed: 2 })(x, y));
-    else if (y > 146 && y < 161 - Math.round(4 * Math.sin(x * 0.2))) pc.px(x, y, { a: (x + y) % 3 ? '#1a2130' : '#232b3d', d: 0.9, id: 4, e: (x * 37) % 11 === 0 && y === 150 ? '#ffcc80' : undefined, ei: 2.2 });
+    else if (lamp) pc.px(x, y, { a: '#2a2c33', d: 0.88, id: 4, e: y <= 120 ? '#ffd08a' : undefined, ei: y <= 120 ? 4 : 0 });
+    else if (roof) pc.px(x, y, { a: Math.abs(x - 33) > (y - 100) * 1.2 ? '#dfe7f2' : (x + y) % 3 ? '#2a2f3c' : '#353b4a', d: 0.89, id: 4, n: [x < 33 ? -0.5 : 0.5, 0.6] });
+    else if (house) { const win = (x > 27 && x < 32 || x > 35 && x < 40) && y > 122 && y < 130; pc.px(x, y, { a: win ? '#1b1e27' : (x + y) % 4 === 0 ? '#5a5048' : '#4a4038', d: 0.89, id: 4, e: win ? '#ffc46b' : undefined, ei: win ? 2.2 : 0 }); }
+    else if (y > 146 && y < 161 - Math.round(4 * Math.sin(x * 0.2))) pc.px(x, y, { a: (x + y) % 3 ? '#1a2130' : '#232b3d', d: 0.9, id: 4 });
     else pc.erase(x, y); // sky: the physical sky fills it
   }
+  for (const [fx, fy, sx, sy] of [[18, 74, 1, 1], [79, 74, -1, 1], [18, 175, 1, -1], [79, 175, -1, -1]] as const)
+    for (let k = 0; k < 9; k++) for (let j = 0; j < 9 - k; j++) if ((k * 7 + j * 3) % 5 < 3) pc.px(fx + sx * k, fy + sy * j, { a: '#c6d2e3', d: 0.579, id: 3, e: '#c6d8ff', ei: 0.15 });
   // the doorway (right): a lit hallway with patterned wallpaper, a coat on a hook, a light switch
   const open = Math.round(4 + 30 * k);
   pc.rect(222, 120, 48, 210, (xx, yy) => ({ a: xx === 222 || yy === 120 ? FR[4]! : FR[1]!, d: 0.58, id: 5 }));
@@ -72,10 +79,18 @@ export function paintDesk(pc: PixelCanvas, o: { t: number; k: number }) {
   pc.rect(60, 176, 110, 66, (x, y) => ({ a: y === 176 || x === 60 ? '#3a3d46' : y === 241 || x === 169 ? '#0b0c10' : P.mon, d: 0.44, id: 11 }));
   pc.rect(111, 173, 8, 3, { a: '#24262d', d: 0.439, id: 11 }); pc.px(115, 174, { a: '#1a1a1f', d: 0.438, id: 11, e: '#7dd3ff', ei: 0.8 });
   const on = Math.max(0, 1 - k * 1.6);
+  // the game on screen: a night platformer level (cave, platforms, a coin, the player sprite) with a HUD
   for (let y = 180; y < 238; y++) for (let x = 64; x < 166; x++) {
-    const sky = y < 210, hill = y > 214 + Math.sin(x * 0.12) * 4, cloud = sky && vnoise(x * 0.1, y * 0.25, 1) > 0.7;
-    const col = cloud ? '#c8d8f0' : sky ? (y < 195 ? '#3f62a6' : '#4a6fb0') : hill ? ((x + y) % 5 ? '#2e6b4a' : '#3a7a56') : '#7aa6d8';
-    pc.px(x, y, { a: P.black, d: 0.44, id: 11, e: col, ei: 1.6 * on });
+    const lx = x - 64, ly = y - 180;
+    let col = ly < 30 ? (ly < 15 ? '#1a1f3a' : '#232a4a') : '#2a2440';                      // cave backdrop
+    if ((lx * 7 + ly * 13) % 41 === 0 && ly < 26) col = '#8fa6d0';                            // stars through the cave mouth
+    const plat = (ly === 40 && lx > 8 && lx < 40) || (ly === 32 && lx > 52 && lx < 80) || (ly >= 50);
+    if (plat) col = ly >= 50 ? ((lx + ly) % 4 ? '#5a3a2a' : '#7a4a32') : '#7a6a5a';
+    if (ly === 49 && lx % 6 < 3) col = '#3d8a4a';                                             // grass on the floor
+    if (Math.abs(lx - 64) < 2 && Math.abs(ly - 27) < 2) col = '#ffd04a';                     // a coin
+    if (lx >= 22 && lx < 26 && ly >= 34 && ly < 40) col = ly < 36 ? '#e8c27a' : '#c0392b';   // the player sprite
+    if (ly < 5) col = lx < 30 ? (lx % 5 < 3 && ly > 1 && ly < 4 ? '#e5484d' : '#101216') : (lx > 80 && ly > 1 && ly < 4 && lx % 3 ? '#e8e2d6' : '#101216');   // HUD: hearts, score
+    pc.px(x, y, { a: P.black, d: 0.44, id: 11, e: col, ei: 1.5 * on });
   }
   pc.rect(108, 242, 14, 18, (x, y) => ({ a: x === 108 ? '#4a4d56' : x === 121 ? '#1b1c21' : y === 250 ? '#15161b' : x === 109 ? '#33363e' : P.monL, d: 0.45, id: 12 }));
   pc.rect(96, 258, 38, 4, (x, y) => ({ a: y === 258 ? '#4a4d56' : P.monL, d: 0.45, id: 12 }));
@@ -116,5 +131,7 @@ export function deskLights(k: number): Light[] {
     { x: 115, y: 210, d: 0.4, col: '#7aa6d8', i: 2.2 * on, r: 90, shadow: true },
     { x: 250, y: 220, d: 0.56, col: '#ffd9a0', i: 0.6 + 3.2 * k, r: 120, shadow: true },
     { x: 33, y: 250, d: 0.38, col: '#ffd9a0', i: 0.8 * k, r: 26 },
+    { x: 150, y: 250, d: 0.32, col: '#7aa6d8', i: 1.6 * on, r: 70 },        // the monitor's glow on the chair's back edges (rim)
+    { x: 235, y: 300, d: 0.1, col: '#ffd9a0', i: 0.5 + 1.4 * k, r: 90 },     // warm fill from the doorway, from the camera side
   ];
 }

@@ -56,6 +56,16 @@ export class Overlay {
     c.save();
     c.font = font(fam, size);
     c.textBaseline = 'middle';
+    // a soft dark plate behind each row: readable over any background (snow, sky, glow)
+    c.save();
+    c.filter = `blur(${Math.round(size * 0.45)}px)`;
+    c.fillStyle = `rgba(6,7,11,${0.5 * A})`;
+    rows.forEach((row, r) => {
+      const rw = row.reduce((a, i) => a + measure(words[i]!, fam, size), 0) + sp * (row.length - 1);
+      roundRect(c, (W - rw) / 2 - size * 0.45, y0 + r * lh - size * 0.62, rw + size * 0.9, size * 1.24, size * 0.4);
+      c.fill();
+    });
+    c.restore();
     rows.forEach((row, r) => {
       const ws = row.map((i) => measure(words[i]!, fam, size));
       let x = (W - (ws.reduce((a, b) => a + b, 0) + sp * (row.length - 1))) / 2;
@@ -63,7 +73,7 @@ export class Overlay {
         const w = l.words[i]!;
         const on = clamp((t - w.start) / 0.09);
         c.shadowColor = 'rgba(0,0,0,0.75)'; c.shadowBlur = size * 0.35; c.shadowOffsetY = size * 0.04;
-        c.fillStyle = rgba('bone', A * (0.32 + 0.68 * on));
+        c.fillStyle = rgba('bone', A * (0.5 + 0.5 * on));
         c.fillText(words[i]!, x, y0 + r * lh - size * 0.06 * (1 - ease.outCubic(on)) * (on > 0 ? 1 : 0));
         x += ws[k]! + sp;
       });

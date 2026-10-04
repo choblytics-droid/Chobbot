@@ -13,6 +13,38 @@ const FRAG = /* glsl */ `
 uniform vec2 art; uniform float t, R, spin, link; uniform vec2 C;
 uniform vec3 A, B; // the two points (unit vectors, globe space)
 float bayer4(vec2 p) { ivec2 q = ivec2(mod(p, 4.0)); int m[16] = int[16](0,8,2,10,12,4,14,6,3,11,1,9,15,7,13,5); return (float(m[q.x + q.y * 4]) + 0.5) / 16.0; }
+// the continents, approximated by ellipses in latitude/longitude (degrees), with a ragged coast
+float ell(vec2 ll, vec2 c, vec2 r) { vec2 d = (ll - c) / r; return 1.0 - dot(d, d); }
+float landAt(vec3 g) {
+  vec2 ll = vec2(degrees(asin(clamp(g.y, -1.0, 1.0))), degrees(atan(g.x, g.z)));
+  float m = -1.0;
+  // North America, Alaska, Central America, Canada, Greenland
+  m = max(m, ell(ll, vec2(45.0, -100.0), vec2(16.0, 28.0))); m = max(m, ell(ll, vec2(63.0, -150.0), vec2(7.0, 14.0)));
+  m = max(m, ell(ll, vec2(22.0, -100.0), vec2(8.0, 8.0))); m = max(m, ell(ll, vec2(12.0, -86.0), vec2(5.0, 5.0)));
+  m = max(m, ell(ll, vec2(64.0, -100.0), vec2(9.0, 30.0))); m = max(m, ell(ll, vec2(72.0, -40.0), vec2(9.0, 13.0)));
+  m = min(m, -ell(ll, vec2(60.0, -86.0), vec2(5.0, 7.0)) * 0.5 + 0.5 * m);
+  // South America
+  m = max(m, ell(ll, vec2(-8.0, -58.0), vec2(16.0, 14.0))); m = max(m, ell(ll, vec2(-34.0, -66.0), vec2(16.0, 6.0))); m = max(m, ell(ll, vec2(5.0, -68.0), vec2(7.0, 10.0)));
+  // Europe, Scandinavia, Iberia, Britain, Italy
+  m = max(m, ell(ll, vec2(50.0, 18.0), vec2(8.0, 18.0))); m = max(m, ell(ll, vec2(63.0, 16.0), vec2(7.0, 8.0)));
+  m = max(m, ell(ll, vec2(40.0, -4.0), vec2(4.5, 6.0))); m = max(m, ell(ll, vec2(54.0, -3.0), vec2(4.0, 2.6))); m = max(m, ell(ll, vec2(42.5, 13.0), vec2(4.0, 2.2)));
+  // Africa, the Horn, Arabia, Madagascar
+  m = max(m, ell(ll, vec2(10.0, 18.0), vec2(17.0, 24.0))); m = max(m, ell(ll, vec2(-16.0, 25.0), vec2(17.0, 12.0)));
+  m = max(m, ell(ll, vec2(9.0, 45.0), vec2(5.0, 6.0))); m = max(m, ell(ll, vec2(24.0, 46.0), vec2(8.0, 9.0))); m = max(m, ell(ll, vec2(-19.0, 47.0), vec2(6.0, 2.2)));
+  // Asia, India, Southeast Asia, Kamchatka, Japan, Indonesia, Australia, New Zealand
+  m = max(m, ell(ll, vec2(58.0, 95.0), vec2(13.0, 48.0))); m = max(m, ell(ll, vec2(38.0, 100.0), vec2(13.0, 26.0)));
+  m = max(m, ell(ll, vec2(21.0, 78.0), vec2(9.0, 7.0))); m = max(m, ell(ll, vec2(15.0, 102.0), vec2(8.0, 5.0)));
+  m = max(m, ell(ll, vec2(57.0, 160.0), vec2(6.0, 5.0))); m = max(m, ell(ll, vec2(36.0, 138.0), vec2(6.0, 2.4)));
+  m = max(m, ell(ll, vec2(-2.0, 113.0), vec2(3.5, 14.0))); m = max(m, ell(ll, vec2(-25.0, 134.0), vec2(10.0, 17.0))); m = max(m, ell(ll, vec2(-42.0, 173.0), vec2(5.0, 2.5)));
+  // Antarctica
+  m = max(m, (-68.0 - ll.x) / 6.0);
+  return m + fbm(g * 9.0, 5) * 0.55 + fbm(g * 23.0, 3) * 0.18;   // ragged coasts, bays, islands
+}
+// where people live: brighter regions
+float dense(vec3 g) {
+  vec2 ll = vec2(degrees(asin(clamp(g.y, -1.0, 1.0))), degrees(atan(g.x, g.z)));
+  return sat(ell(ll, vec2(42.0, -82.0), vec2(10.0, 16.0))) + sat(ell(ll, vec2(49.0, 10.0), vec2(9.0, 16.0))) + sat(ell(ll, vec2(25.0, 80.0), vec2(9.0, 9.0))) + sat(ell(ll, vec2(32.0, 115.0), vec2(9.0, 12.0))) + sat(ell(ll, vec2(36.0, 138.0), vec2(5.0, 4.0))) + 0.25;
+}
 mat3 rotY(float a) { float c = cos(a), s = sin(a); return mat3(c, 0, -s, 0, 1, 0, s, 0, c); }
 mat3 rotX(float a) { float c = cos(a), s = sin(a); return mat3(1, 0, 0, 0, c, s, 0, -s, c); }
 vec2 proj(vec3 g, mat3 M) { vec3 v = M * g; return C + v.xy * R; }
@@ -28,10 +60,11 @@ void main() {
   if (r2 < 1.0) {
     vec3 n = vec3(d, sqrt(1.0 - r2));
     vec3 g = transpose(M) * n;                      // globe space
-    float land = fbm(g * 2.2 + 3.0, 5);
-    bool isLand = land > 0.05;
+    float land = landAt(g);
+    bool isLand = land > 0.0;
     float day = dot(n, sun);
-    vec3 alb = isLand ? mix(vec3(0.10, 0.12, 0.08), vec3(0.16, 0.15, 0.1), sat(land * 3.0)) : vec3(0.02, 0.05, 0.12);
+    vec3 alb = isLand ? mix(vec3(0.09, 0.11, 0.07), vec3(0.17, 0.15, 0.10), sat(land * 2.0)) : vec3(0.015, 0.04, 0.10);
+    if (isLand && abs(g.y) > 0.92) alb = vec3(0.55, 0.6, 0.68);   // polar ice
     // night side: ocean and land in moonlight, city lights on land
     vec3 lit = alb * (0.08 + 1.4 * sat(day));
     if (isLand && day < 0.1) {
@@ -41,9 +74,11 @@ void main() {
       for (int k = 0; k < 3; k++) {
         float L = 60.0 * pow(4.0, float(k)), cpx = R / L;
         float w = smoothstep(0.5, 1.0, cpx) * smoothstep(7.0, 3.5, cpx);
-        city += w * step(0.86, hash12(floor(ll * L) + float(k) * 31.0));
+        city += w * step(0.86 + float(k) * 0.05, hash12(floor(ll * L) + float(k) * 31.0));
       }
-      city *= smoothstep(0.05, 0.35, land);
+      // lights crowd the coasts and the dense regions; interiors stay dark
+      float coast = landAt(normalize(g + vec3(0.02, 0.0, 0.0))) < 0.0 || landAt(normalize(g - vec3(0.02, 0.0, 0.0))) < 0.0 || landAt(normalize(g + vec3(0.0, 0.02, 0.0))) < 0.0 || landAt(normalize(g + vec3(0.0, 0.0, 0.02))) < 0.0 ? 1.0 : 0.0;
+      city *= (0.08 + coast * 0.9) * min(dense(g), 1.2) * step(0.45, hash12(floor(ll * 9.0) + 3.0) + coast * 0.6);
       lit += vec3(1.0, 0.72, 0.38) * min(city, 1.0) * 1.6 * smoothstep(0.1, -0.15, day);
     }
     // dawn on the terminator, and the ocean's glint
@@ -80,7 +115,8 @@ void main() {
     vec2 sp = C + v.xy * R;
     float dd = length(ap - sp);
     float on = k == 0 ? 1.0 : smoothstep(0.85, 1.0, link);
-    c += vec3(1.0, 0.8, 0.5) * on * (step(dd, 1.6) * 6.0 + exp(-dd * 0.25) * 0.8);
+    float pulse = 0.5 + 0.5 * sin(t * 6.0 + float(k) * 2.0);
+    c += vec3(1.0, 0.8, 0.5) * on * (step(dd, 1.6) * 6.0 + exp(-dd * 0.25) * 0.8 + step(abs(dd - 3.0 - pulse * 2.5), 0.5) * 1.6 * (1.0 - pulse));
   }
   fragColor = vec4(c, 1.0);
 }`;
@@ -93,9 +129,10 @@ export default class Globe extends Scene {
     const u = this.pass.u;
     // the two points: the train (north, night side) and the window on the other side of the world
     const a = (lat: number, lon: number): [number, number, number] => [Math.cos(lat) * Math.sin(lon), Math.sin(lat), Math.cos(lat) * Math.cos(lon)];
-    const A = a(0.75, -0.75), B = a(-0.4, 1.35);
+    // (map positions are illustrative: the post names neither place; the town set reads as Europe)
+    const A = a(0.86, 0.25), B = a(-0.62, 2.35);
     // camera: start close on the train's dot (the globe huge), end on the whole globe with both ends in view
-    const spin = 0.75 - 0.95 * z, R = 2400 * Math.pow(112 / 2400, z);
+    const spin = -0.25 - 1.15 * z, R = 2400 * Math.pow(112 / 2400, z);
     const tilt = 0.35, cs = Math.cos(spin), sn = Math.sin(spin), ct = Math.cos(tilt), st = Math.sin(tilt);
     const vx = cs * A[0] + sn * A[2], vz0 = -sn * A[0] + cs * A[2], vy = ct * A[1] - st * vz0; // M * A (rotX · rotY)
     const end: [number, number] = [AW / 2, AH * 0.45];

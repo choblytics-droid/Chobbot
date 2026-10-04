@@ -28,12 +28,13 @@ export default class Chat extends Scene {
     this.mc.layer.clear();
     // the screen: the stream's chat, full screen, in our own generic UI
     c.fillStyle = '#0c0d12'; c.fillRect(0, 0, W, H);
-    // status line
-    c.font = font(F.mono(700), 34); c.textBaseline = 'middle';
-    c.fillStyle = 'rgba(229,72,77,1)'; c.beginPath(); c.arc(80, 150, 12, 0, Math.PI * 2); c.fill();
-    c.fillStyle = rgba('bone', 0.9); c.fillText('LIVE · 3 watching', 104, 152);
-    const bars = shot === 'keep' ? 4 : Math.min(4, 1 + Math.floor((t - f.start) * 3));
-    for (let i = 0; i < 4; i++) { c.fillStyle = i < bars ? rgba('bone', 0.95) : rgba('bone', 0.2); c.fillRect(W - 170 + i * 28, 168 - (16 + i * 13), 18, 16 + i * 13); }
+    // status line: only in the first chat shot (in the thank-you it would imply the stream reconnected: QA-1)
+    if (shot === 'keep') {
+      c.font = font(F.mono(700), 34); c.textBaseline = 'middle';
+      c.fillStyle = 'rgba(229,72,77,1)'; c.beginPath(); c.arc(80, 260, 12, 0, Math.PI * 2); c.fill();
+      c.fillStyle = rgba('bone', 0.9); c.fillText('LIVE · 3 watching', 104, 262);
+      for (let i = 0; i < 4; i++) { c.fillStyle = rgba('bone', 0.95); c.fillRect(W - 260 + i * 28, 278 - (16 + i * 13), 18, 16 + i * 13); }
+    }
     const big = 104, fam = F.mono(500), famB = F.mono(700);
     const msg = (user: string, text: string, y: number, o: { size: number; a: number; hot?: boolean; caret?: boolean }) => {
       c.save();
@@ -70,13 +71,14 @@ export default class Chat extends Scene {
       focusY = 1 - (y + 300) / H;
     }
     // the input row
-    c.fillStyle = 'rgba(241,238,232,0.08)'; c.fillRect(60, H * 0.62, W - 200, 90);
-    c.font = font(F.mono(400), 34); c.fillStyle = rgba('ash', 0.6); c.fillText('Say something…', 100, H * 0.62 + 52);
+    const iy = shot === 'thanks' ? H * 0.71 : H * 0.62;
+    c.fillStyle = 'rgba(241,238,232,0.08)'; c.fillRect(60, iy, W - 200, 90);
+    c.font = font(F.mono(400), 34); c.fillStyle = rgba('ash', 0.6); c.fillText('Say something…', 100, iy + 52);
     this.mc.render(this.ctx.renderer, out, { t, focusY, tilt: shot === 'keep' ? -0.05 + 0.02 * f.p : 0.04 - 0.02 * f.p, blur: 0.014, warm: shot === 'thanks' ? 1 : 0 });
     // the sung lyric (subtitle) over the macro, low
     const ov = this.ov;
     ov.begin();
-    if (shot === 'thanks') ov.lyric(this.ly.lineAt(t, 0.35, 0.3), t, { y: H * 0.74 });
+    if (shot === 'thanks') ov.lyric(this.ly.lineAt(t, 0.35, 0.3), t, { y: H * 0.6 });
     ov.draw(this.ctx.renderer, this.ctx.comp, out);
     const punch = shot === 'keep' ? 1 + 0.03 * ease.outCubic(clamp((t - f.start) / 1.8)) : 1;
     return { grain: 0.05, vignette: 0.5, bloom: 0.8, halation: 0.35, ca: 1.6, zoom: punch };

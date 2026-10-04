@@ -20,7 +20,16 @@ export class Glitch {
       vec3 c = vec3(texture(src, q + vec2(sp, 0.0)).r, texture(src, q).g, texture(src, q - vec2(sp, 0.0)).b);
       // scanline dropouts
       c *= 1.0 - 0.6 * amt * step(0.92, hash11(floor(uv.y * 400.0) + floor(t * 30.0)));
-      fragColor = vec4(c * (1.0 - black), 1.0);
+      // signal lost: the frozen frame breaks into smeared blocks, drained of colour and light
+      if (black > 0.0) {
+        vec2 bs = vec2(9.0, 16.0);
+        vec2 cell = floor(uv * bs);
+        vec2 smear = vec2((hash12(cell) - 0.5) * 0.12, (hash12(cell + 7.0) - 0.5) * 0.03) * step(0.35, hash12(cell + 3.0));
+        vec3 m = texture(src, (floor(uv * bs * 4.0) + 0.5) / (bs * 4.0) + smear).rgb;
+        m = mix(m, vec3(luma(m)) * vec3(0.55, 0.7, 1.0), 0.65);
+        c = mix(c, m * 0.3, black);
+      }
+      fragColor = vec4(c, 1.0);
     }`, { src: { value: null }, amt: { value: 0 }, t: { value: 0 }, block: { value: 24 }, black: { value: 0 } });
 
   /** Apply to `rt` in place. */

@@ -15,9 +15,14 @@ export interface CarriageOpts {
   phone?: number;
   /** station platform outside (frame 5): 1 = at the platform */
   station?: number;
+  /** point of view through the window (the hero shot) */
+  pov?: boolean;
 }
 
 const WIN = { x0: 20, x1: 250, y0: 112, y1: 300 };
+/** The hero shot: a point of view through the window (the window fills the frame). */
+const WIN_POV = { x0: 8, x1: 262, y0: 26, y1: 392 };
+let win = WIN;
 export const CARRIAGE_WIN = WIN;
 const P = {
   wall: '#5d5348', wallD: '#4a4239', wallL: '#6f6455', frame: '#2b2b30', frameL: '#44444c', rubber: '#16161a',
@@ -32,7 +37,7 @@ const hashI = (n: number) => { const s = Math.sin(n * 127.1 + 311.7) * 43758.545
 
 /** The outside world at travel `s` (window column x maps to line position s*k + x). */
 function outside(pc: PixelCanvas, o: CarriageOpts) {
-  const { x0, x1, y0, y1 } = WIN;
+  const { x0, x1, y0, y1 } = win;
   const hor = 222;
   const cityEnd = o.cityEnd ?? 400;
   const inWin = (x: number, y: number) => x >= x0 && x < x1 && y >= y0 && y < y1;
@@ -67,7 +72,7 @@ function outside(pc: PixelCanvas, o: CarriageOpts) {
         put(x, y, { a, d: 0.8, id: 20 + (b % 50), e: lit ? P.warm : undefined, ei: lit ? 2.2 : 0 });
       }
     } else {
-      const hh = Math.round(3 + 2 * Math.sin(wx * 0.3) + (hashI(Math.floor(wx / 9)) < 0.25 ? 6 + 4 * Math.sin(wx * 0.9) : 0));
+      const hh = Math.round(2 + 4 * vnoise(wx * 0.18, 0, 8) + (hashI(Math.floor(wx / 9)) < 0.25 ? 6 + 4 * Math.sin(wx * 0.9) : 0));
       const HG = ['#121b1a', '#1a2624', '#24332f', '#9fb0cc'];
       for (let y = hor - hh; y < hor + 3; y++) {
         const k = y === hor - hh ? 3 : dither(1 + (vnoise(wx * 0.4, y * 0.5, 4) - 0.5) * 2.2, Math.floor(wx), y);
@@ -92,6 +97,8 @@ function outside(pc: PixelCanvas, o: CarriageOpts) {
       if (st > 0.5 && y > hor + 18) {
         const edge = y === hor + 19 || y === hor + 20;
         const tile = (Math.floor(wx / 12) + y) % 2, sn = hashI(Math.floor(wx / 3) * 13 + y) < 0.06;
+        const tactile = y > hor + 20 && y < hor + 25 && Math.floor(wx) % 2 === 0 && y % 2 === 0;
+        if (tactile) { put(x, y, { a: '#c9a840', d: 0.5 - u * 0.2, n: [0, 0.9], id: 30 }); continue; }
         put(x, y, { a: edge ? (y === hor + 19 ? '#f0d070' : P.yellow) : sn ? P.snowD : tile ? P.plat : (Math.floor(wx) % 12 === 0 ? '#3a3d44' : P.platL), d: 0.5 - u * 0.2, n: [0, 0.9], id: 30 });
         continue;
       }
@@ -101,29 +108,75 @@ function outside(pc: PixelCanvas, o: CarriageOpts) {
       put(x, y, { a: far ? P.field : furrow ? P.snowD : drift > 0.7 ? P.snow : u > 0.5 && hashI(Math.floor(wx) * 7 + y) < 0.04 ? P.field : '#b8c5da', d: 0.75 - u * 0.4, n: [0, furrow ? 0.6 : 0.9], id: 23 });
     }
   }
+  // the farmland, not at the station: stubble rows, a nearer hedge line with gaps, hay bales under snow,
+  // telegraph poles and their wires at mid distance (each layer at its own speed)
+  if (st < 0.5) {
+    const field2 = o.scroll * 0.9, hy2 = hor + Math.round((y1 - hor) * 0.22);
+    for (let x = x0; x < x1; x++) {
+      const wx = x + field2;
+      if (hashI(Math.floor(wx / 30)) < 0.7) for (let y = hy2 - 3 - Math.round(1.5 * Math.sin(wx * 0.5)); y < hy2; y++) put(x, y, { a: y === hy2 - 3 ? '#9fb0cc' : y === hy2 - 2 ? '#2c3c37' : (x + y) % 3 ? '#1a2624' : '#24332f', d: 0.62, id: 78 });
+      const bale = Math.floor(wx / 46), bx = wx - bale * 46;
+      if (hashI(bale + 40) < 0.45 && bx > 10 && bx < 19) {
+        const r = Math.abs(bx - 14.5) / 4.5, h = Math.round(4 * Math.sqrt(Math.max(0, 1 - r * r)));
+        for (let y = hy2 + 4 - h; y <= hy2 + 4; y++) put(x, y, { a: y === hy2 + 4 - h ? '#eef3fa' : bx > 15 ? '#8fa0bd' : '#b8c5da', d: 0.6, id: 79, n: [(bx - 14.5) / 5, 0.6] });
+      }
+    }
+    const tel = o.scroll * 1.15;
+    for (let k = Math.floor(tel / 64) - 1; k <= Math.floor((tel + 270) / 64) + 1; k++) {
+      const tx = Math.round(k * 64 - tel + x0);
+      for (let y = hor - 26; y < hy2 + 2; y++) put(tx, y, { a: y === hor - 26 ? '#dfe7f2' : y % 5 === 0 ? '#5a4636' : y % 5 === 2 ? '#241d19' : '#2e2621', d: 0.58, id: 80 });
+      for (let dx = -3; dx <= 3; dx++) put(tx + dx, hor - 24, { a: Math.abs(dx) === 3 ? '#9aa0aa' : '#3a2f29', d: 0.58, id: 80 });   // crossarm with insulators
+    }
+    for (let x = x0; x < x1; x++) { const wx = x + tel; put(x, hor - 22 + Math.round(2 * Math.sin(((wx % 64) / 64) * Math.PI)), { a: '#1a1c22', d: 0.585, id: 80 }); }
+    // stubble rows in the snow: dark specks along the furrows
+    for (let y = hy2 + 6; y < y1; y += 3) for (let x = x0; x < x1; x++) { const wx = x + o.scroll * (0.5 + ((y - hor) / (y1 - hor)) * 0.9); if (hashI(Math.floor(wx) * 3 + y * 7) < 0.08) put(x, y, { a: '#6f7c96', d: 0.6 - (y - hor) * 0.001, id: 23 }); }
+  }
+  // a field fence rushing past in the near field (speed you can read), not at the station
+  if (st < 0.5) {
+    const fence = o.scroll * 1.7, fy = Math.round(hor + (y1 - hor) * 0.55);
+    for (let x = x0; x < x1; x++) { put(x, fy, { a: '#3a2f29', d: 0.42, id: 76 }); put(x, fy + 4, { a: '#2e2621', d: 0.42, id: 76 }); }
+    for (let k = Math.floor(fence / 24) - 1; k <= Math.floor((fence + 270) / 24) + 1; k++) {
+      const fx = Math.round(k * 24 - fence + x0);
+      for (let y = fy - 4; y < fy + 12; y++) for (let dx = 0; dx < 2; dx++) put(fx + dx, y, { a: y === fy - 4 ? '#dfe7f2' : dx ? '#3a2f29' : '#5a4636', d: 0.41, id: 76 });
+    }
+  }
   // the catenary masts flicking past (nearest, fastest)
-  const pole = o.scroll * 2.2;
-  for (let k = Math.floor(pole / 150) - 1; k <= Math.floor((pole + 260) / 150) + 1; k++) {
-    const px = Math.round(k * 150 - pole + x0);
+  const pole = o.scroll * 2.2, gap = o.pov ? 110 : 150;
+  for (let k = Math.floor(pole / gap) - 1; k <= Math.floor((pole + 260) / gap) + 1; k++) {
+    const px = Math.round(k * gap - pole + x0);
     for (let y = y0; y < y1; y++) for (let dx = 0; dx < 3; dx++) put(px + dx, y, { a: dx === 0 ? '#4a4e58' : dx === 2 ? '#1a1c22' : (y % 9 === 0 ? '#3a3d46' : P.pole), d: 0.3, id: 40, n: [dx < 1 ? -0.6 : 0.4, 0] });
     for (let dx = -40; dx < 6; dx++) put(px + dx, y0 + 16, { a: P.pole, d: 0.3, id: 40 });
+  }
+  // station furniture (frame 5): canopy columns with the canopy band, benches, name signs
+  if (st > 0.5) {
+    const mid = o.scroll * 0.8;
+    for (let y = hor - 34; y < hor - 30; y++) for (let x = x0; x < x1; x++) put(x, y, { a: y === hor - 34 ? '#4a505e' : y === hor - 31 ? '#15171c' : (Math.floor(x + mid) % 12 === 0 ? '#5a5f6a' : '#22262f'), d: 0.56, id: 72 });
+    for (let k = Math.floor(mid / 70) - 1; k <= Math.floor((mid + 260) / 70) + 1; k++) {
+      const cxp = Math.round(k * 70 + 35 - mid + x0);
+      for (let y = hor - 30; y < hor + 19; y++) for (let dx = 0; dx < 3; dx++) put(cxp + dx, y, { a: dx === 0 ? '#5a5f6a' : dx === 2 ? '#1a1c22' : (y % 7 === 0 ? '#4a4d56' : '#3a3d46'), d: 0.55, id: 73 });
+      if (k % 2 === 0) for (let dx = -8; dx < 9; dx++) for (let dy = 0; dy < 3; dy++) put(cxp + 10 + dx, hor + 12 + dy, { a: dy === 0 ? '#6b4a32' : '#3a2a20', d: 0.54, id: 74 });   // bench
+      if (k % 3 === 0) for (let dx = -10; dx < 11; dx++) for (let dy = 0; dy < 6; dy++) put(cxp + dx, hor - 26 + dy, { a: dy === 0 || dy === 5 || Math.abs(dx) === 10 ? '#1c2a4a' : (dy === 2 || dy === 3) && Math.abs(dx) < 7 && dx % 3 !== 0 ? '#e8e2d6' : '#2a3e6a', d: 0.545, id: 75 });   // station name sign (blank glyphs)
+    }
   }
   // station lamps (frame 5)
   if (st > 0.5) {
     const lamps = o.scroll * 0.8;
     for (let k = Math.floor(lamps / 70) - 1; k <= Math.floor((lamps + 260) / 70) + 1; k++) {
       const lx = Math.round(k * 70 - lamps + x0);
-      for (let y = hor - 30; y < hor + 19; y++) put(lx, y, { a: P.pole, d: 0.55, id: 41 });
-      for (let dx = -3; dx <= 3; dx++) put(lx + dx, hor - 31, { a: P.lamp, d: 0.55, id: 41, e: '#ffe7b0', ei: 5 });
+      for (let y = hor - 30; y < hor + 19; y++) put(lx, y, { a: P.pole, d: 0.55, id: 77 });
+      for (let dx = -3; dx <= 3; dx++) put(lx + dx, hor - 31, { a: P.lamp, d: 0.55, id: 77, e: '#ffe7b0', ei: 5 });
     }
   }
 }
 
 export function paintCarriage(pc: PixelCanvas, o: CarriageOpts) {
   pc.clear();
-  pc.names = { 41: 'city block', 42: 'city block', 43: 'city block', 44: 'city block', 45: 'city block', 46: 'city block', 47: 'city block', 48: 'city block', 9: 'heater grille', 1: 'carriage wall', 2: 'window frame', 3: 'ceiling', 4: 'lamp strip', 5: 'luggage rack', 6: 'bag', 7: 'table', 8: 'cup', 50: 'seat R', 51: 'headrest R', 52: 'seat L', 53: 'headrest L', 63: 'phone', 64: 'phone screen', 23: 'snow field', 21: 'hedges', 22: 'farmhouse', 30: 'platform', 40: 'catenary' };
+  pc.names = { 78: 'hedge row', 79: 'hay bales', 80: 'telegraph poles', 72: 'canopy band', 73: 'canopy column', 74: 'bench', 75: 'station sign', 76: 'fence', 77: 'platform lamps', 9: 'heater grille', 1: 'carriage wall', 2: 'window frame', 3: 'ceiling', 4: 'lamp strip', 5: 'luggage rack', 6: 'bag', 7: 'table', 8: 'cup', 50: 'seat R', 51: 'headrest R', 52: 'seat L', 53: 'headrest L', 63: 'phone', 64: 'phone screen', 23: 'snow field', 21: 'hedges', 22: 'farmhouse', 30: 'platform', 40: 'catenary' };
+  for (let k = 20; k < 70; k++) if (!pc.names[k] || pc.names[k] === '') pc.names[k] = k >= 20 && k <= 21 ? pc.names[k] ?? 'city block' : 'city block';
+  pc.names[21] = 'hedges'; pc.names[22] = 'farmhouse'; pc.names[23] = 'snow field'; pc.names[30] = 'platform'; pc.names[40] = 'catenary';
+  win = o.pov ? WIN_POV : WIN;
   outside(pc, o);
-  const { x0, x1, y0, y1 } = WIN;
+  const { x0, x1, y0, y1 } = win;
   const D = 0.2;
   // the wall around the window (everything outside the window rect), with panels
   for (let y = 0; y < 480; y++)
@@ -147,6 +200,7 @@ export function paintCarriage(pc: PixelCanvas, o: CarriageOpts) {
       else if (nearCorner) pc.px(x, y, { a: P.rubber, d: D - 0.01, id: 2 });
     }
   
+  if (!o.pov) {
   // ceiling: lamp strip and the luggage rack
   // ceiling panels with air vents
   pc.rect(0, 0, AW, 22, (x, y) => {
@@ -169,6 +223,7 @@ export function paintCarriage(pc: PixelCanvas, o: CarriageOpts) {
     return { a: zip ? '#b8893f' : seam ? BG[3]! : BG[Math.max(0, Math.min(4, dither(v, x, y)))]!, d: D - 0.03, id: 6, n: [(x - 190) / 25, 0.3] };
   });
   for (let x = 178; x < 202; x++) pc.px(x, 49 + Math.round(2 * Math.abs((x - 190) / 12) ** 2), { a: BG[1]!, d: D - 0.031, id: 6 });
+  }
   // table under the window with a paper cup
   pc.rect(x0 - 6, y1 + 10, 150, 6, (x, y) => (y === y1 + 10 ? { a: '#6a5a46', d: D - 0.04, id: 7, n: [0, 0.9] } : wood(ramp(P.table, 0.8), { d: D - 0.04, id: 7, pw: 3, seed: 4, n: [0, 0.9] })(x, y)));
   pc.rect(x0 - 6, y1 + 16, 150, 2, { a: '#241e19', d: D - 0.04, id: 7 });
@@ -191,8 +246,13 @@ export function paintCarriage(pc: PixelCanvas, o: CarriageOpts) {
     // headrest cover: woven cotton, a centre seam, darker where it folds over the top
     pc.rect(sx + 8, top + 3, w - 16, 16, (x, y) => (x === sx + Math.floor(w / 2) ? { a: '#b8b0a2', d: 0.07, id: id + 1 } : y === top + 3 ? { a: '#a8a092', d: 0.07, id: id + 1, n: [0, 0.6] } : fabric(ramp(P.head, 0.35), { d: 0.07, id: id + 1, seed: id, n: [0, 0.3] })(x, y)));
   };
-  seat(150, 110, 50);
-  seat(-30, 100, 52);
+  if (!o.pov) { seat(150, 110, 50); seat(-30, 100, 52); }
+  // the carriage reflected in the glass: the lamp strip and the headrest tops, faint
+  for (let x = x0 + 6; x < x1 - 6; x++) {
+    if (o.pov && x % 3 !== 0) pc.glow(x, y0 + 14, '#fff1d0', 0.3);
+    const hr = (x - x0) % 70;
+    if (hr > 12 && hr < 40) pc.glow(x, y1 - 26 + (hr === 13 || hr === 39 ? 1 : 0), '#d8d2c4', 0.12);
+  }
   // the phone, propped on the table against the window, filming the view: its screen shows the same
   // world racing past (no people: the stream is the character)
   const ph = o.phone ?? 1;
@@ -210,8 +270,8 @@ export function paintCarriage(pc: PixelCanvas, o: CarriageOpts) {
     // a little stand behind it
     pc.rect(px0 + 8, py0 + phh - 2, 14, 2, { a: P.metalD, d: 0.105, id: 66 });
   }
-  // reflections on the glass: the lamp strip and a soft bloom of the interior
-  for (let x = x0 + 10; x < x1 - 10; x++) if (x % 3 !== 0) pc.glow(x, y0 + 9, '#fff1d0', 0.35);
+  // reflection of the lamp strip on the glass (wide shots)
+  if (!o.pov) for (let x = x0 + 10; x < x1 - 10; x++) if (x % 3 !== 0) pc.glow(x, y0 + 9, '#fff1d0', 0.35);
 }
 
 export function carriageLights(o: CarriageOpts): Light[] {

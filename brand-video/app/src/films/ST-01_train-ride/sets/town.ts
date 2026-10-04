@@ -4,7 +4,7 @@
 // phone on its tripod filming the carousel (no people: the stream is the character).
 import { PixelCanvas, type Light, type Mat, AW } from '../../../kit/pixel';
 import { mulberry32 } from '../../../engine/util';
-import { ramp, hillside, plaster, stone, slate, wood, snow, mix, dither } from '../../../kit/materials';
+import { ramp, hillside, plaster, stone, slate, wood, snow, mix, dither, vnoise } from '../../../kit/materials';
 import { paintCastle, paintPines, CASTLE_SNOW } from './castle';
 
 export interface TownOpts {
@@ -162,7 +162,7 @@ export function paintTown(pc: PixelCanvas, o: TownOpts) {
     const shut = ['#2f5a3e', '#2f4a6b', '#7a2a2c', '#3a3a40'][Math.floor(hh(5) * 4)]!;
     for (let r = 0; r < rows; r++)
       for (let c = 0; c < cols; c++) {
-        const ww = 5, wh = 7;
+        const ww = 4 + Math.floor(hh(9) * 3), wh = 6 + Math.floor(hh(10) * 3);
         const wx = x + Math.round(((c + 1) * w) / (cols + 1)) - 2, wy = top + 8 + r * 18;
         const lit = R() < 0.55;
         const tint = R() < 0.3 ? P.warm2 : P.warm;
@@ -179,6 +179,9 @@ export function paintTown(pc: PixelCanvas, o: TownOpts) {
         pc.rect(wx - 1, wy + wh + 1, ww + 2, 1, { a: STN[3]!, d, id });
         pc.rect(wx - 1, wy + wh, ww + 2, 1, { a: P.snow, d, id, n: [0, 0.9] });
         if (lit) for (let k = 1; k <= 2; k++) pc.glow(wx + 2, wy + wh + 1 + k, tint, ei * 0.08 / k);
+        // a flower box with snow on some houses, rain stains under the sill on others
+        if (hh(11) < 0.35 && r < rows - 1) { pc.rect(wx - 1, wy + wh + 2, ww + 2, 2, { a: TB[2]!, d, id }); pc.rect(wx - 1, wy + wh + 1, ww + 2, 1, { a: '#e8eef6', d, id, n: [0, 0.9] }); }
+        else if (hh(12) < 0.6) for (let k = 0; k < 3; k++) pc.px(wx + 1 + ((k * 2 + hi) % ww), wy + wh + 2 + k, { a: WR[1]!, d, id });
       }
     x += w + 1;
   }
@@ -270,11 +273,20 @@ export function paintTown(pc: PixelCanvas, o: TownOpts) {
       for (let gx = -30; gx < AW + 30; gx++) {
         const stone = Math.floor((gx + off + 600) / sw);
         const hv = Math.sin(stone * 12.9898 + row * 78.233) * 43758.5453, rnd = hv - Math.floor(hv);
-        const joint = yy === gy || (gx + off + 600) % sw === 0;
-        const edgeSnow = Math.max(0, Math.abs(gx - 135) / 135 - 0.5) * 2 * (1 - u * 0.7);
-        const snowy = rnd < 0.01 + edgeSnow * 0.25;
-        const top = yy === gy + 1 && !joint; // a lit upper lip on each stone
-        pc.px(gx, yy, { a: snowy ? (joint ? P.snowS : P.snow) : joint ? P.cobD : top ? P.cobL : rnd < 0.5 ? P.cob : '#4d505c', d, n: [0, top ? 0.95 : 0.8], id: 5 });
+        const inX = (gx + off + 600) % sw, inY = yy - gy;
+        const joint = inY === 0 || inX === 0;
+        // rounded stones: lit in the middle, darker toward the joints
+        const cxn = Math.abs(inX - sw / 2) / (sw / 2), cyn = Math.abs(inY - rh / 2) / (rh / 2 + 0.5);
+        const round = 1 - Math.max(cxn, cyn);
+        // snow lies in drifts: along the edges of the square, at the hut bases, thicker the next morning
+        const day = o.day ?? 0;
+        const drift = vnoise(gx * (0.07 + day * 0.1), yy * (0.2 + day * 0.2), 21) + Math.max(0, Math.abs(gx - 135) / 135 - 0.45) * 1.4 + (yy < GROUND + 5 ? 0.3 : 0);
+        const snowy = drift > 0.95 - day * 0.8;   // the next morning: fresh snow almost everywhere
+        // footprints through the snow toward the tripod
+        const fp = snowy && Math.abs(gx - (20 + (yy - GROUND) * 0.6)) < 1.5 && (yy % 4 === 0);
+        const C = snowy ? [P.snowS, '#c6d2e3', P.snow, '#eef3fa'] : [P.cobD, P.cob, '#4d505c', P.cobL];
+        const v = joint ? 0 : 1 + round * 1.6 + (rnd - 0.5) * 0.8;
+        pc.px(gx, yy, { a: fp ? '#8a96ad' : C[Math.max(0, Math.min(3, Math.round(v)))]!, d, n: [0, joint ? 0.7 : 0.8 + round * 0.15], id: 5 });
       }
     gy += rh; row++;
   }

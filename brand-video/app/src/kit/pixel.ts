@@ -377,7 +377,15 @@ void main() {
   if (sunEl > 0.0) {
     vec3 sc = skyCol(normalize(s + vec3(0.0, 0.02, 0.0)), s) * skyExp * 0.004;
     sc = normalize(sc + 1e-4) * min(length(sc), 1.0) * 2.2;
-    lit += sc * sat(dot(n, normalize(vec3(s.x, s.y + 0.25, 0.6))) * 0.8 + 0.2) * smoothstep(0.0, 0.04, sunEl);
+    // long sun shadows: march toward the sun's side on screen over nearer geometry
+    vec2 sd = normalize(vec2(s.x, 0.35));
+    float sh = 0.0;
+    for (int k = 2; k <= 40; k += 2) {
+      vec4 Nq = texture(nrm, (ap + 0.5 + sd * float(k)) / art);
+      if (Nq.a > 0.5 && Nq.b < d - 0.02) { sh = 1.0; break; }
+    }
+    lit += sc * sat(dot(n, normalize(vec3(s.x, s.y + 0.25, 0.6))) * 0.8 + 0.2) * smoothstep(0.0, 0.04, sunEl) * (1.0 - 0.8 * sh);
+    lit += vec3(0.02, 0.035, 0.07) * sh;   // shadows go blue (sky fill)
   }
 
   for (int i = 0; i < ${MAXL}; i++) {
@@ -463,31 +471,55 @@ void main() {
 const NEON_FRAG = /* glsl */ `
 uniform sampler2D alb, nrm, emi;
 uniform vec2 art;
-uniform float t, k;
+uniform float t, k, groundY;
 vec3 hue(vec3 a) { float m = max(max(a.r, a.g), max(a.b, 1e-3)); vec3 c = a / m; float l = luma(c); return mix(vec3(l), c, 1.8); }
+bool isEdge(vec2 ap, float id, float d) {
+  for (int i = 0; i < 4; i++) {
+    vec2 o = i == 0 ? vec2(1, 0) : i == 1 ? vec2(-1, 0) : i == 2 ? vec2(0, 1) : vec2(0, -1);
+    vec4 Ao = texture(alb, (ap + o + 0.5) / art), No = texture(nrm, (ap + o + 0.5) / art);
+    if (No.a < 0.5 || abs(Ao.a * 255.0 - id) > 0.5 || abs(No.b - d) > 0.03) return true;
+  }
+  return false;
+}
+// the neon picture at one art pixel: outlines, their glow falling into the surface, points of light
+vec3 neonAt(vec2 ap) {
+  vec4 A = texture(alb, (ap + 0.5) / art), N = texture(nrm, (ap + 0.5) / art), E = texture(emi, (ap + 0.5) / art);
+  if (N.a < 0.5) return vec3(0.0);
+  float id = A.a * 255.0, d = N.b;
+  vec3 col = hue(toLinear(A.rgb));
+  float flick = 0.85 + 0.15 * step(0.08, hash11(floor(t * 14.0) + id));
+  vec3 c = vec3(0.0);
+  if (isEdge(ap, id, d)) c += col * 2.4 * flick * (1.0 - d * 0.6);
+  else {
+    // glow falloff: how close is the nearest outline (up to 4 px away)
+    float near = 0.0;
+    for (int r = 1; r <= 4; r++) {
+      for (int i = 0; i < 4; i++) {
+        vec2 o = (i == 0 ? vec2(1, 0) : i == 1 ? vec2(-1, 0) : i == 2 ? vec2(0, 1) : vec2(0, -1)) * float(r);
+        vec4 No = texture(nrm, (ap + o + 0.5) / art), Ao = texture(alb, (ap + o + 0.5) / art);
+        if (No.a < 0.5 || abs(Ao.a * 255.0 - id) > 0.5) near = max(near, 1.0 - float(r - 1) / 4.0);
+      }
+    }
+    c += col * near * near * 0.22 * flick * (1.0 - d * 0.6);
+  }
+  c += toLinear(E.rgb) * E.a * 8.0 * 0.45;      // what glows stays a point of light (kept below blowing out)
+  return c;
+}
 void main() {
   vec2 ap = floor(vUv * art);
-  vec4 A = texture(alb, (ap + 0.5) / art), N = texture(nrm, (ap + 0.5) / art), E = texture(emi, (ap + 0.5) / art);
+  vec4 N = texture(nrm, (ap + 0.5) / art);
   vec3 c = vec3(0.004, 0.005, 0.012);
-  // faint perspective grid on the ground, and stars in the sky
   if (N.a < 0.5) {
     c += vec3(0.6, 0.7, 1.0) * step(0.9975, hash12(ap)) * 0.6;
     fragColor = vec4(c, 1.0); return;
   }
-  float id = A.a * 255.0, d = N.b;
-  float edge = 0.0;
-  for (int i = 0; i < 4; i++) {
-    vec2 o = i == 0 ? vec2(1, 0) : i == 1 ? vec2(-1, 0) : i == 2 ? vec2(0, 1) : vec2(0, -1);
-    vec4 Ao = texture(alb, (ap + o + 0.5) / art), No = texture(nrm, (ap + o + 0.5) / art);
-    if (No.a < 0.5 || abs(Ao.a * 255.0 - id) > 0.5 || abs(No.b - d) > 0.03) edge = 1.0;
+  c += neonAt(ap);
+  // the wet ground mirrors the neon above the ground line, broken by ripples
+  float below = groundY - ap.y;
+  if (below > 0.0 && N.g > 0.85) {
+    vec2 m = vec2(ap.x + floor((hash12(vec2(floor(ap.y), floor(t * 6.0))) - 0.5) * 3.0), groundY + below * 0.9);
+    c += neonAt(floor(m)) * 0.45 * exp(-below / 45.0);
   }
-  vec3 col = hue(toLinear(A.rgb));
-  float flick = 0.85 + 0.15 * step(0.08, hash11(floor(t * 14.0) + id));
-  c += col * edge * 2.4 * flick * (1.0 - d * 0.6);
-  // what glows stays a point of light
-  c += toLinear(E.rgb) * E.a * 8.0 * 0.9;
-  // a dim fill so the shapes read
-  c += col * 0.008 * (1.0 - d);
   fragColor = vec4(c, 1.0);
 }`;
 
@@ -505,12 +537,12 @@ export class PixelLight {
     t: { value: 0 }, haze: { value: 0.5 }, snow: { value: 1 }, wet: { value: 0.5 }, groundY: { value: 80 }, hazeWarm: { value: 0 }, hazeCol: { value: [0.02, 0.03, 0.06] },
   });
 
-  neon = new FSPass(NEON_FRAG, { alb: { value: null }, nrm: { value: null }, emi: { value: null }, art: { value: [AW, AH] }, t: { value: 0 }, k: { value: 1 } });
+  neon = new FSPass(NEON_FRAG, { alb: { value: null }, nrm: { value: null }, emi: { value: null }, art: { value: [AW, AH] }, t: { value: 0 }, k: { value: 1 }, groundY: { value: 75 } });
   /** Draw the G-buffer in the neon-line material (no lighting) into `out`. */
-  renderNeon(r: THREE.WebGLRenderer, out: THREE.WebGLRenderTarget, t: number) {
+  renderNeon(r: THREE.WebGLRenderer, out: THREE.WebGLRenderTarget, t: number, groundY = 405) {
     const pc = this.pc, u = this.neon.u;
     pc.upload();
-    u.alb!.value = pc.tex.alb; u.nrm!.value = pc.tex.nrm; u.emi!.value = pc.tex.emi; u.t!.value = t;
+    u.alb!.value = pc.tex.alb; u.nrm!.value = pc.tex.nrm; u.emi!.value = pc.tex.emi; u.t!.value = t; u.groundY!.value = AH - groundY;
     this.neon.render(r, out);
   }
 
