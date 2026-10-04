@@ -53,3 +53,19 @@ lyric handover); a textured globe close-up, a true datamosh, phone macros with a
 | Smaller | Lyric handover fade; hook sticker lower; lyric plate; desk chair quilting, sheen, stitching; headphones prop; dawn grade; credit plate; stream chat and input clear of the caption zone. |
 
 Automated gate (21 frames): **0 flat objects, 0 text in UI zones.**
+
+## Runs 4–7 · 2026-10-04 · independent review rounds 3–6
+
+| Round | Verdict | Main fixes that followed |
+|---|---|---|
+| 3 | not level 6 (train 5, abstract beats 4–5) | credit stops claiming permission; thank-you shown as a received message after the drop; city on a viaduct; smooth snow drifts; phone close-up pushed in; macros with a real phone and carriage behind; globe from the limb; night outro, closer framing; morning snow; stepped pixel clouds |
+| 4 | close (town, outro, front page, city POV at 6) | "first proper IRL" (the poster had test streams before); no invented stream time; station hill under the lyric and a real push-in; consistent chat order; pop-in messages, no cursor; globe arc faces the camera; original desk game (the old one resembled a famous platformer) |
+| 5 | most blocks at 6 | morning tripod, footprints, gable caps; globe night side, no lights on the ice; macro table and frosted window; `reconnecting…` on the phone; city lamp pools and facades vary |
+| 6 | **meets level 6**, one must-fix | the desk chair read as see-through (quilting rows lined up with the floor planks): diamond quilting, outline, lighter fabric; polish: hook higher, arc 30 px further from the buttons, soft street glow, calmer neon ripples |
+
+Final automated gate (21 frames): **0 flat objects, 0 text in UI zones.** Reviewer levels after round 6:
+desk 5.5 → fixed, town 6.5, neon 6, station 6, train 6, signal lost 6, macros 5.5–6, front page 6,
+globe 6–6.5, outro 6.5, morning 6.
+
+Polish left for the level-8 build: the macro phone is smooth (not pixel art), pixel snow on the
+morning square, platform furniture at the station, a lit window cluster at the globe's end marker.

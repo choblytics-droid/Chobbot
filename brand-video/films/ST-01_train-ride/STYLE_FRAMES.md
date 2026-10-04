@@ -13,25 +13,29 @@ Re-render any frame: `cd app && CHROME=<chromium> bun scripts/render.ts stills -
 - **Only facts from the post.** The two real chat lines are used word for word; other chat activity is
   neutral reactions only (`<3`, `o/`, `:)`), no invented messages. Lyrics on screen are the written lyric.
 
-## The frames
+## The frames (v4, after QA rounds 1–7, 2026-10-04)
+
+The first set was approved by the owner; the owner then flagged lazy detail (the castle). These are
+the rebuilt frames after the QA gate (0 flat objects, 0 text in platform UI zones) and seven rounds
+of independent review (final verdict: level 6, see `QA.md`). Times are seconds into the song.
 
 | # | Time | Look | What the viewer understands |
 |---|---|---|---|
-| 1a | 0:00 | Lit pixel art, blue hour | "Based on a true story" over the town at Christmas |
-| 1b | 0:03 | Pixel interior | The game-streaming desk: monitor goes dark, door opens, the phone wakes up LIVE (`first real IRL` → `LIVE · IRL`) |
-| 2 | 0:04 | Lit pixel art | The tour: market, castle, carousel; the phone on its tripod, its screen showing the carousel |
-| 3 | 0:12 | **Neon line** (same composition) | `1 → 3 watching`; one regular's name keeps lighting up in chat |
-| 4 | 0:16 | Pixel art seen **through the stream UI** | The train is in; "End stream?" comes up; then `wait, I've never been on a train` |
-| 5 | 0:21 | Pixel interior + moving world | The train pulls out past the platform lamps; the phone propped at the window |
-| 6 | 0:23 | **Macro of the phone screen** (LCD subpixels, shallow focus, bokeh) | `can you keep it on?` typed on the vocal |
-| 7 | 0:25 | Pixel, parallax + motion blur (hero shot) | The city falls away into snowy farmland, fast; signal bars dropping |
-| 8 | 0:36 | **Glitch** → black | On "gone": pixelate, tear, freeze `reconnecting…`, one beat of black, `signal lost` |
-| 9 | 0:37 | Macro of the screen, warm | `· reconnected ·` then `thanks for being so chill. amazing stream` |
-| 10a | 0:41 | **Newspaper halftone** | Front page slams in on the downbeat: `3 VIEWERS. ENOUGH.` |
-| 10b | 0:43 | Pixel globe at night | Pull back over the globe; a line of light from the train to one lit window on the other side of the world |
-| 11 | 0:45 | Lit pixel art, warm, handheld drift | Back in town like a visitor; the real message remembered, the companion spark beside it for ~1 s |
-| 12 | 0:53 | Lit pixel art, morning sun | A new day, `LIVE · IRL`; `They kept streaming IRL.` |
-| 13 | 0:58 | Brand end card | Spark, `Chobbot`, `never stream alone` (placeholder), the credit line |
+| 01 | 1.2 | Pixel interior | The game-streaming desk (an original game on the monitor), `first real IRL`, the hook sticker |
+| 02 | 4.0 | Lit pixel art, blue hour | The Christmas tour: market, castle, carousel; the phone on its tripod |
+| 03 | 10.5 | **Neon line** | `3 watching`; neutral reactions in chat |
+| 04a/b | 13.5 / 16.5 | Pixel through the **stream UI** | The train is in, "End stream?", then the real line `wait, I've never been on a train`; a push in |
+| 05 | 18.9 | Pixel interior | The carriage at the platform, the phone propped at the window |
+| 06 | 20.8 | **Phone-screen macro** | `can you keep it on?` pops in (received, no cursor) |
+| 07a | 23.5 | Pixel POV, parallax | Through the city on a viaduct: roofs, chimneys, lit windows below, towers behind |
+| 07b | 28.0 | Pixel POV, frost | Open farmland, frost growing on the glass: "Your first train, it moved so fast" |
+| 08a | 31.5 | Pixel close-up | The phone at the window: signal bars to zero, LIVE greys out, `reconnecting…` |
+| 08b | 33.3 | **Datamosh** | On "gone" the frozen picture smears apart: `signal lost` |
+| 09a/b | 34.5 / 36.8 | Macro, warm | The chat log after the drop, then `thanks for being so chill. amazing stream` |
+| 10a | 38.6 | **Newspaper halftone** | `3 VIEWERS. ENOUGH.` (copy from the post's facts only) |
+| 10b/c | 39.7 / 40.8 | Pixel globe at night | From the train's lights out to the whole Earth; an arc to the other side of the world |
+| 11a/b | 43.0 / 47.3 | Lit pixel art, night, closer | Back in town: the thank-you remembered |
+| 12a/b | 51.0 / 54.0 | Lit pixel art, morning | Fresh snow, the phone back on its tripod, `LIVE · IRL`, `They kept streaming IRL.`, the credit |
 
 ## Level 6 checklist (TIER_LIST.md)
 
@@ -54,14 +58,15 @@ Re-render any frame: `cd app && CHROME=<chromium> bun scripts/render.ts stills -
 | Sets: town (3 times of day), station, carriage + moving world, desk | built (`sets/`) |
 | Materials: neon line, glitch, newspaper halftone, phone-screen macro, pixel globe | built |
 | Stream UI (our own generic design), chat, lyric subtitles, captions | built (`app/src/kit/overlay.ts`) |
-| Companion mascot (spark) | built, placeholder until brand tokens land |
-| Brand: colours, end-card wordmark, tagline, sonic logo | **placeholders**: waiting for the design |
-| Transitions between scenes (material wipes on the beat) | to build in the animatic (step 7) |
+| Transitions between scenes (material wipes on the beat) | built (`engine.ts`) |
+| QA gate (G-buffer detail stats, safe-zone text check, zoom sheets) | built (`tools/qa_frames.py`, `docs/QA.md`) |
 
 ## Open points for you
 
-1. The tagline (`never stream alone` is a placeholder) and brand colours.
-2. The permission message to the Reddit author (draft in the script).
+1. The permission message to the Reddit author (draft in the script); `retold with permission` goes into the credit only after a yes.
+2. "Reddit" in the credit: keep (a source credit) or drop (no-brand rule)?
+3. `can you keep it on?` on the phone is the approved script's line, but the post only says the viewer wanted to keep watching: keep it as the viewer's message, or show it only as the sung lyric?
+4. The front-page body copy sits under TikTok's caption (page texture): keep, or soften it?
 
 ## Change after approval (owner, 2026-10-04)
 
