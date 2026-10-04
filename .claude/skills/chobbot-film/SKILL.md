@@ -31,6 +31,11 @@ Everything lives in `brand-video/` (never mixed with other projects). Read first
 10. **Every film ships with its story summary** (step 9, `DESCRIPTION.md`).
 11. Mixed art styles from tier A only, switching on the music; cuts and transitions on the beat.
 12. Do not spend kie Suno credits via n8n unless the owner says so. The owner makes songs in Suno.
+13. **QA gate before anything reaches the owner** (`docs/QA.md`): facts, detail audit at 100%
+    (0 FLAT objects), safe zones (0 text in platform UI zones), timing, an independent reviewer
+    agent, technical. Log it in `films/<id>/QA.md`. Never judge detail on a full-frame thumbnail.
+14. **Build every surface from `app/src/kit/materials.ts`** (plaster, stone, slate, wood, metal,
+    fabric, snow, hillside): ≥ 4 tones, texture, form shading, silhouette breakup, grounding.
 
 ## Steps
 
@@ -41,7 +46,7 @@ Everything lives in `brand-video/` (never mixed with other projects). Read first
 | 2 | Script | copy `docs/SCRIPT_TEMPLATE.md` → `docs/scripts/<id>.md`: beat sheet, **story coverage table** (Text column alone tells the story), story summary | script | owner approves |
 | 3 | Music | paste-ready Suno blocks (Styles, Exclude, Lyrics with tags; settings in `SUNO_GUIDE.md`) | owner sends the WAV in chat | file received |
 | 4 | Audio analysis | see below | `data/ANALYSIS.md`, `lyrics_master.json`, `audio.json`, `lyrics.json` | sung-as-written check |
-| 5 | Style frames | one still per scene from the real film code | `frames/*.jpg`, contact sheets, `STYLE_FRAMES.md` | owner approves the look |
+| 5 | Style frames | one still per scene from the real film code; **QA gate first** (below) | `frames/*.jpg`, contact sheets, `STYLE_FRAMES.md`, `QA.md` | owner approves the look |
 | 6 | Assets | sets, materials, UI in the kit | code | (with 5) |
 | 7 | Animatic | full film, 30 fps, 1 sample, on the master audio | `animatic/<id>_animatic_vN_540p.mp4` | owner approves timing |
 | 8 | Build | level 6–10, 60 fps, adaptive motion blur, 4K on a GPU machine | master + cut-downs | final review |
@@ -84,6 +89,16 @@ Everything lives in `brand-video/` (never mixed with other projects). Read first
   `sets/station.ts`, `sets/carriage.ts` (window + parallax world), `sets/desk.ts`; scenes
   `chat.ts`, `frontpage.ts` (halftone), `globe.ts` (pixel globe + arc).
 
+### QA gate (run before every delivery)
+
+```bash
+bun scripts/render.ts stills --film <id> --qa --t <one time per shot, 15-20 frames> --out <qa-dir>   # no grain/CA, + .gbuf.json + .text.json
+python3 ../tools/qa_frames.py <qa-dir> <qa-dir>/out        # FLAT objects, text in UI zones, zoom sheets at 100%
+```
+Fix until `0 flat; 0 text-in-zone`, then send the zoom sheets and `docs/QA.md` to an independent
+reviewer agent (general-purpose, "find what is weak, 10 weakest spots ranked") and fix its findings.
+Name objects with `pc.names` so the report is readable.
+
 ### Commands (from `brand-video/app`, `bun install` once)
 
 ```bash
@@ -112,6 +127,10 @@ not committed. Send files to the owner with SendUserFile.
 - Put lyrics where the frame is empty (the sky in the town, the seats in the train), keep a line in the same place across a cut.
 - Phone UI, stream UI and the chat explain a situation faster than any character.
 - Check transitions with a `sheet` of mid-cut frames before rendering a whole animatic.
+- **Lazy detail slipped through once** (a flat-box castle) because frames were only checked as
+  thumbnails. Hence the QA gate: G-buffer object stats, zoom sheets at 100%, an independent reviewer.
+- Text placed at the bottom sat under TikTok's caption; text at the right edge under its buttons.
+  Lyrics in the band y 700–1700 wrap narrower automatically.
 - Sky exposure that worked: blue hour `sunEl -0.045, skyExp 3.2`; night `sunEl -0.1, skyExp 4.5`; morning front-lit `sunEl 0.12, sunAz 2.3, skyExp 0.42`.
 
 Update this skill after every film with anything learned.
