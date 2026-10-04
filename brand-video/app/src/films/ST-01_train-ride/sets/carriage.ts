@@ -54,10 +54,11 @@ function outside(pc: PixelCanvas, o: CarriageOpts) {
   for (let x = x0; x < x1; x++) {
     const wx = x + far;
     const hy = hor - 8 - Math.round(6 * Math.sin(wx * 0.021) + 4 * Math.sin(wx * 0.057));
-    for (let y = hy; y < hor + 2; y++) put(x, y, { a: '#1a2130', d: 0.97, id: 2 });
+    const FH = ['#121823', '#1a2130', '#222b3c', '#3a4558', '#8b9ab4'];
+    for (let y = hy; y < hor + 2; y++) put(x, y, { a: y === hy ? FH[4]! : y === hy + 1 ? FH[3]! : FH[Math.max(0, Math.min(2, dither(1 + (vnoise(wx * 0.15, y * 0.3, 21) - 0.5) * 2.2 - (y - hy) * 0.04 + (y - hy < 4 ? 0.6 : 0), Math.floor(wx), y)))]!, d: 0.97, id: 89 });   // snowy ridge line, forest below
     // the town falling behind: lit windows on the far hill, thinning out with distance
     const town = Math.max(0, 1 - Math.max(0, (o.scroll - cityEnd * 0.7)) / 900);
-    if (town > 0 && hashI(Math.floor(wx)) < 0.18 * town) put(x, hy + 2 + Math.floor(hashI(Math.floor(wx) + 3) * 6), { a: '#1a2130', d: 0.97, id: 2, e: '#ffcc80', ei: 2.5 * town });
+    if (town > 0 && hashI(Math.floor(wx)) < 0.18 * town) put(x, hy + 2 + Math.floor(hashI(Math.floor(wx) + 3) * 6), { a: '#1a2130', d: 0.97, id: 89, e: '#ffcc80', ei: 2.5 * town });
   }
   // mid: the city blocks first, then hedgerows, trees and a farmhouse now and then
   const mid = o.scroll * 0.4;
@@ -76,7 +77,11 @@ function outside(pc: PixelCanvas, o: CarriageOpts) {
       const b = Math.floor(wx / 26), bx = wx - b * 26, bw = 18 + Math.floor(hashI(b + 7) * 8);
       if (bx >= bw) {
         // the gap between blocks: a lit street running away from the line
-        for (let y = hor - 6; y < hor + 6; y++) put(x, y, { a: y > hor - 2 ? '#2a2a30' : '#14171e', d: 0.82, id: 86, e: y === hor + 1 ? '#ffb45a' : undefined, ei: y === hor + 1 ? 1.2 : 0 });
+        const RD = ['#101318', '#181b22', '#24262d', '#34363e'];
+        for (let y = hor - 6; y < hor + 6; y++) {
+          const pool = Math.exp(-(((bx - bw - 4) / 3) ** 2)) * (y > hor - 2 ? 1 : 0.4);
+          put(x, y, { a: RD[Math.max(0, Math.min(3, dither((y > hor - 2 ? 1.6 : 0.6) + pool * 1.6 + (vnoise(wx * 0.5, y * 0.5, 22) - 0.5) * 1.2, Math.floor(wx), y)))]!, d: 0.82, id: 86, e: y === hor + 1 ? '#ffb45a' : undefined, ei: y === hor + 1 ? 1.2 : 0 });
+        }
         continue;
       }
       const h = 30 + Math.floor(hashI(b) * 48), col = P.bld[b % 4]!, top = hor - h;
@@ -224,7 +229,7 @@ export function paintCarriage(pc: PixelCanvas, o: CarriageOpts) {
   pc.clear();
   pc.names = { 70: 'frost', 31: 'station building', 65: 'phone UI', 78: 'hedge row', 79: 'hay bales', 80: 'telegraph poles', 72: 'canopy band', 73: 'canopy column', 74: 'bench', 75: 'station sign', 76: 'fence', 77: 'platform lamps', 9: 'heater grille', 1: 'carriage wall', 2: 'window frame', 3: 'ceiling', 4: 'lamp strip', 5: 'luggage rack', 6: 'bag', 7: 'table', 8: 'cup', 50: 'seat R', 51: 'headrest R', 52: 'seat L', 53: 'headrest L', 63: 'phone', 64: 'phone screen', 23: 'snow field', 21: 'hedges', 22: 'farmhouse', 30: 'platform', 40: 'catenary' };
   for (let k = 20; k < 70; k++) if (!pc.names[k] || pc.names[k] === '') pc.names[k] = k >= 20 && k <= 21 ? pc.names[k] ?? 'city block' : 'city block';
-  for (let k = 81; k < 85; k++) pc.names[k] = 'city block'; pc.names[85] = 'back towers'; pc.names[86] = 'street'; pc.names[87] = 'rooftop'; pc.names[88] = 'street lamp'; pc.names[21] = 'hedges'; pc.names[22] = 'farmhouse'; pc.names[23] = 'snow field'; pc.names[30] = 'platform'; pc.names[40] = 'catenary';
+  for (let k = 81; k < 85; k++) pc.names[k] = 'city block'; pc.names[85] = 'back towers'; pc.names[89] = 'far hills'; pc.names[86] = 'street'; pc.names[87] = 'rooftop'; pc.names[88] = 'street lamp'; pc.names[21] = 'hedges'; pc.names[22] = 'farmhouse'; pc.names[23] = 'snow field'; pc.names[30] = 'platform'; pc.names[40] = 'catenary';
   const view = o.view ?? (o.pov ? 'city' : 'wide');
   win = view === 'wide' ? WIN : view === 'fields' ? WIN_TIGHT : WIN_POV;
   outside(pc, o);
@@ -248,7 +253,13 @@ export function paintCarriage(pc: PixelCanvas, o: CarriageOpts) {
       const rx = Math.min(x - x0, x1 - 1 - x), ry = Math.min(y - y0, y1 - 1 - y);
       const corner = inside && rx < 8 && ry < 8 && (8 - rx) ** 2 + (8 - ry) ** 2 > 64;
       const nearCorner = inside && rx < 9 && ry < 9 && (8 - rx) ** 2 + (8 - ry) ** 2 > 49 && !corner;
-      if (corner || (!inside && ox + oy > 0 && ox < 5 && oy < 5)) pc.px(x, y, { a: ox + oy > 2 ? P.frameL : P.frame, d: D - 0.01, id: 2, n: [x < x0 ? -0.5 : x >= x1 ? 0.5 : 0, y < y0 ? 0.5 : y >= y1 ? -0.5 : 0] });
+      if (corner || (!inside && ox + oy > 0 && ox < 5 && oy < 5)) {
+        // brushed aluminium: a bevel (lit outer lip, dark inner step), streaks along the frame, the odd scuff
+        const AL = ['#1c1c21', '#2b2b30', '#3a3a42', '#4d4e57', '#6a6c76'];
+        const w = Math.max(ox, oy), along = ox > oy ? y : x;
+        const v = (w >= 4 ? 3.4 : w === 3 ? 2.4 : w === 2 ? 1.6 : 1) + (vnoise(along * 0.08, w, 23) - 0.5) * 1.3 + (hashI(along * 3 + w) < 0.03 ? 1 : 0);
+        pc.px(x, y, { a: AL[Math.max(0, Math.min(4, dither(v, x, y)))]!, d: D - 0.01, id: 2, n: [x < x0 ? -0.5 : x >= x1 ? 0.5 : 0, y < y0 ? 0.5 : y >= y1 ? -0.5 : 0] });
+      }
       else if (nearCorner) pc.px(x, y, { a: P.rubber, d: D - 0.01, id: 2 });
     }
   

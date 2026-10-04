@@ -33,3 +33,23 @@ shot in the v0.8+ cut); the macro is at 20.9 s.
 | — | Signal lost is a plain black frame | fix: frozen, datamoshed last frame instead of black |
 | — | Outro chat card covers the castle keep | fix: card moved left |
 | — | QA tool missed text drawn inside the scene (masthead, macro header) | fix: QA-3 checks the final frame for text-like content too; masthead and header moved |
+
+## Run 2 · independent review round 2
+
+Verdict: not level 6 yet. Town frames pass; the train block (18.9–33.4 s) and the abstract beats
+(33–41 s) at level 4–5. Top asks: three distinct hero POV shots; readability (morning grade, credit,
+lyric handover); a textured globe close-up, a true datamosh, phone macros with a real background.
+
+## Run 3 · 2026-10-04 · fixes for round 2
+
+| Area | Fix |
+|---|---|
+| Train | Three distinct shots: city POV (back towers, setbacks, rooftops, street lamps, glass reflections), fields POV (tight, feathery frost growing from the glass edges), phone close-up (the phone films the view, its own LIVE pill and signal bars dropping to 0). Station view rebuilt (brick building, paving in perspective, tactile strip, yellow line). Far hills and the window frame textured. |
+| Signal lost | P-frame datamosh: macroblocks smear the frozen picture along the last motion, stale blocks, chroma bleed, a tear line sliding down, light draining; "signal lost" on a plate, larger. |
+| Macros | A real phone: rounded body, punch-hole camera, side buttons, frame glare; the carriage far out of focus behind it (lamp strip, window band, passing lights as bokeh). "keep" is tight, "thanks" is pulled back and pushes in. Messages in the middle third. |
+| Globe | Terrain at two scales, rivers, northern snow, clouds, city lights inland too, the link's light spilling on the ground under it, the arc bows sideways so it reads as a curve. |
+| Neon | Wider inward glow, faint wall fill (glowing interiors), rippled vertical reflection streaks. |
+| Front page | Body copy built only from the post's facts (no placeholder bars), folded-back corner with its shadow, stronger centre fold. |
+| Smaller | Lyric handover fade; hook sticker lower; lyric plate; desk chair quilting, sheen, stitching; headphones prop; dawn grade; credit plate; stream chat and input clear of the caption zone. |
+
+Automated gate (21 frames): **0 flat objects, 0 text in UI zones.**
