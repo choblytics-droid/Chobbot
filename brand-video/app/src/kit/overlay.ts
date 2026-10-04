@@ -27,7 +27,7 @@ export class Overlay {
   lyric(l: Line | null, t: number, o: { y?: number; size?: number; a?: number } = {}) {
     if (!l) return;
     const c = this.c, size = o.size ?? (PORTRAIT ? 62 : 54), fam = F.archivo(100, 700);
-    const inA = clamp((t - (l.words[0]!.start - 0.35)) / 0.2), outA = 1 - clamp((t - (l.end + 0.35)) / 0.25);
+    const inA = clamp((t - (l.words[0]!.start - 0.35)) / 0.2), outA = 1 - clamp((t - (l.end + 0.05)) / 0.22);
     const A = (o.a ?? 1) * inA * outA;
     if (A <= 0) return;
     // in the band of the platform's right-hand buttons (y 700–1700) the line wraps narrower to stay clear of them
@@ -59,7 +59,7 @@ export class Overlay {
     // a soft dark plate behind each row: readable over any background (snow, sky, glow)
     c.save();
     c.filter = `blur(${Math.round(size * 0.45)}px)`;
-    c.fillStyle = `rgba(6,7,11,${0.5 * A})`;
+    c.fillStyle = `rgba(6,7,11,${0.58 * A})`;
     rows.forEach((row, r) => {
       const rw = row.reduce((a, i) => a + measure(words[i]!, fam, size), 0) + sp * (row.length - 1);
       roundRect(c, (W - rw) / 2 - size * 0.45, y0 + r * lh - size * 0.62, rw + size * 0.9, size * 1.24, size * 0.4);
@@ -73,7 +73,7 @@ export class Overlay {
         const w = l.words[i]!;
         const on = clamp((t - w.start) / 0.09);
         c.shadowColor = 'rgba(0,0,0,0.75)'; c.shadowBlur = size * 0.35; c.shadowOffsetY = size * 0.04;
-        c.fillStyle = rgba('bone', A * (0.5 + 0.5 * on));
+        c.fillStyle = rgba('bone', A * (0.62 + 0.38 * on));
         c.fillText(words[i]!, x, y0 + r * lh - size * 0.06 * (1 - ease.outCubic(on)) * (on > 0 ? 1 : 0));
         x += ws[k]! + sp;
       });
@@ -110,7 +110,7 @@ export class Overlay {
     const inK = clamp((t - t0) / 0.28), outK = clamp((t - (t1 - 0.18)) / 0.18);
     if (inK <= 0 || outK >= 1) return;
     const sc = ease.outBack(inK) * (1 - ease.inCubic(outK));
-    const c = this.c, size = o.size ?? (PORTRAIT ? 58 : 52), fam = F.archivo(100, 800), y = o.y ?? H * 0.33;
+    const c = this.c, size = o.size ?? (PORTRAIT ? 58 : 52), fam = F.archivo(100, 800), y = o.y ?? H * 0.6;
     const tw = measure(s, fam, size), pw = tw + size * 1.3, ph = size * 1.9;
     c.save();
     c.translate(W / 2, y); c.rotate(-0.045); c.scale(sc, sc);
@@ -177,7 +177,7 @@ export class Overlay {
     c.restore();
     // chat panel, bottom: newest at the bottom, a new message slides in
     const msgs = (o.chat ?? []).filter((m) => t >= m.at);
-    const size = 34, lh = size * 1.45, x0 = 44, yb = H - 470;   // the chat ends above the platform caption zone
+    const size = 34, lh = size * 1.45, x0 = 44, yb = H - 530;   // the chat ends above the platform caption zone
     c.save();
     const g = c.createLinearGradient(0, yb - 320, 0, yb + 140);
     g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(0.6, 'rgba(0,0,0,0.62)'); g.addColorStop(1, 'rgba(0,0,0,0)');
@@ -206,8 +206,8 @@ export class Overlay {
       c.fillText(m.text, x0 + uw, yy);
     });
     // input row
-    roundRect(c, x0 - 8, H - 420, 880, 64, 32); c.fillStyle = 'rgba(241,238,232,0.12)'; c.fill();
-    c.font = font(F.mono(400), 28); c.fillStyle = rgba('ash', 0.8); c.textBaseline = 'middle'; c.fillText('Say something…', x0 + 22, H - 388);
+    roundRect(c, x0 - 8, H - 480, 880, 64, 32); c.fillStyle = 'rgba(241,238,232,0.12)'; c.fill();
+    c.font = font(F.mono(400), 28); c.fillStyle = rgba('ash', 0.8); c.textBaseline = 'middle'; c.fillText('Say something…', x0 + 22, H - 448);
     c.restore();
     // the "End stream?" prompt
     if (o.prompt && o.prompt.a > 0) {

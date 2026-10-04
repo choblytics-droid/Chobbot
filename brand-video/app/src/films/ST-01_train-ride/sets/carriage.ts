@@ -15,13 +15,18 @@ export interface CarriageOpts {
   phone?: number;
   /** station platform outside (frame 5): 1 = at the platform */
   station?: number;
-  /** point of view through the window (the hero shot) */
+  /** point of view through the window (the hero shots) */
   pov?: boolean;
+  /** which train shot: the wide carriage, the city POV, the fields POV (tight, frosty), the phone close-up */
+  view?: 'wide' | 'city' | 'fields' | 'phone';
+  /** signal bars on the phone's own screen (phone close-up) */
+  bars?: number;
 }
 
 const WIN = { x0: 20, x1: 250, y0: 112, y1: 300 };
-/** The hero shot: a point of view through the window (the window fills the frame). */
+/** The hero shots: a point of view through the window (the window fills the frame), tighter for the fields. */
 const WIN_POV = { x0: 8, x1: 262, y0: 26, y1: 392 };
+const WIN_TIGHT = { x0: -8, x1: 278, y0: -8, y1: 404 };
 let win = WIN;
 export const CARRIAGE_WIN = WIN;
 const P = {
@@ -60,17 +65,40 @@ function outside(pc: PixelCanvas, o: CarriageOpts) {
     const wx = x + mid;
     const line = wx / 0.4; // where on the line this column is
     if (line < cityEnd + 60 && st < 0.5) {
-      const b = Math.floor(wx / 22), bx = wx - b * 22;
-      const h = 30 + Math.floor(hashI(b) * 45), col = P.bld[b % 4]!;
-      for (let y = hor - h; y < hor + 6; y++) {
-        const win = bx > 3 && bx < 19 && (bx % 5) < 3 && ((y - (hor - h)) % 8) > 2 && ((y - (hor - h)) % 8) < 6 && y < hor - 3;
-        const lit = win && hashI(b * 31 + Math.floor(bx / 5) * 7 + Math.floor((y - (hor - h)) / 8)) < 0.5;
-        // facade: floor lines, a lit roof edge, concrete speckle, a dark joint between blocks
-        const fy = (y - (hor - h)) % 8, roofEdge = y === hor - h;
-        const conc = ramp(col, 0.6);
-        const a = bx === 0 ? '#14171e' : roofEdge ? conc[4]! : fy === 7 ? conc[1]! : conc[dither(2 + (vnoise(wx * 0.3, y * 0.3, b) - 0.5) * 1.4, Math.floor(wx), y)]!;
-        put(x, y, { a, d: 0.8, id: 20 + (b % 50), e: lit ? P.warm : undefined, ei: lit ? 2.2 : 0 });
+      // a back row of towers first (slower, hazier), then the near blocks: varied widths, setbacks,
+      // parapets, rooftop tanks and masts, irregular lit windows (warm, a few TV-blue), a street with lamps
+      const bwx = x + o.scroll * 0.28, bb = Math.floor(bwx / 30), bbx = bwx - bb * 30, bh = 60 + Math.floor(hashI(bb + 300) * 50);
+      if (bbx > 2) for (let y = hor - bh; y < hor - 20; y++) {
+        const lit = bbx > 5 && bbx < 27 && Math.floor(bbx) % 3 === 0 && (y - (hor - bh)) % 6 === 3 && hashI(bb * 17 + Math.floor(bbx) * 3 + y) < 0.35;
+        put(x, y, { a: y === hor - bh ? '#3c4458' : (Math.floor(bwx) + y) % 7 === 0 ? '#20242f' : '#1b1f29', d: 0.9, id: 85, e: lit ? '#ffd08a' : undefined, ei: lit ? 1.3 : 0 });
       }
+      if (bbx > 13 && bbx < 15 && hashI(bb + 301) < 0.4) for (let y = hor - bh - 12; y < hor - bh; y++) put(x, y, { a: '#2a2f3a', d: 0.9, id: 85, e: y === hor - bh - 12 ? '#ff4a3a' : undefined, ei: y === hor - bh - 12 ? 2.5 * (0.5 + 0.5 * Math.sin(o.scroll * 0.05 + bb)) : 0 });
+      const b = Math.floor(wx / 26), bx = wx - b * 26, bw = 18 + Math.floor(hashI(b + 7) * 8);
+      if (bx >= bw) {
+        // the gap between blocks: a lit street running away from the line
+        for (let y = hor - 6; y < hor + 6; y++) put(x, y, { a: y > hor - 2 ? '#2a2a30' : '#14171e', d: 0.82, id: 86, e: y === hor + 1 ? '#ffb45a' : undefined, ei: y === hor + 1 ? 1.2 : 0 });
+        continue;
+      }
+      const h = 30 + Math.floor(hashI(b) * 48), col = P.bld[b % 4]!, top = hor - h;
+      const setback = hashI(b + 11) < 0.45 ? 10 + Math.floor(hashI(b + 12) * 10) : 0, sb = bx < 3 || bx > bw - 4;
+      const conc = ramp(col, 0.7);
+      const fl = 6 + (b % 3);           // floor height per block
+      for (let y = top; y < hor + 6; y++) {
+        if (sb && y < top + setback) continue;
+        const fy = (y - top) % fl, roofEdge = y === top || (sb && y === top + setback), parapet = y === top + 1 || (sb && y === top + setback + 1);
+        const wcol = Math.floor((bx - 2) / 4), inWx = (bx - 2) - wcol * 4;
+        const win = bx > 1 && bx < bw - 2 && inWx < 2 + (b % 2) && fy > 1 && fy < fl - 2 && y > top + 3 && y < hor - 4;
+        const r = hashI(b * 31 + wcol * 7 + Math.floor((y - top) / fl) * 13);
+        const lit = win && r < 0.48, tv = lit && r < 0.05;
+        const a = roofEdge ? conc[4]! : parapet ? conc[0]! : win ? (lit ? '#3a2e22' : '#11141b') : fy === fl - 1 ? conc[1]! : bx < 1 ? conc[3]! : bx > bw - 2 ? conc[0]! : conc[dither(2 + (vnoise(wx * 0.3, y * 0.3, b) - 0.5) * 1.4, Math.floor(wx), y)]!;
+        put(x, y, { a, d: 0.8, id: 81 + (b % 4), n: [bx < 1 ? -0.5 : bx > bw - 2 ? 0.5 : 0, roofEdge ? 0.8 : 0], e: lit ? (tv ? '#8fb4ff' : r < 0.2 ? '#ffd9a0' : P.warm) : undefined, ei: lit ? (tv ? 1.6 : 2.2) : 0 });
+      }
+      // rooftop: a water tank on legs or a mast with a red light
+      const rt = hashI(b + 50);
+      if (rt < 0.3 && bx > 5 && bx < 12) for (let y = top - 7; y < top; y++) put(x, y, { a: y > top - 3 ? ((Math.floor(bx) % 3) ? '#14171e' : '#2a2f3a') : y === top - 7 ? '#5a5f6a' : '#3a3d46', d: 0.8, id: 87 });
+      if (rt > 0.75 && Math.floor(bx) === 9) for (let y = top - 14; y < top; y++) put(x, y, { a: '#2a2f3a', d: 0.8, id: 87, e: y === top - 14 ? '#ff4a3a' : undefined, ei: y === top - 14 ? 3 : 0 });
+      // street level: a lamp in front of every second block
+      if (b % 2 === 0 && Math.floor(bx) === 4) for (let y = hor - 10; y < hor + 6; y++) put(x, y, { a: '#1a1c22', d: 0.78, id: 88, e: y === hor - 10 ? '#ffc46b' : undefined, ei: y === hor - 10 ? 5 : 0 });
     } else {
       const hh = Math.round(2 + 4 * vnoise(wx * 0.18, 0, 8) + (hashI(Math.floor(wx / 9)) < 0.25 ? 6 + 4 * Math.sin(wx * 0.9) : 0));
       const HG = ['#121b1a', '#1a2624', '#24332f', '#9fb0cc'];
@@ -94,18 +122,41 @@ function outside(pc: PixelCanvas, o: CarriageOpts) {
     const u = (y - hor) / (y1 - hor);
     for (let x = x0; x < x1; x++) {
       const wx = x + near * (0.5 + u * 0.9);
-      if (st > 0.5 && y > hor + 18) {
-        const edge = y === hor + 19 || y === hor + 20;
-        const tile = (Math.floor(wx / 12) + y) % 2, sn = hashI(Math.floor(wx / 3) * 13 + y) < 0.06;
-        const tactile = y > hor + 20 && y < hor + 25 && Math.floor(wx) % 2 === 0 && y % 2 === 0;
-        if (tactile) { put(x, y, { a: '#c9a840', d: 0.5 - u * 0.2, n: [0, 0.9], id: 30 }); continue; }
-        put(x, y, { a: edge ? (y === hor + 19 ? '#f0d070' : P.yellow) : sn ? P.snowD : tile ? P.plat : (Math.floor(wx) % 12 === 0 ? '#3a3d44' : P.platL), d: 0.5 - u * 0.2, n: [0, 0.9], id: 30 });
+      if (st > 0.5) {
+        // the station seen from the train: the building's wall at the back, the platform paving
+        // coming toward us, and its edge (tactile strip, yellow line, coping) right below the window
+        const bx = x + near * 0.55;
+        if (y < hor + 16) {
+          const bay = Math.floor(bx / 40), inB = bx - bay * 40;
+          const door = inB > 14 && inB < 24 && y > hor + 3, win2 = (inB > 4 && inB < 11 || inB > 28 && inB < 35) && y > hor + 4 && y < hor + 11;
+          const brick = (y + (Math.floor(bx / 4) % 2)) % 3 === 0 || Math.floor(bx) % 4 === 0;
+          put(x, y, door ? { a: '#2a1d14', d: 0.56, id: 31, e: '#ffcf8a', ei: 1.4 * (1 - (y - hor) / 20) } : win2 ? { a: '#1b1e27', d: 0.56, id: 31, e: '#ffd59a', ei: 1.8 } : { a: brick ? '#4a3a32' : (Math.floor(bx * 0.5 + y) % 5 === 0 ? '#6a5446' : '#5a463b'), d: 0.56, id: 31, n: [0, 0] });
+          continue;
+        }
+        const pu = (y - (hor + 16)) / (y1 - (hor + 16));
+        const nearRow = y1 - y;
+        if (nearRow <= 3) { put(x, y, { a: nearRow <= 1 ? '#1d1e23' : '#55575e', d: 0.36, id: 30, n: [0, nearRow <= 1 ? -0.4 : 0.6] }); continue; }
+        if (nearRow <= 6) { put(x, y, { a: nearRow === 6 ? '#f0d070' : P.yellow, d: 0.37, id: 30, n: [0, 0.9] }); continue; }
+        if (nearRow <= 11) { put(x, y, { a: (Math.floor(wx) + y) % 2 === 0 ? '#c9a840' : '#a88a30', d: 0.38, id: 30, n: [0, 0.9] }); continue; }
+        const rowH = Math.max(2, Math.round(2 + pu * 7)), slabW = Math.round(8 + pu * 18);
+        const ry = Math.floor((y - hor - 16) / rowH), slab = Math.floor((wx + (ry % 2) * slabW * 0.5) / slabW);
+        const joint = (y - hor - 16) % rowH === 0 || Math.floor(wx + (ry % 2) * slabW * 0.5) % slabW === 0;
+        const tone = hashI(slab * 7 + ry * 13);
+        put(x, y, { a: joint ? '#3a3c44' : tone < 0.33 ? '#5a5d65' : tone < 0.66 ? '#64676f' : '#6e7179', d: 0.5 - pu * 0.12, n: [0, 0.9], id: 30 });
         continue;
       }
       const furrow = Math.sin((y - hor) * (0.9 - u * 0.45) * 2.1) > 0.6 && hashI(Math.floor(wx / 37) + y * 3) > 0.25;
       const drift = Math.sin(wx * 0.013 + y * 0.05) * 0.5 + 0.5;
       const far = u < 0.18;
-      put(x, y, { a: far ? P.field : furrow ? P.snowD : drift > 0.7 ? P.snow : u > 0.5 && hashI(Math.floor(wx) * 7 + y) < 0.04 ? P.field : '#b8c5da', d: 0.75 - u * 0.4, n: [0, furrow ? 0.6 : 0.9], id: 23 });
+      if (far) {
+        // the far fields: soft drifts, a dark hedge line now and then, a few lit farm windows
+        const fw = x + near * (0.5 + u * 0.9) * 0.6;
+        const hedge = Math.abs(Math.sin(u * 40)) < 0.12 && hashI(Math.floor(fw / 25) + Math.floor(u * 12) * 5) < 0.6;
+        const FF = ramp(P.field, 0.5);
+        put(x, y, { a: hedge ? '#2a3534' : FF[Math.max(0, Math.min(4, dither(2 + (vnoise(fw * 0.06, y * 0.5, 41) - 0.5) * 1.8 + u * 4, Math.floor(fw), y)))]!, d: 0.75 - u * 0.4, n: [0, 0.9], id: 23 });
+        continue;
+      }
+      put(x, y, { a: furrow ? P.snowD : drift > 0.7 ? P.snow : u > 0.5 && hashI(Math.floor(wx) * 7 + y) < 0.04 ? P.field : '#b8c5da', d: 0.75 - u * 0.4, n: [0, furrow ? 0.6 : 0.9], id: 23 });
     }
   }
   // the farmland, not at the station: stubble rows, a nearer hedge line with gaps, hay bales under snow,
@@ -153,8 +204,8 @@ function outside(pc: PixelCanvas, o: CarriageOpts) {
     for (let y = hor - 34; y < hor - 30; y++) for (let x = x0; x < x1; x++) put(x, y, { a: y === hor - 34 ? '#4a505e' : y === hor - 31 ? '#15171c' : (Math.floor(x + mid) % 12 === 0 ? '#5a5f6a' : '#22262f'), d: 0.56, id: 72 });
     for (let k = Math.floor(mid / 70) - 1; k <= Math.floor((mid + 260) / 70) + 1; k++) {
       const cxp = Math.round(k * 70 + 35 - mid + x0);
-      for (let y = hor - 30; y < hor + 19; y++) for (let dx = 0; dx < 3; dx++) put(cxp + dx, y, { a: dx === 0 ? '#5a5f6a' : dx === 2 ? '#1a1c22' : (y % 7 === 0 ? '#4a4d56' : '#3a3d46'), d: 0.55, id: 73 });
-      if (k % 2 === 0) for (let dx = -8; dx < 9; dx++) for (let dy = 0; dy < 3; dy++) put(cxp + 10 + dx, hor + 12 + dy, { a: dy === 0 ? '#6b4a32' : '#3a2a20', d: 0.54, id: 74 });   // bench
+      for (let y = hor - 30; y < hor + 26; y++) for (let dx = 0; dx < 3; dx++) put(cxp + dx, y, { a: dx === 0 ? '#5a5f6a' : dx === 2 ? '#1a1c22' : (y % 7 === 0 ? '#4a4d56' : '#3a3d46'), d: 0.55, id: 73 });
+      if (k % 2 === 0) for (let dx = -8; dx < 9; dx++) for (let dy = 0; dy < 3; dy++) put(cxp + 18 + dx, hor + 13 + dy, { a: dy === 0 ? '#6b4a32' : '#3a2a20', d: 0.54, id: 74 });   // bench
       if (k % 3 === 0) for (let dx = -10; dx < 11; dx++) for (let dy = 0; dy < 6; dy++) put(cxp + dx, hor - 26 + dy, { a: dy === 0 || dy === 5 || Math.abs(dx) === 10 ? '#1c2a4a' : (dy === 2 || dy === 3) && Math.abs(dx) < 7 && dx % 3 !== 0 ? '#e8e2d6' : '#2a3e6a', d: 0.545, id: 75 });   // station name sign (blank glyphs)
     }
   }
@@ -163,7 +214,7 @@ function outside(pc: PixelCanvas, o: CarriageOpts) {
     const lamps = o.scroll * 0.8;
     for (let k = Math.floor(lamps / 70) - 1; k <= Math.floor((lamps + 260) / 70) + 1; k++) {
       const lx = Math.round(k * 70 - lamps + x0);
-      for (let y = hor - 30; y < hor + 19; y++) put(lx, y, { a: P.pole, d: 0.55, id: 77 });
+      for (let y = hor - 30; y < hor - 20; y++) put(lx, y, { a: P.pole, d: 0.55, id: 77 });
       for (let dx = -3; dx <= 3; dx++) put(lx + dx, hor - 31, { a: P.lamp, d: 0.55, id: 77, e: '#ffe7b0', ei: 5 });
     }
   }
@@ -171,10 +222,11 @@ function outside(pc: PixelCanvas, o: CarriageOpts) {
 
 export function paintCarriage(pc: PixelCanvas, o: CarriageOpts) {
   pc.clear();
-  pc.names = { 78: 'hedge row', 79: 'hay bales', 80: 'telegraph poles', 72: 'canopy band', 73: 'canopy column', 74: 'bench', 75: 'station sign', 76: 'fence', 77: 'platform lamps', 9: 'heater grille', 1: 'carriage wall', 2: 'window frame', 3: 'ceiling', 4: 'lamp strip', 5: 'luggage rack', 6: 'bag', 7: 'table', 8: 'cup', 50: 'seat R', 51: 'headrest R', 52: 'seat L', 53: 'headrest L', 63: 'phone', 64: 'phone screen', 23: 'snow field', 21: 'hedges', 22: 'farmhouse', 30: 'platform', 40: 'catenary' };
+  pc.names = { 70: 'frost', 31: 'station building', 65: 'phone UI', 78: 'hedge row', 79: 'hay bales', 80: 'telegraph poles', 72: 'canopy band', 73: 'canopy column', 74: 'bench', 75: 'station sign', 76: 'fence', 77: 'platform lamps', 9: 'heater grille', 1: 'carriage wall', 2: 'window frame', 3: 'ceiling', 4: 'lamp strip', 5: 'luggage rack', 6: 'bag', 7: 'table', 8: 'cup', 50: 'seat R', 51: 'headrest R', 52: 'seat L', 53: 'headrest L', 63: 'phone', 64: 'phone screen', 23: 'snow field', 21: 'hedges', 22: 'farmhouse', 30: 'platform', 40: 'catenary' };
   for (let k = 20; k < 70; k++) if (!pc.names[k] || pc.names[k] === '') pc.names[k] = k >= 20 && k <= 21 ? pc.names[k] ?? 'city block' : 'city block';
-  pc.names[21] = 'hedges'; pc.names[22] = 'farmhouse'; pc.names[23] = 'snow field'; pc.names[30] = 'platform'; pc.names[40] = 'catenary';
-  win = o.pov ? WIN_POV : WIN;
+  for (let k = 81; k < 85; k++) pc.names[k] = 'city block'; pc.names[85] = 'back towers'; pc.names[86] = 'street'; pc.names[87] = 'rooftop'; pc.names[88] = 'street lamp'; pc.names[21] = 'hedges'; pc.names[22] = 'farmhouse'; pc.names[23] = 'snow field'; pc.names[30] = 'platform'; pc.names[40] = 'catenary';
+  const view = o.view ?? (o.pov ? 'city' : 'wide');
+  win = view === 'wide' ? WIN : view === 'fields' ? WIN_TIGHT : WIN_POV;
   outside(pc, o);
   const { x0, x1, y0, y1 } = win;
   const D = 0.2;
@@ -200,7 +252,7 @@ export function paintCarriage(pc: PixelCanvas, o: CarriageOpts) {
       else if (nearCorner) pc.px(x, y, { a: P.rubber, d: D - 0.01, id: 2 });
     }
   
-  if (!o.pov) {
+  if (view === 'wide') {
   // ceiling: lamp strip and the luggage rack
   // ceiling panels with air vents
   pc.rect(0, 0, AW, 22, (x, y) => {
@@ -246,17 +298,59 @@ export function paintCarriage(pc: PixelCanvas, o: CarriageOpts) {
     // headrest cover: woven cotton, a centre seam, darker where it folds over the top
     pc.rect(sx + 8, top + 3, w - 16, 16, (x, y) => (x === sx + Math.floor(w / 2) ? { a: '#b8b0a2', d: 0.07, id: id + 1 } : y === top + 3 ? { a: '#a8a092', d: 0.07, id: id + 1, n: [0, 0.6] } : fabric(ramp(P.head, 0.35), { d: 0.07, id: id + 1, seed: id, n: [0, 0.3] })(x, y)));
   };
-  if (!o.pov) { seat(150, 110, 50); seat(-30, 100, 52); }
+  if (view === 'wide') { seat(150, 110, 50); seat(-30, 100, 52); }
   // the carriage reflected in the glass: the lamp strip and the headrest tops, faint
-  for (let x = x0 + 6; x < x1 - 6; x++) {
-    if (o.pov && x % 3 !== 0) pc.glow(x, y0 + 14, '#fff1d0', 0.3);
+  const rk = view === 'city' ? 2.2 : 1;
+  for (let x = Math.max(0, x0 + 6); x < Math.min(AW, x1 - 6); x++) {
+    if (view !== 'wide' && x % 3 !== 0) pc.glow(x, Math.max(2, y0 + 14), '#fff1d0', 0.3 * rk);
     const hr = (x - x0) % 70;
-    if (hr > 12 && hr < 40) pc.glow(x, y1 - 26 + (hr === 13 || hr === 39 ? 1 : 0), '#d8d2c4', 0.12);
+    if (hr > 12 && hr < 40) for (let k = 0; k < (view === 'city' ? 6 : 1); k++) pc.glow(x, y1 - 26 + k + (hr === 13 || hr === 39 ? 1 : 0), '#d8d2c4', 0.12 * rk / (k + 1));
+    if (view === 'city' && x > 40 && x < 82) for (let yy = y1 - 120; yy < y1 - 60; yy += 2) pc.glow(x, yy, '#c8d8ff', 0.06);   // the phone's glow, mirrored in the glass
+  }
+  if (view === 'fields') {
+    // frost growing in from the edges of the glass: feathery, brighter at the rim
+    for (let y = 0; y < 480; y++) for (let x = 0; x < AW; x++) {
+      if (!(x >= x0 && x < x1 && y >= y0 && y < y1)) continue;
+      const edge = Math.min(x - Math.max(0, x0), Math.min(AW, x1) - 1 - x, y - Math.max(0, y0), y1 - 1 - y);
+      // coverage falls off from the rim; fern-like ridges (ridged noise along two diagonals) give the
+      // crystals, thin frost only tints the glass (glow), thick frost is opaque and catches the light
+      const reach = 9 + 15 * vnoise(x * 0.04, y * 0.04, 31);
+      const cov = (reach - edge) / reach + (vnoise(x * 0.09, y * 0.09, 33) - 0.5) * 0.5;
+      if (cov <= 0) continue;
+      const r1 = 1 - Math.abs(2 * vnoise((x + y) * 0.16, (x - y) * 0.05, 34) - 1), r2 = 1 - Math.abs(2 * vnoise((x - y) * 0.16, (x + y) * 0.05, 35) - 1);
+      const fern = Math.max(r1, r2) ** 3;
+      const v = cov * 2.2 + fern * 1.6;
+      if (v < 0.7) continue;
+      if (v < 1.4) { pc.glow(x, y, '#c8d8ff', 0.25 + fern * 0.5); continue; }
+      const FR = ['#7f93b4', '#9fb2d0', '#c4d2e6', '#e4ecf7'];
+      pc.px(x, y, { a: FR[Math.max(0, Math.min(3, dither(v - 1.2, x, y)))]!, d: 0.15, id: 70, n: [(r1 - r2) * 0.6, 0.5], e: '#c8d8ff', ei: 0.12 + fern * 0.2 });
+    }
   }
   // the phone, propped on the table against the window, filming the view: its screen shows the same
   // world racing past (no people: the stream is the character)
   const ph = o.phone ?? 1;
-  if (ph > 0) {
+  if (view === 'phone') {
+    const pw = 92, phh = 168, px0 = 89, py0 = 216;
+    // the screen first (it copies the view behind the phone, before the phone covers it)
+    pc.screen(x0 + 40, y0 + 60, 180, 300, px0 + 4, py0 + 10, pw - 8, phh - 16, { ei: 1.15, d: 0.058, id: 64 });
+    for (let y = 0; y < phh; y++) for (let x = 0; x < pw; x++) {
+      if (x >= 4 && x < pw - 4 && y >= 10 && y < phh - 6) continue;
+      const cxk = x < 6 ? 6 - x : x > pw - 7 ? x - (pw - 7) : 0, cyk = y < 6 ? 6 - y : y > phh - 7 ? y - (phh - 7) : 0;
+      if (cxk * cxk + cyk * cyk > 36) continue;
+      pc.px(px0 + x, py0 + y, { a: x === 0 || y === 0 ? '#4a4d56' : x === pw - 1 || y === phh - 1 ? '#0b0c10' : x === 1 || y === 1 ? '#2a2c33' : P.phone, d: 0.06, id: 63 });
+    }
+    pc.rect(px0 + pw, py0 + 30, 2, 18, { a: '#4a4d56', d: 0.06, id: 63 });                  // side buttons
+    pc.rect(px0 + 40, py0 + 4, 12, 3, { a: '#08090c', d: 0.058, id: 63 });                   // speaker
+    pc.px(px0 + 56, py0 + 5, { a: '#1a2240', d: 0.058, id: 63, e: '#4a6aff', ei: 0.6 });      // front camera lens
+    // the stream's own UI on the phone: LIVE pill, viewer dots, the signal bars going down
+    pc.rect(px0 + 8, py0 + 14, 14, 6, { a: '#b0343a', d: 0.055, id: 65, e: '#ff3b3b', ei: 2.2 });
+    for (let k = 0; k < 3; k++) pc.px(px0 + 26 + k * 2, py0 + 17, { a: '#e8e2d6', d: 0.055, id: 65, e: '#ffffff', ei: 2 });
+    const nb = o.bars ?? 4;
+    for (let i = 0; i < 4; i++) for (let j = 0; j < 2 + i * 2; j++) for (let w = 0; w < 2; w++) pc.px(px0 + pw - 22 + i * 4 + w, py0 + 20 - j, { a: '#e8e2d6', d: 0.055, id: 65, e: '#ffffff', ei: i < nb ? 2.4 : 0.35 });
+    if (nb === 0) for (let k = 0; k < 14; k++) pc.px(px0 + pw - 23 + k, py0 + 21 - Math.round(k * 0.7), { a: '#e5484d', d: 0.054, id: 65, e: '#ff4040', ei: 3 });
+    // the ledge it leans on, lit by the screen
+    pc.rect(0, py0 + phh - 4, AW, 10, (x, y) => ({ a: y === py0 + phh - 4 ? '#7a705f' : '#4a4038', d: 0.07, id: 7, n: [0, 0.9] }));
+  } else if (ph > 0) {
     const pw = 30, phh = 52, px0 = 52, py0 = y1 + 10 - phh + Math.round((1 - ph) * 60);
     const blk: Mat = { a: P.phone, d: 0.1, id: 63 };
     const rimC = (x: number, y: number) => (x === 0 || y === 0 ? '#3a3d46' : x === pw - 1 || y === phh - 1 ? '#0b0c10' : x === 1 || y === 1 ? '#24262d' : P.phone);
@@ -281,6 +375,7 @@ export function carriageLights(o: CarriageOpts): Light[] {
   L.push({ x: 40, y: 250, d: 0.02, col: '#ffcf96', i: 1.2, r: 80 });
   // the window: cool night light falling in
   L.push({ x: 140, y: 210, d: 0.32, col: '#8fa6d0', i: 1.6, r: 110 });
-  if ((o.phone ?? 1) > 0) L.push({ x: 67, y: 290, d: 0.06, col: '#c8d8ff', i: 1.0, r: 24 });
+  if (o.view === 'phone') L.push({ x: 135, y: 300, d: 0.04, col: '#c8d8ff', i: 1.6, r: 60 });
+  else if ((o.phone ?? 1) > 0) L.push({ x: 67, y: 290, d: 0.06, col: '#c8d8ff', i: 1.0, r: 24 });
   return L;
 }

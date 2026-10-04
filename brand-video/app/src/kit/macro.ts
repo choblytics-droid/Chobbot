@@ -1,36 +1,58 @@
 // The phone screen in macro: whatever is drawn on `layer` (the screen's content) is shown as an LCD
 // seen from a few centimetres: tilted, with its RGB subpixel grid, shallow focus falling off away from
-// the focus line, the glass catching reflections and out-of-focus lights.
+// the focus line, the glass catching a reflection; around it the bezel and the carriage, far out of focus.
 import * as THREE from 'three';
 import { FSPass, Layer2D, W, H } from '../engine/gl';
 
 export class Macro {
   layer = new Layer2D();
   pass = new FSPass(/* glsl */ `
-    uniform sampler2D src; uniform float t, tilt, focusY, blurK, cell, glow, warm;
+    uniform sampler2D src; uniform float t, tilt, focusY, blurK, cell, glow, warm, zoom, bgK;
     vec2 warp(vec2 uv) {
-      // a gentle keystone and rotation: the phone held at an angle
+      // a gentle keystone and rotation: the phone held at an angle; zoom > 1 pulls back to show more of the room
       vec2 p = uv - 0.5;
       p = rot2(tilt) * p;
       p.x *= 1.0 + (p.y) * 0.18;
-      return p * 1.07 + 0.5;   // pulled back a touch: the phone's edge is in frame
+      return p * zoom + 0.5;
     }
     vec3 screenAt(vec2 q) {
       vec4 s = texture(src, q);
       vec3 base = vec3(0.012, 0.014, 0.02);
       return mix(base, s.rgb, s.a);
     }
+    // the carriage behind the phone, far out of focus: the warm lamp strip, the window's cold blue band
+    // with lights sliding past as big soft discs, the seat backs below
+    vec3 room(vec2 v) {
+      vec3 c = mix(vec3(0.05, 0.035, 0.025), vec3(0.12, 0.085, 0.05), smoothstep(0.0, 0.9, v.y));
+      c += vec3(1.0, 0.82, 0.55) * 0.55 * exp(-pow((v.y - 0.93) / 0.035, 2.0));                 // lamp strip
+      float wnd = smoothstep(0.30, 0.36, v.y) * smoothstep(0.74, 0.68, v.y);
+      c = mix(c, vec3(0.05, 0.08, 0.15), wnd * 0.85);                                              // the window
+      c = mix(c, vec3(0.09, 0.11, 0.2), smoothstep(0.24, 0.0, v.y) * 0.6);                         // seat backs
+      for (int i = 0; i < 7; i++) {
+        float fi = float(i);
+        vec2 bp = vec2(fract(hash11(fi * 3.1) - t * (0.05 + 0.08 * hash11(fi + 4.0))), 0.38 + 0.3 * hash11(fi * 7.7));
+        float d = length((v - bp) * vec2(${W / H}, 1.0)), rad = 0.035 + 0.035 * hash11(fi * 5.3);
+        vec3 col = mix(vec3(1.0, 0.72, 0.4), vec3(0.6, 0.75, 1.0), step(0.55, hash11(fi * 9.1)) * (1.0 - warm));
+        c += col * 0.22 * wnd * smoothstep(rad, rad * 0.9, d) * (0.65 + 0.35 * smoothstep(rad * 0.5, rad * 0.95, d));
+      }
+      return c * bgK;
+    }
     void main() {
       vec2 uv = warp(vUv);
-      // outside the screen: the phone's bezel (black glass, a lit rim), then the dim carriage behind
-      vec2 e = max(vec2(0.02) - uv, uv - vec2(0.98));
-      float outD = max(e.x, e.y);
-      if (outD > 0.0) {
-        float bez = smoothstep(0.03, 0.028, outD);
-        vec3 back = mix(vec3(0.05, 0.04, 0.03), vec3(0.11, 0.08, 0.05), vUv.y) * (0.7 + 0.3 * fbm(vUv * 3.0, 3));
-        vec3 bezel = vec3(0.012) + vec3(0.25, 0.22, 0.18) * smoothstep(0.004, 0.0, abs(outD - 0.026)) + vec3(0.04) * smoothstep(0.006, 0.0, abs(outD - 0.002));
-        fragColor = vec4(mix(back, bezel, bez), 1.0); return;
+      // the phone: a rounded screen, black glass bezel with a lit rim, side buttons, then the room
+      vec2 q = (uv - 0.5) * vec2(${W}.0, ${H}.0), hb = vec2(${W}.0, ${H}.0) * 0.48;
+      vec2 k = max(abs(q) - hb + 70.0, 0.0);
+      float sd = length(k) + min(max(abs(q).x - hb.x + 70.0, abs(q).y - hb.y + 70.0), 0.0) - 70.0;
+      if (sd > 0.0) {
+        vec3 bezel = vec3(0.012) + vec3(0.32, 0.28, 0.22) * smoothstep(5.0, 0.0, abs(sd - 46.0)) + vec3(0.05) * smoothstep(4.0, 0.0, abs(sd - 2.0));
+        bezel += vec3(0.06, 0.055, 0.05) * smoothstep(0.3, 0.0, abs((vUv.x - vUv.y * 0.6) - 0.15));      // glare on the frame
+        float btn = step(hb.x + 48.0, q.x) * step(q.x, hb.x + 58.0) * (step(abs(q.y - 380.0), 70.0) + step(abs(q.y - 170.0), 110.0));
+        vec3 col = sd < 50.0 ? bezel : btn > 0.0 ? vec3(0.16, 0.15, 0.14) + vec3(0.25) * smoothstep(3.0, 0.0, abs(q.x - hb.x - 50.0)) : room(vUv);
+        fragColor = vec4(col, 1.0); return;
       }
+      // the front camera: a punch hole at the top centre, a glint in the lens
+      float ch = length(q - vec2(0.0, hb.y - 46.0));
+      if (ch < 20.0) { fragColor = vec4(vec3(0.005) + vec3(0.25, 0.3, 0.5) * smoothstep(5.0, 0.0, length(q - vec2(-6.0, hb.y - 40.0))) + vec3(0.06) * smoothstep(2.0, 0.0, abs(ch - 17.0)), 1.0); return; }
       float dist = abs(uv.y - focusY);
       float r = blurK * smoothstep(0.04, 0.45, dist);
       vec3 c = vec3(0.0);
@@ -52,23 +74,14 @@ export class Macro {
       // the glass: a soft diagonal reflection and out-of-focus lights from the carriage
       float streak = smoothstep(0.35, 0.0, abs((vUv.x - vUv.y * 0.6) - 0.15 + 0.03 * sin(t * 0.3)));
       c += vec3(0.05, 0.045, 0.04) * streak;
-      for (int i = 0; i < 4; i++) {
-        float fi = float(i);
-        vec2 bp = vec2(hash11(fi * 3.1), hash11(fi * 7.7 + 1.0)) * vec2(1.2, 1.0) - vec2(0.1, 0.0);
-        bp.x = fract(bp.x - t * 0.02 * (0.5 + hash11(fi)));
-        float d = length((vUv - bp) * vec2(${W / H}, 1.0));
-        float rad = 0.025 + 0.03 * hash11(fi * 5.3);
-        vec3 col = mix(vec3(1.0, 0.75, 0.45), vec3(0.55, 0.7, 1.0), step(0.6, hash11(fi * 9.1)) * (1.0 - warm));
-        c += col * 0.06 * smoothstep(rad, rad * 0.85, d) * (0.6 + 0.4 * smoothstep(rad * 0.6, rad, d));
-      }
       fragColor = vec4(c, 1.0);
-    }`, { src: { value: null }, t: { value: 0 }, tilt: { value: -0.06 }, focusY: { value: 0.5 }, blurK: { value: 0.012 }, cell: { value: 7 }, glow: { value: 1.3 }, warm: { value: 0 } });
+    }`, { src: { value: null }, t: { value: 0 }, tilt: { value: -0.06 }, focusY: { value: 0.5 }, blurK: { value: 0.012 }, cell: { value: 7 }, glow: { value: 1.3 }, warm: { value: 0 }, zoom: { value: 1.07 }, bgK: { value: 1 } });
 
-  render(r: THREE.WebGLRenderer, out: THREE.WebGLRenderTarget, o: { t: number; tilt?: number; focusY?: number; blur?: number; cell?: number; glow?: number; warm?: number }) {
+  render(r: THREE.WebGLRenderer, out: THREE.WebGLRenderTarget, o: { t: number; tilt?: number; focusY?: number; blur?: number; cell?: number; glow?: number; warm?: number; zoom?: number; bg?: number }) {
     const u = this.pass.u;
     u.src!.value = this.layer.upload();
     u.t!.value = o.t; u.tilt!.value = o.tilt ?? -0.06; u.focusY!.value = o.focusY ?? 0.5; u.blurK!.value = o.blur ?? 0.012;
-    u.cell!.value = o.cell ?? 7; u.glow!.value = o.glow ?? 1.3; u.warm!.value = o.warm ?? 0;
+    u.cell!.value = o.cell ?? 7; u.glow!.value = o.glow ?? 1.3; u.warm!.value = o.warm ?? 0; u.zoom!.value = o.zoom ?? 1.07; u.bgK!.value = o.bg ?? 1;
     this.pass.render(r, out);
   }
 }

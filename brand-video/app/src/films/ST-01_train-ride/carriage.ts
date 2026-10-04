@@ -32,7 +32,9 @@ export default class Carriage extends Scene {
     const frozen = t >= gone;
     const tp = frozen ? gone : t;
     const s = travel(tp, P.t0);
-    const o = { t: tp, scroll: s, cityEnd: 1500, station: s < 160 ? 1 : 0, phone: P.shot === 'board' ? clamp((t - f.start) / 1.2) : 1, pov: P.shot !== 'board' };
+    const bars = P.shot === 'board' ? 4 : Math.max(0, 4 - Math.floor(clamp((t - P.t0 - 4) / 9) * 4.999));
+    const view = (this.ctx.params.view as 'wide' | 'city' | 'fields' | 'phone' | undefined) ?? (P.shot === 'board' ? 'wide' : 'city');
+    const o = { t: tp, scroll: s, cityEnd: 1500, station: s < 160 ? 1 : 0, phone: P.shot === 'board' ? clamp((t - f.start) / 1.2) : 1, view, bars: frozen ? 0 : bars };
     paintCarriage(this.pc, o);
     this.pl.render(this.ctx.renderer, out, {
       lights: carriageLights(o), t: tp, sunEl: -0.11, sunAz: -0.4, skyExp: 4.5, ambient: 0.8, ambNear: 0.6, stars: 1, clouds: 0.35,
@@ -40,7 +42,7 @@ export default class Carriage extends Scene {
     });
     if (P.shot === 'lost') {
       const amt = clamp((t - (gone - 0.35)) / 0.35);
-      const black = t >= (P.black ?? 1e9) ? 1 : 0;
+      const black = t >= (P.black ?? 1e9) ? Math.max(0.02, clamp((t - P.black!) / 0.5)) : 0;
       if (amt > 0 || black) this.gl.apply(this.ctx.renderer, out, { amt: frozen ? 1 : amt, t: frozen ? gone : t, block: 22, black });
     }
     // text: lyric low over the seats, signal bars top right
@@ -48,10 +50,9 @@ export default class Carriage extends Scene {
     ov.begin();
     const black = t >= (P.black ?? 1e9);
     if (!black) ov.lyric(this.ly.lineAt(t, 0.35, 0.3), t, { y: H * 0.165 }); // upper third, over the ceiling (docs/QA.md)
-    const bars = P.shot === 'board' ? 4 : Math.max(0, 4 - Math.floor(clamp((t - P.t0 - 4) / 9) * 4.999));
-    if (!black) this.signal(frozen ? 0 : bars, 70, 225);   // top left, clear of the lyric and the top bar
+    if (!black && view !== 'phone') this.signal(frozen ? 0 : bars, 70, 225);   // top left, clear of the lyric and the top bar
     if (frozen && !black) ov.caption('reconnecting…', W / 2, H * 0.36, { size: 38, align: 'center' });
-    if (black) ov.caption('signal lost', W / 2, H * 0.5, { size: 40, align: 'center', box: false, col: 'rgba(241,238,232,0.9)' });
+    if (black) ov.caption('signal lost', W / 2, H * 0.5, { size: 60, align: 'center' });
     ov.draw(this.ctx.renderer, this.ctx.comp, out);
     return { grain: 0.05, vignette: 0.45, bloom: 0.7, halation: 0.3, ca: 1.0 };
   }

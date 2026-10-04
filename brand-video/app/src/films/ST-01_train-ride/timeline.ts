@@ -21,9 +21,11 @@ export function makeTimeline(au: AudioData): TimelineEntry[] {
     { id: 'station', load: () => import('./station'), start: B(6), end: B(9), trans: 'pixel', inBeats: 1 },
     { id: 'board', load: train, start: B(9), end: B(10), params: { shot: 'board', t0 }, trans: 'dip', inBeats: 0.5 },
     { id: 'keep', load: chat, start: B(10), end: B(11), params: { shot: 'keep' }, trans: 'pixel', inBeats: 0.5 },
-    { id: 'hero', load: train, start: B(11), end: B(15), params: { shot: 'hero', t0 }, trans: 'flash', inBeats: 0.5 },
+    { id: 'hero', load: train, start: B(11), end: B(13), params: { shot: 'hero', t0, view: 'city' }, trans: 'flash', inBeats: 0.5 },
+    // "You watched the city turn to fields": a tighter, frosty view of the fields (hard cut on the downbeat)
+    { id: 'fields', load: train, start: B(13), end: B(15), params: { shot: 'hero', t0, view: 'fields' } },
     // the same shot continues (no transition): the signal fails on "gone"
-    { id: 'lost', load: train, start: B(15), end: B(17), params: { shot: 'lost', t0, gone, black: B(16, 3) } },
+    { id: 'lost', load: train, start: B(15), end: B(17), params: { shot: 'lost', t0, gone, black: B(16, 3), view: 'phone' } },
     { id: 'thanks', load: chat, start: B(17), end: B(19), params: { shot: 'thanks' }, trans: 'scan', inBeats: 0.5 },
     // the front page slams in on the hook's downbeat (its own slam: a hard cut)
     { id: 'front', load: () => import('./frontpage'), start: B(19), end: B(20) },

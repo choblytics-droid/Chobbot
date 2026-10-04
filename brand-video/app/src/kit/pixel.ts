@@ -491,16 +491,16 @@ vec3 neonAt(vec2 ap) {
   vec3 c = vec3(0.0);
   if (isEdge(ap, id, d)) c += col * 2.4 * flick * (1.0 - d * 0.6);
   else {
-    // glow falloff: how close is the nearest outline (up to 4 px away)
+    // glow falloff: how close is the nearest outline (up to 6 px away), and a faint fill: the tube lights the wall it is on
     float near = 0.0;
-    for (int r = 1; r <= 4; r++) {
+    for (int r = 1; r <= 6; r++) {
       for (int i = 0; i < 4; i++) {
         vec2 o = (i == 0 ? vec2(1, 0) : i == 1 ? vec2(-1, 0) : i == 2 ? vec2(0, 1) : vec2(0, -1)) * float(r);
         vec4 No = texture(nrm, (ap + o + 0.5) / art), Ao = texture(alb, (ap + o + 0.5) / art);
-        if (No.a < 0.5 || abs(Ao.a * 255.0 - id) > 0.5) near = max(near, 1.0 - float(r - 1) / 4.0);
+        if (No.a < 0.5 || abs(Ao.a * 255.0 - id) > 0.5) near = max(near, 1.0 - float(r - 1) / 6.0);
       }
     }
-    c += col * near * near * 0.22 * flick * (1.0 - d * 0.6);
+    c += col * (near * near * 0.34 + 0.025) * flick * (1.0 - d * 0.6);
   }
   c += toLinear(E.rgb) * E.a * 8.0 * 0.45;      // what glows stays a point of light (kept below blowing out)
   return c;
@@ -517,8 +517,12 @@ void main() {
   // the wet ground mirrors the neon above the ground line, broken by ripples
   float below = groundY - ap.y;
   if (below > 0.0 && N.g > 0.85) {
-    vec2 m = vec2(ap.x + floor((hash12(vec2(floor(ap.y), floor(t * 6.0))) - 0.5) * 3.0), groundY + below * 0.9);
-    c += neonAt(floor(m)) * 0.45 * exp(-below / 45.0);
+    // ripples sway each row sideways; the reflection stretches into vertical streaks (several taps up the mirror)
+    float sway = sin(below * 0.7 + t * 3.0) * 1.2 + (hash12(vec2(floor(ap.y), floor(t * 6.0))) - 0.5) * 2.0;
+    vec2 m = vec2(ap.x + floor(sway + 0.5), groundY + below * 0.9);
+    vec3 rc = vec3(0.0);
+    for (int j = 0; j < 4; j++) rc += neonAt(floor(m + vec2(0.0, float(j) * 1.6 * (1.0 + below / 40.0)))) * (1.0 - float(j) * 0.2);
+    c += rc / 2.8 * 0.5 * exp(-below / 55.0);
   }
   fragColor = vec4(c, 1.0);
 }`;

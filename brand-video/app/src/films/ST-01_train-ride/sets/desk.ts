@@ -90,7 +90,8 @@ export function paintDesk(pc: PixelCanvas, o: { t: number; k: number }) {
     if (Math.abs(lx - 64) < 2 && Math.abs(ly - 27) < 2) col = '#ffd04a';                     // a coin
     if (lx >= 22 && lx < 26 && ly >= 34 && ly < 40) col = ly < 36 ? '#e8c27a' : '#c0392b';   // the player sprite
     if (ly < 5) col = lx < 30 ? (lx % 5 < 3 && ly > 1 && ly < 4 ? '#e5484d' : '#101216') : (lx > 80 && ly > 1 && ly < 4 && lx % 3 ? '#e8e2d6' : '#101216');   // HUD: hearts, score
-    pc.px(x, y, { a: P.black, d: 0.44, id: 11, e: col, ei: 1.5 * on });
+    const refl = Math.max(0, 1 - Math.abs(lx - 78 - ly * 0.35) / 14) * (1 - on) * k;   // the door's light on the dark glass
+    pc.px(x, y, { a: P.black, d: 0.44, id: 11, e: on > 0.05 ? col : '#ffd9a0', ei: on > 0.05 ? 1.5 * on : 0.35 * refl + 0.04 * k });
   }
   pc.rect(108, 242, 14, 18, (x, y) => ({ a: x === 108 ? '#4a4d56' : x === 121 ? '#1b1c21' : y === 250 ? '#15161b' : x === 109 ? '#33363e' : P.monL, d: 0.45, id: 12 }));
   pc.rect(96, 258, 38, 4, (x, y) => ({ a: y === 258 ? '#4a4d56' : P.monL, d: 0.45, id: 12 }));
@@ -99,7 +100,10 @@ export function paintDesk(pc: PixelCanvas, o: { t: number; k: number }) {
   for (let x = 72; x < 142; x += 3) pc.px(x, 268, { a: P.key, d: 0.405, id: 13, e: ['#ff4d6d', '#ffb224', '#4dd2ff', '#9b6bff'][Math.floor(x / 18) % 4], ei: 1.4 * on });
   pc.rect(148, 264, 18, 6, { a: '#1a1b20', d: 0.412, id: 14 });
   pc.rect(152, 263, 6, 6, (x, y) => ({ a: y === 263 ? '#4a4d56' : x === 155 ? '#0f1014' : P.key, d: 0.41, id: 14 }));
-  pc.disc(40, 254, 9, (x, y, dx, dy) => (dy < 0.2 && dx * dx + dy * dy > 0.45 ? { a: dy < -0.5 ? '#3a3c45' : '#24252c', d: 0.41, id: 15 } : { a: P.wall, d: 0.6, id: 1 }));
+  // headphones on a stand: the stand, the headband arc, two ear cups with a lit rim
+  pc.rect(48, 252, 2, 16, { a: '#3a3c45', d: 0.412, id: 15 }); pc.rect(44, 267, 10, 2, { a: '#2a2c33', d: 0.412, id: 15 });
+  for (let a = Math.PI; a <= 2 * Math.PI; a += 0.08) pc.px(Math.round(49 + Math.cos(a) * 8), Math.round(252 + Math.sin(a) * 7), { a: a < 4.2 ? '#4a4d56' : '#2a2c33', d: 0.41, id: 15 });
+  for (const ex of [40, 56]) pc.rect(ex, 250, 4, 8, (x, y) => ({ a: x === ex ? '#5a5d66' : y === 250 ? '#4a4d56' : '#1d1e24', d: 0.409, id: 15 }));
   pc.rect(182, 254, 9, 14, (x, y) => ({ a: x === 182 ? '#f4efe6' : x === 190 ? '#a8a296' : y === 254 ? '#3a2418' : P.mug, d: 0.41, id: 16 }));
   pc.rect(191, 257, 2, 6, { a: '#c8c2b5', d: 0.41, id: 16 });
   pc.rect(196, 248, 12, 20, (x, y) => ({ a: y === 248 ? '#8a603e' : x === 207 ? '#4a3222' : '#6b4a32', d: 0.41, id: 17 }));
@@ -114,12 +118,16 @@ export function paintDesk(pc: PixelCanvas, o: { t: number; k: number }) {
   const CH = ramp(P.chair, 0.9), CR = ramp(P.chairR, 0.8);
   pc.poly([[cx - 30, cy - 62], [cx - 22, cy - 74], [cx + 18, cy - 78], [cx + 26, cy - 68], [cx + 30, cy + 40], [cx - 30, cy + 44]], (x, y) => {
     const side = x < cx - 24 || x > cx + 24, stitch = (x === cx - 24 || x === cx + 24 || (y - cy) % 14 === 0) && (x + y) % 2 === 0;
-    const v = 2 + (side ? -0.9 : 0) + (vnoise(x * 0.12, y * 0.12, 2) - 0.5) * 0.9 + (y < cy - 60 ? 0.6 : 0);
-    return { a: stitch ? CH[3]! : CH[Math.max(0, Math.min(4, dither(v, x, y)))]!, d: 0.2, id: 20, n: [(x - cx) / 50, y < cy - 66 ? 0.6 : 0.1] };
+    // quilted rows: each puffs up between stitch lines (lit top, a shadow under the seam), a leather sheen
+    const ry = ((y - cy) % 14 + 14) % 14;
+    const sheen = Math.exp(-(((x - (cx - 6 + (y - cy) * 0.05)) / 3.5) ** 2)) * (vnoise(x * 0.3, y * 0.08, 5) > 0.35 ? 1 : 0.4);
+    const v = 2 + (side ? -0.9 : 0) + (vnoise(x * 0.12, y * 0.12, 2) - 0.5) * 0.9 + (y < cy - 60 ? 0.6 : 0) + (ry === 1 ? -0.9 : ry < 5 ? 0.35 : ry > 11 ? -0.35 : 0) + sheen * 1.4;
+    return { a: stitch ? CH[3]! : CH[Math.max(0, Math.min(4, dither(v, x, y)))]!, d: 0.2, id: 20, n: [(x - cx) / 50, y < cy - 66 ? 0.6 : ry < 5 ? 0.45 : 0.1] };
   });
   pc.rect(cx - 14, cy - 64, 26, 12, (x, y) => ({ a: y === cy - 64 ? CH[3]! : y === cy - 53 ? CH[0]! : (x + y) % 9 === 0 ? CH[3]! : CH[2]!, d: 0.198, id: 23, n: [0, 0.4] }));
   pc.poly([[cx - 22, cy - 66], [cx - 14, cy - 67], [cx - 10, cy + 38], [cx - 18, cy + 39]], (x, y) => ({ a: CR[x === cx - 21 ? 3 : (y % 7 === 0 ? 1 : 2)]!, d: 0.195, id: 20 }));
   pc.poly([[cx + 6, cy - 69], [cx + 14, cy - 70], [cx + 16, cy + 37], [cx + 8, cy + 37]], (x, y) => ({ a: CR[x === cx + 7 ? 3 : (y % 7 === 0 ? 1 : 2)]!, d: 0.195, id: 20 }));
+  for (let y = cy - 64; y < cy + 37; y += 2) { pc.px(cx - 23, y, { a: CR[4]!, d: 0.194, id: 20 }); pc.px(cx + 15, y, { a: CR[4]!, d: 0.194, id: 20 }); }   // contrast stitching
   pc.rect(cx - 28, cy + 40, 56, 12, (x, y) => ({ a: y === cy + 40 ? CH[4]! : y === cy + 51 ? CH[0]! : y === cy + 41 ? CH[3]! : CH[(x + y) % 11 === 0 ? 2 : 1]!, d: 0.19, id: 21, n: [0, 0.6] }));
   pc.rect(cx - 2, cy + 52, 5, 40, (x) => ({ a: x === cx - 2 ? '#8d929c' : x === cx + 2 ? '#2a2c33' : P.metal, d: 0.18, id: 22 }));
   for (const dx of [-36, -14, 12, 34]) { pc.line(cx, cy + 92, cx + dx, cy + 104, { a: P.metal, d: 0.17, id: 22 }); pc.disc(cx + dx, cy + 105, 2, { a: '#1a1b20', d: 0.169, id: 22 }); }

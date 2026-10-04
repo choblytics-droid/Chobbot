@@ -3,6 +3,7 @@ import type * as THREE from 'three';
 import { Scene, type Frame } from '../../engine/scene';
 import { PixelCanvas, PixelLight } from '../../kit/pixel';
 import { Overlay } from '../../kit/overlay';
+import { roundRect } from '../../kit/kit';
 import { F, font } from '../../engine/type';
 import { loadLyrics, type Lyrics } from '../../engine/lyrics';
 import { paintTown, townLights, type TownOpts } from './sets/town';
@@ -26,7 +27,7 @@ export default class Town extends Scene {
     if (shot === 'tour') { o.streamer = 'tripod'; o.sx = 74; o.camX = -4 + 8 * p; }
     if (shot === 'neon') { o.streamer = 'tripod'; o.sx = 74; o.camX = 4 + 4 * p; }
     if (shot === 'outro') { o.streamer = 'none'; o.camX = -30 + 60 * p; o.camY = 1.5 * Math.sin(t * 4.1); sky = { ...sky, sunEl: -0.04, skyExp: 3.6 }; }
-    if (shot === 'newday') { o.streamer = 'none'; o.day = 1; sky = { sunEl: 0.09, sunAz: -1.95, skyExp: 0.5, ambient: 1.25, stars: 0, clouds: 0.55 }; haze = 0.22; wet = 0.2; snow = 0.25; }
+    if (shot === 'newday') { o.streamer = 'none'; o.day = 1; sky = { sunEl: 0.07, sunAz: -1.95, skyExp: 0.9, ambient: 1.2, stars: 0, clouds: 0.45 }; haze = 0.18; wet = 0.15; snow = 0; }   // dawn: pale sky above, low warm sun from the left
     paintTown(this.pc, o);
     if (shot === 'neon') return this.neon(f, out);
     this.pl.render(this.ctx.renderer, out, {
@@ -51,7 +52,9 @@ export default class Town extends Scene {
       if (a > 0) ov.title('They kept streaming IRL.', W / 2, H * 0.2, { a });
       // the credit, small, at the bottom; then the film fades out with the song's last note
       const c = ov.c;
-      c.save(); c.font = font(F.mono(400), 24); c.textAlign = 'center'; c.fillStyle = `rgba(241,238,232,${0.85 * a})`;
+      c.save(); c.font = font(F.mono(500), 26); c.textAlign = 'center';
+      c.fillStyle = `rgba(6,7,11,${0.62 * a})`; roundRect(c, W / 2 - 420, H * 0.25 - 26, 840, 40, 12); c.fill();
+      c.fillStyle = `rgba(241,238,232,${0.95 * a})`;
       c.shadowColor = 'rgba(0,0,0,0.9)'; c.shadowBlur = 18;
       c.fillText('Story shared by a streamer on Reddit, retold with permission', W / 2, H * 0.25); c.restore();   // under the closing line, clear of the caption zone
       ov.caption('LIVE · IRL', W * 0.08, H * 0.1, { size: 30, dot: '#ff3b3b', a: clamp((t - f.start - 0.4) / 0.2) });

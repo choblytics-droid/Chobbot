@@ -281,7 +281,7 @@ export function paintTown(pc: PixelCanvas, o: TownOpts) {
         // snow lies in drifts: along the edges of the square, at the hut bases, thicker the next morning
         const day = o.day ?? 0;
         const drift = vnoise(gx * (0.07 + day * 0.1), yy * (0.2 + day * 0.2), 21) + Math.max(0, Math.abs(gx - 135) / 135 - 0.45) * 1.4 + (yy < GROUND + 5 ? 0.3 : 0);
-        const snowy = drift > 0.95 - day * 0.8;   // the next morning: fresh snow almost everywhere
+        const snowy = day > 0.5 || drift > 0.95;   // the next morning: fresh snow almost everywhere
         // footprints through the snow toward the tripod
         const fp = snowy && Math.abs(gx - (20 + (yy - GROUND) * 0.6)) < 1.5 && (yy % 4 === 0);
         const C = snowy ? [P.snowS, '#c6d2e3', P.snow, '#eef3fa'] : [P.cobD, P.cob, '#4d505c', P.cobL];

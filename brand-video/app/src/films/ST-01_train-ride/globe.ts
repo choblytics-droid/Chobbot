@@ -63,11 +63,16 @@ void main() {
     float land = landAt(g);
     bool isLand = land > 0.0;
     float day = dot(n, sun);
-    vec3 alb = isLand ? mix(vec3(0.09, 0.11, 0.07), vec3(0.17, 0.15, 0.10), sat(land * 2.0)) : vec3(0.015, 0.04, 0.10);
+    // terrain: lowland, forest and ridges at two scales (it holds up in the close-up), snow in the north
+    float tr = fbm(g * 70.0, 4), tr2 = fbm(g * 260.0, 3) * 0.6 + fbm(g * 1100.0, 3) * 0.4;
+    vec3 alb = isLand ? mix(vec3(0.07, 0.10, 0.06), vec3(0.19, 0.16, 0.11), sat(land * 1.6 + tr * 0.9)) * (0.8 + 0.5 * tr2)
+                      : vec3(0.015, 0.04, 0.10) * (0.85 + 0.3 * fbm(g * 120.0, 2)) + vec3(0.0, 0.02, 0.03) * sat(0.25 - land * 3.0);   // shelf water by the coast
+    if (isLand && g.y > 0.8 + tr * 0.08) alb = mix(alb, vec3(0.5, 0.56, 0.66) * (0.85 + 0.3 * tr2), 0.8);   // winter snow in the far north
+    if (isLand && abs(fbm(g * 22.0, 4)) < 0.009) alb = vec3(0.02, 0.05, 0.09);                              // rivers
     if (isLand && abs(g.y) > 0.92) alb = vec3(0.55, 0.6, 0.68);   // polar ice
     // night side: ocean and land in moonlight, city lights on land
     vec3 lit = alb * (0.08 + 1.4 * sat(day));
-    if (isLand && day < 0.1) {
+    if (isLand && day < 0.3) {
       // lights at three scales; each shows while its cells are 1–6 art px across (fine at any zoom)
       vec2 ll = vec2(atan(g.z, g.x), asin(g.y));
       float city = 0.0;
@@ -78,9 +83,19 @@ void main() {
       }
       // lights crowd the coasts and the dense regions; interiors stay dark
       float coast = landAt(normalize(g + vec3(0.02, 0.0, 0.0))) < 0.0 || landAt(normalize(g - vec3(0.02, 0.0, 0.0))) < 0.0 || landAt(normalize(g + vec3(0.0, 0.02, 0.0))) < 0.0 || landAt(normalize(g + vec3(0.0, 0.0, 0.02))) < 0.0 ? 1.0 : 0.0;
-      city *= (0.08 + coast * 0.9) * min(dense(g), 1.2) * step(0.45, hash12(floor(ll * 9.0) + 3.0) + coast * 0.6);
-      lit += vec3(1.0, 0.72, 0.38) * min(city, 1.0) * 1.6 * smoothstep(0.1, -0.15, day);
+      city *= (0.3 + coast * 0.7) * min(dense(g), 1.2) * step(0.45, hash12(floor(ll * 9.0) + 3.0) + coast * 0.6);
+      lit += vec3(1.0, 0.72, 0.38) * min(city, 1.0) * 1.6 * smoothstep(0.3, 0.0, day);
     }
+    // the stream's light spilling onto the ground under the link (the great circle from A to B, as far as it has grown)
+    vec3 pn = normalize(cross(A, B));
+    float off = abs(dot(g, pn));
+    vec3 gp = normalize(g - pn * dot(g, pn));
+    float along = acos(clamp(dot(gp, A), -1.0, 1.0)) / acos(clamp(dot(A, B), -1.0, 1.0));
+    float onArc = step(0.0, dot(cross(A, gp), pn)) * step(along, link) * step(0.001, link);
+    lit += vec3(1.0, 0.62, 0.3) * exp(-off * 60.0) * onArc * 0.35 * smoothstep(0.2, -0.1, day);
+    // clouds: thin, drifting, catching moonlight and the glow of the cities below
+    float cl = sat(fbm(g * 7.0 + vec3(t * 0.01, 0.0, 0.0), 5) * 1.6 - 0.25);
+    lit = mix(lit, vec3(0.06, 0.07, 0.09) * (0.3 + 1.2 * sat(day + 0.2)) + lit * 0.45, cl * 0.55);
     // dawn on the terminator, and the ocean's glint
     if (!isLand) lit += vec3(1.0, 0.8, 0.6) * pow(sat(dot(reflect(-sun, n), vec3(0, 0, 1))), 40.0) * 0.8;
     // posterise with an ordered dither (pixel art)
@@ -99,7 +114,8 @@ void main() {
   for (int i = 0; i <= 96; i++) {
     float u = min(float(i) / 96.0, link);
     vec3 p = normalize(mix(A, B, u) + 1e-4);
-    p *= 1.0 + 0.16 * sin(u * 3.14159);
+    p *= 1.0 + 0.24 * sin(u * 3.14159);
+    p += normalize(cross(A, B)) * 0.14 * sin(u * 3.14159);   // bow sideways too, so the arc reads as a curve from any angle
     vec3 v = M * p;
     bool hidden = v.z < 0.0 && length(v.xy) < 1.0;   // behind the globe
     vec2 sp = C + v.xy * R;
@@ -107,7 +123,7 @@ void main() {
     prev = sp; hasPrev = !hidden;
     if (float(i) / 96.0 >= link) break;
   }
-  c += vec3(1.0, 0.7, 0.3) * (smoothstep(1.6, 0.4, best) * 3.0 + exp(-best * 0.35) * 0.35);
+  c += vec3(1.0, 0.7, 0.3) * (smoothstep(1.6, 0.4, best) * 3.0 + exp(-best * 0.35) * 0.35 + exp(-best * 0.08) * 0.12);
   // the two ends: the train (a warm dot) and the lit window on the other side
   for (int k = 0; k < 2; k++) {
     vec3 v = M * (k == 0 ? A : B);

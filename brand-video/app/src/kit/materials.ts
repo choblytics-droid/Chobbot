@@ -131,7 +131,7 @@ export function snow(r: string[], b: Base & { seed?: number }) {
 export function hillside(rock: string[], sn: string[], b: Base & { ty: (x: number) => number; seed?: number }) {
   return (x: number, y: number): Mat => {
     const depth = y - b.ty(x);
-    const drift = vnoise(x * 0.06, y * 0.12, b.seed ?? 14) + (depth < 3 ? 0.35 : 0) - depth * 0.004;
+    const drift = vnoise(x * 0.035, y * 0.07, b.seed ?? 14) * 0.8 + vnoise(x * 0.12, y * 0.2, 99) * 0.2 + (depth < 3 ? 0.35 : 0) - depth * 0.004;
     if (drift > 0.62) return { a: pick(sn, dither(1.6 + (drift - 0.62) * 4, x, y)), d: b.d, id: b.id, n: [0, 0.8] };
     let v = 1.6 + (vnoise(x * 0.2, y * 0.2, 15) - 0.5) * 1.8 - depth * 0.01;
     return { a: pick(rock, dither(v, x, y)), d: b.d, id: b.id, n: [(vnoise(x * 0.2, y * 0.2, 16) - 0.5) * 0.8, 0.5] };

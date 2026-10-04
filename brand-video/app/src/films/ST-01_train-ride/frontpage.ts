@@ -6,6 +6,7 @@ import { FSPass, Layer2D, makeRT, W, H } from '../../engine/gl';
 import { PixelCanvas, PixelLight } from '../../kit/pixel';
 import { paintTown, townLights } from './sets/town';
 import { F, font, measure } from '../../engine/type';
+import { wrap } from '../../kit/kit';
 import { clamp, ease } from '../../engine/util';
 
 const PHOTO = { x: 60, y: 900, w: 960, h: 760 };
@@ -27,8 +28,19 @@ export default class FrontPage extends Scene {
       vec2 q = vec2(pp.x, ${H}.0 - pp.y);              // y down
       // the table under the page: dark wood grain
       vec3 table = vec3(0.045, 0.028, 0.018) * (0.75 + 0.5 * fbm(vec2(q.x * 0.004, q.y * 0.05), 4)) * (0.8 + 0.2 * sin(q.y * 0.08 + fbm(q * 0.01, 3) * 6.0));
-      // the curled bottom-right corner
-      float curl = step(${W + H - 260}.0, q.x + q.y);
+      // the curled bottom-right corner: cut off along x + y = L, folded back over the page (we see the
+      // flap's back, shaded like a roll: lit along the crease, darker toward its tip), a shadow under it
+      float cd0 = q.x + q.y - ${W + H - 260}.0;
+      vec2 pr = q - vec2(cd0);
+      if (cd0 < 0.0 && pr.x < ${W - 20}.0 && pr.y < ${H - 20}.0) {
+        float roll = -cd0;
+        vec3 back = vec3(0.80, 0.77, 0.71) * (0.78 + 0.22 * smoothstep(0.0, 26.0, roll) - 0.2 * smoothstep(60.0, 180.0, roll) + 0.12 * exp(-pow(roll - 14.0, 2.0) / 60.0));
+        back *= 0.97 + fbm(pr * vec2(0.02, 0.2), 3) * 0.04;
+        float rim = min(${W - 20}.0 - pr.x, ${H - 20}.0 - pr.y);
+        back *= 0.8 + 0.2 * smoothstep(0.0, 6.0, rim);
+        fragColor = vec4(back * 0.92, 1.0); return;
+      }
+      float curl = step(0.0, cd0);
       if (q.x < 20.0 || q.y < 20.0 || q.x > ${W - 20}.0 || q.y > ${H - 20}.0 || curl > 0.5) { fragColor = vec4(table * (1.0 - 0.5 * smoothstep(60.0, 0.0, min(min(q.x - 20.0, ${W - 20}.0 - q.x), min(q.y - 20.0, ${H - 20}.0 - q.y)) + 30.0)), 1.0); return; }
       // newsprint: fibres and tone
       float fib = fbm(q * vec2(0.02, 0.2), 3) * 0.04 + hash12(floor(q)) * 0.03;
@@ -50,17 +62,19 @@ export default class FrontPage extends Scene {
       float ink = texture(page, vec2(pp.x / ${W}.0, pp.y / ${H}.0) + vec2(0.0006, 0.0)).a;
       c = mix(c, INK, ink * 0.95);
       // a centre fold (dark crease, lit lip), soft shading toward the edges, the shadow of the curl
-      float fold = abs(q.x - ${W / 2}.0);
-      c *= 1.0 - 0.18 * exp(-fold * 0.5) + 0.05 * exp(-(fold - 3.0) * (fold - 3.0) * 0.2);
+      float fs = q.x - ${W / 2}.0, fold = abs(fs);
+      c *= 1.0 - 0.28 * exp(-fold * 0.45) - 0.1 * exp(-fold / 60.0) * step(fs, 0.0) + 0.07 * exp(-(fs - 4.0) * (fs - 4.0) * 0.15) + 0.04 * exp(-fs / 50.0) * step(0.0, fs);
       c *= 0.86 + 0.14 * smoothstep(0.0, 260.0, min(q.x, ${W}.0 - q.x));
-      float cd = q.x + q.y - ${W + H - 260}.0;
-      c *= 1.0 - 0.35 * smoothstep(-90.0, 0.0, cd);
+      // the flap's shadow on the page, along its outer edges
+      vec2 pr2 = q - vec2(cd0);
+      float sh = cd0 < 0.0 ? smoothstep(28.0, 0.0, min(pr2.x - ${W - 20}.0, pr2.y - ${H - 20}.0)) * smoothstep(-260.0, -60.0, cd0) : 0.0;
+      c *= 1.0 - 0.3 * sh;
       fragColor = vec4(c * 0.92, 1.0);
     }`, { photo: { value: null }, page: { value: null }, t: { value: 0 }, slam: { value: 0 }, rotA: { value: 0 }, scl: { value: 1 }, rect: { value: [PHOTO.x, PHOTO.y, PHOTO.w, PHOTO.h] } });
 
   override init() {
     // the page's type: masthead, headline, standfirst, rules, columns of body text as word-shaped
-    // glyph lines (no invented copy), a photo caption line. Everything below y 170 (QA-3).
+    // copy built only from the post's facts, a photo caption line. Everything below y 170 (QA-3).
     const c = this.page.ctx;
     this.page.clear();
     c.fillStyle = '#000';
@@ -76,26 +90,25 @@ export default class FrontPage extends Scene {
     c.font = font(hf, size);
     c.fillText('3 VIEWERS.', W / 2, 340 + size * 0.86);
     c.fillText('ENOUGH.', W / 2, 340 + size * 1.74);
-    // standfirst: two bold glyph lines under the headline
-    let rnd = 7;
-    const r = () => ((rnd = (rnd * 16807) % 2147483647) / 2147483647);
-    const glyphLine = (x: number, y: number, w: number, h: number, gap: number) => {
-      let xx = x;
-      while (xx < x + w - 20) { const ww = Math.min(x + w - xx, 14 + r() * 70); c.fillRect(xx, y, ww, h); xx += ww + gap; }
-    };
-    const sy = 340 + size * 1.74 + 40;
-    c.globalAlpha = 0.85; glyphLine(110, sy, W - 220, 13, 12); glyphLine(110, sy + 26, (W - 220) * 0.7, 13, 12); c.globalAlpha = 1;
+    // standfirst, caption and body: real copy, every sentence from the post's facts (DESCRIPTION.md)
+    const sy = 340 + size * 1.74 + 52;
+    const sf = F.serif(600, true);
+    c.font = font(sf, 34);
+    wrap('A streamer took the stream outside for the first time. Three people were watching.', sf, 34, W - 220).forEach((l, i) => c.fillText(l, W / 2, sy + i * 38));
     c.fillRect(60, PHOTO.y - 30, W - 120, 3);
     c.fillRect(PHOTO.x - 2, PHOTO.y - 2, PHOTO.w + 4, 2); c.fillRect(PHOTO.x - 2, PHOTO.y + PHOTO.h, PHOTO.w + 4, 2);
-    // photo caption
-    c.globalAlpha = 0.7; glyphLine(PHOTO.x, PHOTO.y + PHOTO.h + 16, 520, 8, 8); c.globalAlpha = 1;
-    // three columns of body text with rules between them
+    c.textAlign = 'left';
+    c.font = font(F.mono(500), 17); c.globalAlpha = 0.8;
+    c.fillText('The carousel, as the stream saw it.', PHOTO.x, PHOTO.y + PHOTO.h + 26);
+    c.globalAlpha = 1;
+    const body = 'After a year of streaming games from their desk, they took the stream outside for the first time: a Christmas tour of their town. The market, the castle, a lit-up carousel. They had a train to catch and were about to end the stream. Then one viewer said they had never been on a train. So the stream stayed on, out of the city and across open farmland, until the signal dropped. The viewer thanked them for being so chill and called it an amazing stream. They were watching from the other side of the world. The streamer kept streaming IRL.';
+    const bf = F.serif(600), bs = 19, colW = 300, rows = 9;
+    const lines = wrap(body, bf, bs, colW);
+    c.font = font(bf, bs);
     for (let col = 0; col < 3; col++) {
       const x = 60 + col * 330;
       if (col) c.fillRect(x - 14, PHOTO.y + PHOTO.h + 44, 1, 180);
-      c.globalAlpha = 0.6;
-      for (let k = 0; k < 9; k++) glyphLine(x, PHOTO.y + PHOTO.h + 46 + k * 20, k === 8 ? 160 : 300, 8, 7);
-      c.globalAlpha = 1;
+      lines.slice(col * rows, col * rows + rows).forEach((l, k) => c.fillText(l, x, PHOTO.y + PHOTO.h + 60 + k * 20));
     }
   }
 
