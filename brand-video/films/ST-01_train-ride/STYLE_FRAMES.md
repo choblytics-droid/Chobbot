@@ -1,4 +1,4 @@
-# ST-01 · Style frames (pipeline step 5) · for approval
+# ST-01 · Style frames (pipeline step 5) · **approved by the owner, 2026-10-04**
 
 One still per scene, rendered by the real film code at its moment in the song (9:16, 1080×1920,
 12 motion-blur sub-frames). Frames: `frames/` (contact sheets: `contact-sheet-a.jpg`, `-b.jpg`).
@@ -60,6 +60,5 @@ Re-render any frame: `cd app && CHROME=<chromium> bun scripts/render.ts stills -
 
 ## Open points for you
 
-1. Approve the look per frame (or name the frames to change).
-2. The tagline (`never stream alone` is a placeholder) and brand colours.
-3. The permission message to the Reddit author (draft in the script).
+1. The tagline (`never stream alone` is a placeholder) and brand colours.
+2. The permission message to the Reddit author (draft in the script).

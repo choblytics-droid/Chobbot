@@ -121,7 +121,8 @@ async function video(page: Page, from: number, to: number, fps: number, out: str
   // otherwise ffmpeg converts with BT.601 while players and YouTube decode untagged HD as BT.709.
   // scale tags the matrix and range; primaries and transfer need setparams (the -color_* output flags don't reach the stream).
   args.push('-vf', 'vflip,scale=out_color_matrix=bt709,setparams=color_primaries=bt709:color_trc=bt709', '-c:v', 'libx264', '-preset', opt('preset', 'slow')!, '-crf', crf, '-pix_fmt', 'yuv420p', '-tune', 'grain', '-x264-params', opt('x264', 'aq-mode=3')!);
-  if (!flag('noaudio')) args.push('-c:a', 'aac', '-b:a', '256k', '-shortest');
+  // pad the audio with silence so a shot that runs past the song (the end card) is kept
+  if (!flag('noaudio')) args.push('-af', 'apad', '-c:a', 'aac', '-b:a', '256k', '-t', String(to - from));
   args.push('-movflags', '+faststart', out);
   const ff = Bun.spawn(args, { stdin: 'pipe', stdout: 'inherit', stderr: 'inherit' });
   let frames = 0;

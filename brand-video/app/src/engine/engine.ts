@@ -21,7 +21,21 @@ export interface TimelineEntry {
   params?: Record<string, any>;
   /** Cap on adaptive motion-blur sub-frames while this entry is on screen (for noise that converges slowly). */
   maxSamples?: number;
+  /** How this entry comes in over its overlap with the previous one (default: a crossfade). */
+  trans?: Transition;
 }
+
+/**
+ * Material transitions (docs/STYLE_DECK.md: "transitions are made of material, timed to the beat").
+ *   fade    crossfade
+ *   pixel   the frame breaks into blocks that flip to the new shot in random order
+ *   scan    a glowing line sweeps across; the new shot is drawn behind it
+ *   ink     the new shot bleeds in through a noise mask, with a dark wet edge
+ *   flash   a warm flash peaks at the middle, the shot swaps under it
+ *   dip     down to black and up again
+ */
+export type Transition = 'fade' | 'pixel' | 'scan' | 'ink' | 'flash' | 'dip';
+const TRANS: Record<Transition, number> = { fade: 0, pixel: 1, scan: 2, ink: 3, flash: 4, dip: 5 };
 
 interface Loaded { entry: TimelineEntry; scene: Scene | null; error?: string; lastT: number }
 
@@ -86,8 +100,32 @@ export class Engine {
     this.renderer.setSize(PW, PH, false);
     this.renderer.autoClear = false;
     this.blit = new FSPass(`uniform sampler2D src; void main(){ fragColor = texture(src, vUv); }`, { src: { value: null } });
-    this.xfade = new FSPass(`uniform sampler2D a; uniform sampler2D b; uniform float k;
-      void main(){ fragColor = mix(texture(a, vUv), texture(b, vUv), k); }`, { a: { value: null }, b: { value: null }, k: { value: 0 } });
+    this.xfade = new FSPass(`uniform sampler2D a; uniform sampler2D b; uniform float k; uniform int kind;
+      void main(){
+        vec4 A = texture(a, vUv), B = texture(b, vUv);
+        vec2 px = vUv * vec2(${W}.0, ${H}.0);
+        if (kind == 1) {
+          vec2 cell = floor(px / 36.0);
+          float r = hash12(cell) * 0.8;
+          fragColor = mix(A, B, smoothstep(r, r + 0.2, k));
+        } else if (kind == 2) {
+          float x = vUv.x + (vUv.y - 0.5) * 0.08, e = k * 1.2 - 0.1;
+          float m = smoothstep(e + 0.004, e - 0.004, x);
+          float line = exp(-abs(x - e) * 180.0);
+          fragColor = mix(A, B, m) + vec4(vec3(1.0, 0.75, 0.4) * line * 3.0, 0.0);
+        } else if (kind == 3) {
+          float n = fbm(vUv * vec2(3.0, 5.0) + 7.0, 5) * 0.5 + 0.5;
+          float th = k * 1.3 - 0.15;
+          float m = smoothstep(th + 0.02, th - 0.02, n);
+          float edge = smoothstep(0.06, 0.0, abs(n - th));
+          fragColor = mix(A, B, m) * (1.0 - edge * 0.85);
+        } else if (kind == 4) {
+          float f = exp(-abs(k - 0.5) * 10.0) * 0.7;
+          fragColor = (k < 0.5 ? A : B) + vec4(vec3(1.0, 0.85, 0.65) * f * 2.5, 0.0);
+        } else if (kind == 5) {
+          fragColor = k < 0.5 ? A * (1.0 - smoothstep(0.0, 0.5, k)) : B * smoothstep(0.5, 1.0, k);
+        } else fragColor = mix(A, B, k);
+      }`, { a: { value: null }, b: { value: null }, k: { value: 0 }, kind: { value: 0 } });
     // adds a sub-frame to a sum; a non-finite pixel (a stray NaN from some shader in one sub-frame out of
     // hundreds) is dropped, or it would poison the average and bloom into a disc
     this.accum = new FSPass(`uniform sampler2D src;
@@ -338,6 +376,7 @@ export class Engine {
         this.xfade.u.a!.value = under;
         this.xfade.u.b!.value = rt.texture;
         this.xfade.u.k!.value = tin;
+        this.xfade.u.kind!.value = TRANS[e.trans ?? 'fade'];
         this.xfade.render(r, this.mixRT);
         outTex = this.mixRT.texture;
       } else outTex = rt.texture;

@@ -13,7 +13,8 @@ There are three paths at every level:
 **For a 45–60 s brand film, depth or mixed is the right path.** Breadth needs runtime: at 28 styles,
 each would be on screen for a fraction of a second, and the product message would get lost.
 
-**Owner rule (2026-10-03): level 6 (tier A) is the minimum for every film.** Lower levels below
+**Owner rules: the quality band is level 6–10 (tier A to S+).** Level 6 is the minimum for every film
+(2026-10-03) and each film is pushed as high in the band as it allows (2026-10-04). Lower levels below
 are reference only.
 
 ## The tiers

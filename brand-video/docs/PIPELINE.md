@@ -26,8 +26,9 @@ Rules:
   `.claude/skills/chobbot-film/SKILL.md` (every step, rules, n8n workflow IDs, file layout, commands,
   and the measured cost per film), so every later film follows it exactly. Update it after each film
   with anything learned.
-- **Minimum quality level 6 for every film** (owner rule, 2026-10-03). The level (`TIER_LIST.md`)
-  is chosen at step 1 (6 or higher) and confirmed at step 5. No lower-level tests or drafts for release.
+- **Quality band: level 6–10 for every film** (owner rules, 2026-10-03 and 2026-10-04). 6 is the floor;
+  each film is pushed as far up the band as it allows. The level (`TIER_LIST.md`) is chosen at step 1
+  and confirmed at step 5. No lower-level tests or drafts for release.
 
 ## Standard workflow: step 4, audio analysis (set after ST-01, owner 2026-10-04)
 
