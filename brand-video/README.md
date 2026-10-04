@@ -5,8 +5,10 @@ streamers, cut to our own song. This folder is separate from the Venmar × Quest
 (branch `claude/zealous-newton-7zpeja`) and from any other experiment: nothing here depends on them,
 and nothing there is changed by work here.
 
-**Status:** planning. Next step: briefs and scripts (`docs/PIPELINE.md`). Nothing is built until a
-script is approved and its audio exists. The website design is still in production.
+**Status (2026-10-04):** the first film, ST-01 "The train ride", is built at 1080p60
+(`films/ST-01_train-ride/release/`) and in owner review. **Start with [`HANDOFF.md`](HANDOFF.md)**
+(status, open items, local setup) and [`NEXT_SESSION_PROMPT.md`](NEXT_SESSION_PROMPT.md). The film
+workflow is the skill `.claude/skills/chobbot-film/SKILL.md`.
 
 ## Read first
 
