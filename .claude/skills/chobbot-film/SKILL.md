@@ -6,7 +6,7 @@ description: Make a Chobbot film (Streamer Story music video, Brand · Generic o
 # Chobbot film workflow (captured from ST-01, 2026-10-04)
 
 Everything lives in `brand-video/` (never mixed with other projects). Read first:
-`docs/PIPELINE.md` (the gates), `docs/SERIES.md` (the three sections), `docs/STYLE_DECK.md`,
+`docs/PIPELINE.md` (the gates), `docs/SERIES.md` (the four sections: Streamer Stories · Brand · Generic A · Brand · Generic B · Brand · Master), `docs/STYLE_DECK.md`,
 `docs/SUNO_GUIDE.md`, `docs/SCRIPT_TEMPLATE.md`. The worked example is ST-01:
 `docs/scripts/ST-01_train-ride.md` and `films/ST-01_train-ride/`.
 

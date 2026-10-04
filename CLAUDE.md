@@ -1,7 +1,7 @@
 # Chobbot · project instructions for Claude Code
 
-This repo is the owner's Chobbot video production: code-rendered music videos (Streamer Stories,
-Brand · Generic A/B, Brand · Master A/B). Everything lives in `brand-video/`. The working method is
+This repo is the owner's Chobbot video production: code-rendered films in four sections (Streamer Stories,
+Brand · Generic A, Brand · Generic B, Brand · Master A/B). Everything lives in `brand-video/`. The working method is
 the skill `.claude/skills/chobbot-film/SKILL.md`; use it for all film work and obey every owner rule
 in it (quality level 6–10, approval gates, facts only from the post, no brand in Stories, the QA gate
 before showing anything).

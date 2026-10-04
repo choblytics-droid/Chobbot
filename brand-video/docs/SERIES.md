@@ -1,15 +1,19 @@
-# Content plan: three series, one system
+# Content plan: four sections, one system
 
-## Confirmed structure (2026-10-03)
+## Confirmed structure (2026-10-03; four sections, owner 2026-10-04)
 
-| # | Section | Versions | Method |
-|---|---|---|---|
-| 1 | **Streamer Stories** | Music video | Reddit story (n8n Story Fisher, [`STORY_FISHER.md`](STORY_FISHER.md)) → script → music → video |
-| 2 | **Brand · Generic** (pain → need → function) | **A** majestic technical (score + statements) · **B** music video (song) | Script first ([`PIPELINE.md`](PIPELINE.md)) |
-| 3 | **Brand · Master** (one film) | **A** majestic technical · **B** music video | Script first; built last |
+Brand · Generic is **two sections**: A and B are separate series, not versions of one.
+
+| # | Section | IDs | Form | Method |
+|---|---|---|---|---|
+| 1 | **Streamer Stories** | `ST-01`… | Music video | Reddit story (n8n Story Fisher, [`STORY_FISHER.md`](STORY_FISHER.md)) → script → music → video |
+| 2 | **Brand · Generic A** (pain → need → function) | `GN-U1A`… | Majestic technical (score + statements) | Script first ([`PIPELINE.md`](PIPELINE.md)) |
+| 3 | **Brand · Generic B** (pain → need → function) | `GN-U1B`… | Music video (song) | Script first; same use cases as section 2 |
+| 4 | **Brand · Master** (one film) | `MA-A`, `MA-B` | **A** majestic technical · **B** music video | Script first; built last |
 
 The working plan is the spreadsheet [`../plan/Chobbot_Media_Plan_v0.1.xlsx`](../plan/Chobbot_Media_Plan_v0.1.xlsx):
-one tab per section, plus shared assets. The "Vision track" below is what the A versions are.
+one tab per section (sections 2 and 3 still share tab "2 Brand · Generic": the A rows are section 2,
+the B rows section 3), plus shared assets. The "Vision track" below is what the A versions are.
 
 ## The product as the videos will show it (working model)
 

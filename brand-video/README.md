@@ -19,8 +19,8 @@ workflow is the skill `.claude/skills/chobbot-film/SKILL.md`.
 - [`docs/STYLE_DECK.md`](docs/STYLE_DECK.md): mixed art styles per film, only the ones we render well; characters as
   pixel/voxel sprites, silhouettes or the mascot.
 - [`docs/STORY_FISHER.md`](docs/STORY_FISHER.md): the n8n workflow that collects real streamer stories from Reddit.
-- [`docs/SERIES.md`](docs/SERIES.md): **the plan.** Three series (Streamer Stories MVs, Pain → Need →
-  Function explainers, the master brand film), the parallel Vision track (majestic, score instead of
+- [`docs/SERIES.md`](docs/SERIES.md): **the plan.** Four sections (Streamer Stories MVs, Brand · Generic A
+  majestic explainers, Brand · Generic B music videos, the master brand film), the parallel Vision track (majestic, score instead of
   song), the product model they show, and the consistency system.
 - [`docs/PIPELINE.md`](docs/PIPELINE.md): **the work order.** Brief → script → music → analysis →
   style frames → assets → animatic → build, with an approval gate at each step.
