@@ -13,7 +13,7 @@ Re-render any frame: `cd app && CHROME=<chromium> bun scripts/render.ts stills -
 - **Only facts from the post.** The two real chat lines are used word for word; other chat activity is
   neutral reactions only (`<3`, `o/`, `:)`), no invented messages. Lyrics on screen are the written lyric.
 
-## The frames (v4, after QA rounds 1–7, 2026-10-04)
+## The frames (v4, after QA rounds 1–7, 2026-10-04) · animatic v4 **approved by the owner** (step 7)
 
 The first set was approved by the owner; the owner then flagged lazy detail (the castle). These are
 the rebuilt frames after the QA gate (0 flat objects, 0 text in platform UI zones) and seven rounds
