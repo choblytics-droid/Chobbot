@@ -27,6 +27,8 @@ so that `.claude\` and `brand-video\` sit directly in it. (`.claude` is a hidden
 |---|---|
 | `.claude/skills/chobbot-film/SKILL.md` | **The workflow as a skill**: 14 owner rules, steps 0–9, commands, QA gate, lessons. A local Claude Code session opened in the folder loads it. |
 | `brand-video/README.md`, `docs/` | Plan and rules: `PIPELINE.md` (gates), `SERIES.md`, `STYLE_DECK.md`, `SUNO_GUIDE.md`, `TIER_LIST.md`, `QA.md` (QA rubric), `SCRIPT_TEMPLATE.md`, `STORY_FISHER.md` |
+| `CLAUDE.md` (repo root) | **How a local session works**: the "go" protocol, setup, git rules. Loaded automatically by Claude Code. |
+| `brand-video/plan/STREAMER_STORIES.md` | The Story Fisher picks ST-01…ST-10, readable copy |
 | `brand-video/plan/Chobbot_Media_Plan_v0.1.xlsx` | The working media plan (Streamer Stories ST-01…ST-10, Brand Generic A/B, Brand Master A/B, Story & Song, status) |
 | `brand-video/docs/scripts/ST-01_train-ride.md` | ST-01 script v0.9 (approved), story coverage, permission DM draft |
 | `brand-video/films/ST-01_train-ride/` | The first film: `audio/song.wav` (master), `data/` (analysis, lyrics timing), `frames/` (20 style frames + 2 contact sheets), `animatic/` (v3, v4 540p), **`release/ST-01_train-ride_1080p60.mp4` (the finished video, 75 MB)**, `DESCRIPTION.md` (caption, story summary, credits, hashtags), `STYLE_FRAMES.md`, `QA.md` (all QA rounds) |
@@ -62,6 +64,30 @@ skill), `node_modules` (`bun install`).
    furniture and lamp pools, a lit-window cluster at the globe's end marker, ice shading.
 6. Next films: ST-02…ST-10 are in the media plan (tab 1). The Story Fisher (n8n, manual trigger
    only) can fish more stories, including "bad stories" on the owner's say-so.
+
+## Task queue (what "go" does, top first; see `CLAUDE.md`)
+
+| # | Task | Gate / needs owner | State |
+|---|---|---|---|
+| 1 | Setup on the PC: tools, `bun install`, typecheck, smoke still, `perf` speed, note it here | system installs only | todo |
+| 2 | ST-01 level-8 polish: pixel-art phone in the macros, station platform furniture and lamp pools, lit-window cluster at the globe's end marker, shading on the ice; QA gate + reviewer | none | todo |
+| 3 | ST-01 4K 60 fps build (`--samples auto --scale 2`); keep the master in `out/`, a posting copy < 100 MB in `release/` | owner approves the final video | todo |
+| 4 | ST-01 credit: add `, retold with permission` once the author says yes (town.ts `credit`, DESCRIPTION.md), re-render the last shot / rebuild | owner sends the DM (draft in the script) and reports the answer | waiting |
+| 5 | ST-02 "The raid from the hero": run Story Context on the post, brief + script draft (`docs/SCRIPT_TEMPLATE.md`), Suno blocks | owner approves the script, then makes the song in Suno and sends the WAV | todo |
+| 6 | ST-02 steps 4–9 once the WAV arrives (analysis, frames, QA, animatic, build, description) | gates per step | todo |
+| 7 | ST-03 … ST-10 the same way, in order (`plan/STREAMER_STORIES.md`) | gates per step | todo |
+
+## Decisions from the chat (not recorded elsewhere)
+
+- Stories "also can be bad stories" (sad, open-ended): ST-05 and ST-10 are in the picks. Adding
+  "bad story" search phrases to the Story Fisher was offered, not confirmed: ask before changing it.
+- ST-01 has no people (approved that way). Faceless background figures in the market and on the
+  platform are allowed by the rule but were never answered: default **no**.
+- The outro uses a closer, night framing (the owner's "different angle" question, resolved by QA).
+- Defaults taken on "go": "Reddit" stays in the credit as the source; `can you keep it on?` stays as
+  the viewer's message (approved script v0.9); the front-page body copy is soft page texture.
+- The owner makes songs in Suno and sends the WAV in chat; no kie Suno credits via n8n.
+- The owner wants everything downloadable to the PC: keep the branch complete and pushed.
 
 ## Run it locally (Windows)
 
