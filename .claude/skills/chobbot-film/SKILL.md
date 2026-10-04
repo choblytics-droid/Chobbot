@@ -122,6 +122,14 @@ not committed. Send files to the owner with SendUserFile.
   CRF 19 / maxrate 20M for posting (~75 MB) and keep it in `films/<id>/release/` (the box is
   temporary). Files over ~50 MB don't send in chat: send a ~25 MB two-pass copy.
   The 4K level-8 build with adaptive motion blur needs a GPU machine.
+
+## Measured on the owner's PC (RTX 4070 SUPER, Chrome on the GPU, 2026-10-04)
+
+- Still with 12 sub-frames: ~4 s incl. browser start. 1080p frame: 0.27 s at 1 sample, 1.0 s at 4;
+  4K (`--scale 2`) 0.38 s at 1 sample. Still CPU-bound (one Chrome thread), not GPU-bound.
+- **`--samples auto` uncapped is unusable on fast shots**: the train POV hits 324 sub-frames, ~79 s
+  per frame at 1080p. Always pass `--max-samples 36` (or 12) on a full build; 4K60 at cap 36 ≈ 10–12 h.
+- `render.ts perf` prints nothing until the whole range is done: measure 0.25 s ranges, not seconds.
 - Agent time is the owner's usage bar: note it before and after each film to calibrate `docs/TIER_LIST.md`.
 
 ## Lessons from ST-01

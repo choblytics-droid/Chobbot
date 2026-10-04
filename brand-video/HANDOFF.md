@@ -69,15 +69,37 @@ skill), `node_modules` (`bun install`).
 
 | # | Task | Gate / needs owner | State |
 |---|---|---|---|
-| 1 | Setup on the PC: tools, `bun install`, typecheck, smoke still, `perf` speed, note it here | system installs only | todo |
+| 1 | Setup on the PC: tools, `bun install`, typecheck, smoke still, `perf` speed, note it here | system installs only | **done 2026-10-04** (speeds below) |
 | 2 | ST-01 level-8 polish: pixel-art phone in the macros, station platform furniture and lamp pools, lit-window cluster at the globe's end marker, shading on the ice; QA gate + reviewer | none | todo |
-| 3 | ST-01 4K 60 fps build (`--samples auto --scale 2`); keep the master in `out/`, a posting copy < 100 MB in `release/` | owner approves the final video | todo |
+| 3 | ST-01 4K 60 fps build (`--samples auto --max-samples 36 --scale 2`, ~10–12 h overnight, see speeds); keep the master in `out/`, a posting copy < 100 MB in `release/` | owner approves the final video | todo |
 | 4 | ST-01 credit: add `, retold with permission` once the author says yes (town.ts `credit`, DESCRIPTION.md), re-render the last shot / rebuild | owner sends the DM (draft in the script) and reports the answer | waiting |
 | 5 | ST-02 "The raid from the hero": run Story Context on the post, brief + script draft (`docs/SCRIPT_TEMPLATE.md`), Suno blocks | owner approves the script, then makes the song in Suno and sends the WAV | todo |
 | 6 | ST-02 steps 4–9 once the WAV arrives (analysis, frames, QA, animatic, build, description) | gates per step | todo |
 | 7 | ST-03 … ST-10 the same way, in order (`plan/STREAMER_STORIES.md`) | gates per step | todo |
 
+## The PC (set up 2026-10-04)
+
+RTX 4070 SUPER 12 GB, 20 threads, Chrome 154 on the GPU (ANGLE D3D11; `render.ts gpu` prints it),
+Bun 1.4.2 (`%USERPROFILE%\.bun\bin`; a portable copy also sits in `D:\APP\CHOB_FILM\tools`), ffmpeg in
+`C:\Users\Administrator\bin`, Python 3.13 with all packages. The skill is also copied to
+`%USERPROFILE%\.claude\skills\chobbot-film` so sessions started in `D:\APP` load it (re-copy after edits).
+
+Speed on ST-01 (train POV at 22 s, one of the heaviest shots), ms per frame incl. readback:
+
+| Setting | 1080p | 4K (`--scale 2`) |
+|---|---|---|
+| 1 sample | 266 | 375 |
+| 4 samples | 1 011 | ~1 500 |
+| `--samples auto` (uncapped) | **79 000** (hits 324 sub-frames) | ~110 000 |
+
+The film is 3 288 frames at 60 fps: 1080p60 with 4 samples ≈ 55 min; 4K60 with 4 samples ≈ 1.5 h;
+4K60 auto capped at 36 ≈ 10–12 h at worst; uncapped auto ≈ days (never use it on a whole film). The
+cost is CPU-bound (one Chrome thread; the GPU idles at 10–40 %), so `--scale 2` only adds ~40 %.
+
 ## Decisions from the chat (not recorded elsewhere)
+
+- 4K build cap: `--max-samples 36` (taken on "go", 2026-10-04; uncapped auto would take days).
+  Raise it per shot only where streaks still look stepped.
 
 - Stories "also can be bad stories" (sad, open-ended): ST-05 and ST-10 are in the picks. Adding
   "bad story" search phrases to the Story Fisher was offered, not confirmed: ask before changing it.

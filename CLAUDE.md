@@ -36,7 +36,8 @@ Defaults when the owner doesn't answer a question: take the recommendation you g
 - **Never set the `CHROME` env var here** (that is the cloud's slow software renderer); unset, the
   renderer uses the installed Chrome and the GPU.
 - Smoke test: `bun scripts/render.ts stills --film ST-01_train-ride --t 23.5 --samples 12 --out ../films/ST-01_train-ride/out/test`
-  and `bun scripts/render.ts perf --from 22 --to 23 --samples auto`; note the speed in HANDOFF.md.
+  and `bun scripts/render.ts perf --from 22 --to 22.25 --samples 4`; note the speed in HANDOFF.md.
+  (Not `--samples auto` over a whole second: the train shot hits 324 sub-frames, ~80 s per frame.)
 - Story work needs the n8n MCP connector (Story Fisher, Story Context). If it isn't connected, say so
   in one line and work on build items meanwhile.
 
