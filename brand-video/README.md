@@ -48,7 +48,7 @@ brand-video/
   docs/inputs/   reports and material from you (e.g. the goignon overview)
   kit/           the shared brand kit in code: companion stages, palette, type, end card
   films/<name>/  one folder per film: audio/, data/, app/ (engine + scenes), out/ (renders, not committed)
-                 e.g. films/stories-01-*, films/pain-01-*, films/master
+                 e.g. films/ST-01_train-ride (named like its script in docs/scripts/)
 ```
 
 Each film gets its own folder so cut-downs (16:9 hero, 9:16 social, 1:1) and later films never mix.

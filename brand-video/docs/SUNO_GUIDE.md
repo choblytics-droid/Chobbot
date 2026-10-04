@@ -82,7 +82,7 @@ Sources: [TikTok 2026: hook-first songs](https://www.inspiredbybeatz.com/en/hook
 5. It ends cleanly (`[End]` respected) and is at least 45 s.
 
 Download the **WAV** (and stems if your plan has them: the vocal stem makes word timing much more
-accurate) and drop it in the chat or in `films/<film-id>/audio/`.
+accurate) and upload it to `brand-video/films/<film-id>/audio/` on GitHub (Add file → Upload files) as `song.wav` and `vocals.wav`. Each film folder has a README there that names the files.
 
 ## House rules
 
