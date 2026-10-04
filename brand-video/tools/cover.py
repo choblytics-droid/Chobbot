@@ -1,6 +1,6 @@
 """Streamer Stories series cover (TikTok / Shorts / Reels), one fixed design, per film only number + title.
 
-  python tools/cover.py --num 01 --title "The train ride" --out ready-to-post/ST-01_train-ride/ST-01_train-ride_cover.png
+  python tools/cover.py --num 01 --title "The train ride" --out ../ready-to-post/ST-01_train-ride/ST-01_train-ride_cover.png
   python tools/cover.py --make-chob D:/APP/heroes/CHOB_CANONICAL.png      (only if Chob's art changes)
 
 Layers: the series plate (the streamer's desk room from the film engine, rendered with --notext),

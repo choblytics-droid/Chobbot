@@ -98,7 +98,7 @@ cost is CPU-bound (one Chrome thread; the GPU idles at 10–40 %), so `--scale 2
   title, pixel Chob in the streamer's room (`tools/cover.py`; plate and pixel Chob in
   `assets/cover/`, Chob pixelated from the locked `CHOB_CANONICAL.png`, not redrawn). The cover is the
   one place a Story shows Chob; the film itself stays brand-free.
-- **Posting package** = `ready-to-post/<ID>_<name>/` with `_video.mp4`, `_cover.png`,
+- **Posting package** = `ready-to-post/<ID>_<name>/` at the repo root (owner moved it out of `brand-video/`) with `_video.mp4`, `_cover.png`,
   `_description.txt` (`ready-to-post/README.md`). No AI watermark on the video (owner turned it off
   2026-08-08); the description credits Suno and TikTok's AI-content switch goes on.
 

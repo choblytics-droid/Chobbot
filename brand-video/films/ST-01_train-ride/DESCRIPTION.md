@@ -3,7 +3,7 @@
 Every line is a fact from the post, the poster's own comments or their later posts
 (`docs/scripts/ST-01_train-ride.md`, "Full picture"). No names, no places, no invented details.
 
-**The TikTok text that gets posted is `ready-to-post/ST-01_train-ride/ST-01_train-ride_description.txt`**
+**The TikTok text that gets posted is `../../../ready-to-post/ST-01_train-ride/ST-01_train-ride_description.txt`**
 (2026-10-04, hook line + the story start to end + credit + hashtags). The blocks below are the
 earlier drafts, kept for YouTube / other platforms.
 

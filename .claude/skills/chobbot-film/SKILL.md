@@ -51,7 +51,7 @@ Everything lives in `brand-video/` (never mixed with other projects). Read first
 | 6 | Assets | sets, materials, UI in the kit | code | (with 5) |
 | 7 | Animatic | full film, 30 fps, 1 sample, on the master audio | `animatic/<id>_animatic_vN_540p.mp4` | owner approves timing |
 | 8 | Build | level 6–10, 60 fps, adaptive motion blur, 4K on a GPU machine | master + cut-downs | final review |
-| 9 | Post package | TikTok description = hook line + story summary start to end (facts only, the feeling of the backstory, human-copy-voice) + credit + hashtags; link/name only with the author's permission. Cover: `python tools/cover.py --num NN --title "..."` (one series design). Pack it as `ready-to-post/<ID>_<name>/` with `_video.mp4`, `_cover.png`, `_description.txt` (naming in `ready-to-post/README.md`) | `DESCRIPTION.md` + the ready-to-post folder | owner approves, then posts |
+| 9 | Post package | TikTok description = hook line + story summary start to end (facts only, the feeling of the backstory, human-copy-voice) + credit + hashtags; link/name only with the author's permission. Cover: `python tools/cover.py --num NN --title "..."` (one series design). Pack it as `ready-to-post/<ID>_<name>/` (repo root, next to `brand-video/`) with `_video.mp4`, `_cover.png`, `_description.txt` (naming in `ready-to-post/README.md`) | `DESCRIPTION.md` + the ready-to-post folder | owner approves, then posts |
 
 ## Step 4 in detail (audio)
 

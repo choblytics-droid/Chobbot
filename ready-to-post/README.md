@@ -29,7 +29,8 @@ The folder is called `<ID>_<name>`, the same as the film's working folder in `fi
 Chob in the streamer's room. Everything sits inside TikTok's 3:4 grid crop. Make a new one with:
 
 ```
-python tools/cover.py --num 02 --title "The raid from the hero" --out ready-to-post/ST-02_raid-from-the-hero/ST-02_raid-from-the-hero_cover.png
+cd brand-video
+python tools/cover.py --num 02 --title "The raid from the hero" --out ../ready-to-post/ST-02_raid-from-the-hero/ST-02_raid-from-the-hero_cover.png
 ```
 
 ## When posting (TikTok)
