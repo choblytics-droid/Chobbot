@@ -28,7 +28,12 @@ Three viewers can be enough.
 ## Credits (under the description)
 
 ```
-Story: shared by a streamer on Reddit, retold with permission. Names and places left out; the town is a pixel-art stand-in.
+Story: shared by a streamer on Reddit[, retold with permission]. Names and places left out; the town is a pixel-art stand-in.
+```
+
+`[, retold with permission]` goes in (here and in the film's credit) only once the author has said yes.
+
+```
 Song: "The Train Ride", an original song made for this film with Suno.
 ```
 

@@ -10,7 +10,7 @@ import { clamp, ease } from '../../engine/util';
 import { H } from '../../engine/gl';
 
 const FRAG = /* glsl */ `
-uniform vec2 art; uniform float t, R, spin, link; uniform vec2 C;
+uniform vec2 art; uniform float t, R, spin, link, expo; uniform vec2 C;
 uniform vec3 A, B; // the two points (unit vectors, globe space)
 float bayer4(vec2 p) { ivec2 q = ivec2(mod(p, 4.0)); int m[16] = int[16](0,8,2,10,12,4,14,6,3,11,1,9,15,7,13,5); return (float(m[q.x + q.y * 4]) + 0.5) / 16.0; }
 // the continents, approximated by ellipses in latitude/longitude (degrees), with a ragged coast
@@ -83,7 +83,8 @@ void main() {
       }
       // lights crowd the coasts and the dense regions; interiors stay dark
       float coast = landAt(normalize(g + vec3(0.02, 0.0, 0.0))) < 0.0 || landAt(normalize(g - vec3(0.02, 0.0, 0.0))) < 0.0 || landAt(normalize(g + vec3(0.0, 0.02, 0.0))) < 0.0 || landAt(normalize(g + vec3(0.0, 0.0, 0.02))) < 0.0 ? 1.0 : 0.0;
-      city *= (0.3 + coast * 0.7) * min(dense(g), 1.2) * step(0.45, hash12(floor(ll * 9.0) + 3.0) + coast * 0.6);
+      float home = exp(-distance(g, A) * 14.0);   // the train's own region: towns along the line
+      city *= (0.3 + coast * 0.7 + home * 1.4) * min(dense(g) + home, 1.6) * step(0.45, hash12(floor(ll * 9.0) + 3.0) + coast * 0.6 + home);
       lit += vec3(1.0, 0.72, 0.38) * min(city, 1.0) * 1.6 * smoothstep(0.3, 0.0, day);
     }
     // the stream's light spilling onto the ground under the link (the great circle from A to B, as far as it has grown)
@@ -92,13 +93,14 @@ void main() {
     vec3 gp = normalize(g - pn * dot(g, pn));
     float along = acos(clamp(dot(gp, A), -1.0, 1.0)) / acos(clamp(dot(A, B), -1.0, 1.0));
     float onArc = step(0.0, dot(cross(A, gp), pn)) * step(along, link) * step(0.001, link);
-    lit += vec3(1.0, 0.62, 0.3) * exp(-off * 60.0) * onArc * 0.35 * smoothstep(0.2, -0.1, day);
+    lit += vec3(1.0, 0.62, 0.3) * exp(-off * 22.0) * onArc * 0.12 * smoothstep(0.2, -0.1, day);
     // clouds: thin, drifting, catching moonlight and the glow of the cities below
     float cl = sat(fbm(g * 7.0 + vec3(t * 0.01, 0.0, 0.0), 5) * 1.6 - 0.25);
     lit = mix(lit, vec3(0.06, 0.07, 0.09) * (0.3 + 1.2 * sat(day + 0.2)) + lit * 0.45, cl * 0.55);
     // dawn on the terminator, and the ocean's glint
     if (!isLand) lit += vec3(1.0, 0.8, 0.6) * pow(sat(dot(reflect(-sun, n), vec3(0, 0, 1))), 40.0) * 0.8;
     // posterise with an ordered dither (pixel art)
+    lit *= expo;
     float lv = max(max(lit.r, lit.g), lit.b), bands = 7.0;
     float q = exp2(floor(log2(max(lv, 1e-4)) * bands * 0.5 + bayer4(ap)) / (bands * 0.5));
     c = lit * q / max(lv, 1e-4);
@@ -138,7 +140,7 @@ void main() {
 }`;
 
 export default class Globe extends Scene {
-  pass = new FSPass(FRAG, { art: { value: [AW, AH] }, t: { value: 0 }, R: { value: 100 }, spin: { value: 0 }, link: { value: 0 }, C: { value: [AW / 2, AH / 2] }, A: { value: [0, 0, 1] }, B: { value: [0, 0, -1] } });
+  pass = new FSPass(FRAG, { art: { value: [AW, AH] }, t: { value: 0 }, R: { value: 100 }, spin: { value: 0 }, link: { value: 0 }, expo: { value: 1 }, C: { value: [AW / 2, AH / 2] }, A: { value: [0, 0, 1] }, B: { value: [0, 0, -1] } });
   ov = new Overlay();
   render(f: Frame, out: THREE.WebGLRenderTarget) {
     const z = ease.inOutCubic(clamp(f.p * 1.15));
@@ -147,13 +149,15 @@ export default class Globe extends Scene {
     const a = (lat: number, lon: number): [number, number, number] => [Math.cos(lat) * Math.sin(lon), Math.sin(lat), Math.cos(lat) * Math.cos(lon)];
     // (map positions are illustrative: the post names neither place; the town set reads as Europe)
     const A = a(0.86, 0.25), B = a(-0.62, 2.35);
-    // camera: start close on the train's dot (the globe huge), end on the whole globe with both ends in view
-    const spin = -0.25 - 1.15 * z, R = 2400 * Math.pow(112 / 2400, z);
+    // camera: start close on the train's dot near the globe's edge (the curve and the air show above it),
+    // end on the whole globe with both ends in view, left of the buttons column
+    const spin = -1.555 + 0.155 * z, R = 900 * Math.pow(112 / 900, z);
     const tilt = 0.35, cs = Math.cos(spin), sn = Math.sin(spin), ct = Math.cos(tilt), st = Math.sin(tilt);
     const vx = cs * A[0] + sn * A[2], vz0 = -sn * A[0] + cs * A[2], vy = ct * A[1] - st * vz0; // M * A (rotX · rotY)
-    const end: [number, number] = [AW / 2, AH * 0.45];
-    const start: [number, number] = [AW / 2 - vx * R, AH * 0.42 - vy * R];
+    const end: [number, number] = [AW * 0.45, AH * 0.45];
+    const start: [number, number] = [AW * 0.55 - vx * R, AH * 0.4 - vy * R];
     u.C!.value = [start[0] + (end[0] - start[0]) * z, start[1] + (end[1] - start[1]) * z];
+    u.expo!.value = 1.9 - 0.9 * z;
     u.R!.value = R; u.spin!.value = spin; u.t!.value = f.t;
     u.link!.value = clamp((f.p - 0.25) / 0.6);
     u.A!.value = A; u.B!.value = B;

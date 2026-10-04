@@ -24,7 +24,7 @@ export class Overlay {
    * The lyric subtitle, lower third: the whole line shows a beat early at low opacity, each word
    * lights as it is sung. `a` fades the whole line.
    */
-  lyric(l: Line | null, t: number, o: { y?: number; size?: number; a?: number } = {}) {
+  lyric(l: Line | null, t: number, o: { y?: number; size?: number; a?: number; plate?: number; maxW?: number } = {}) {
     if (!l) return;
     const c = this.c, size = o.size ?? (PORTRAIT ? 62 : 54), fam = F.archivo(100, 700);
     const inA = clamp((t - (l.words[0]!.start - 0.35)) / 0.2), outA = 1 - clamp((t - (l.end + 0.05)) / 0.22);
@@ -32,7 +32,7 @@ export class Overlay {
     if (A <= 0) return;
     // in the band of the platform's right-hand buttons (y 700–1700) the line wraps narrower to stay clear of them
     const yc = o.y ?? H * 0.8;
-    const maxW = PORTRAIT && yc > 640 && yc < 1760 ? 2 * (900 - W / 2) : W * 0.84, sp = measure(' ', fam, size);
+    const maxW = o.maxW ?? (PORTRAIT && yc > 640 && yc < 1760 ? 2 * (900 - W / 2) : W * 0.84), sp = measure(' ', fam, size);
     const words = l.words.map((w) => w.w);
     const rows: number[][] = [[]];
     let rw = 0;
@@ -59,7 +59,7 @@ export class Overlay {
     // a soft dark plate behind each row: readable over any background (snow, sky, glow)
     c.save();
     c.filter = `blur(${Math.round(size * 0.45)}px)`;
-    c.fillStyle = `rgba(6,7,11,${0.58 * A})`;
+    c.fillStyle = `rgba(6,7,11,${(o.plate ?? 0.58) * A})`;
     rows.forEach((row, r) => {
       const rw = row.reduce((a, i) => a + measure(words[i]!, fam, size), 0) + sp * (row.length - 1);
       roundRect(c, (W - rw) / 2 - size * 0.45, y0 + r * lh - size * 0.62, rw + size * 0.9, size * 1.24, size * 0.4);

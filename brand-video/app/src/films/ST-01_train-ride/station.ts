@@ -6,7 +6,7 @@ import { PixelCanvas, PixelLight } from '../../kit/pixel';
 import { Overlay } from '../../kit/overlay';
 import { loadLyrics, type Lyrics } from '../../engine/lyrics';
 import { paintStation, stationLights } from './sets/station';
-import { clamp } from '../../engine/util';
+import { clamp, ease } from '../../engine/util';
 import { H } from '../../engine/gl';
 
 export default class Station extends Scene {
@@ -39,8 +39,9 @@ export default class Station extends Scene {
       ],
       prompt: { a: clamp((t - (l5.start + 0.2)) / 0.2), keep: clamp((t - (l6.end - 0.3)) / 0.25) },
     });
-    ov.lyric(this.ly.lineAt(t, 0.35, 0.3), t, { y: H * 0.375 });
+    ov.lyric(this.ly.lineAt(t, 0.35, 0.3), t, { y: H * 0.375, plate: 0.85 });   // a denser plate: the snowy ridge runs behind it
     ov.draw(this.ctx.renderer, this.ctx.comp, out);
-    return { grain: 0.05, vignette: 0.35, bloom: 0.7, halation: 0.3, ca: 1.0 };
+    // a slow push in as the chat line lands
+    return { grain: 0.05, vignette: 0.35, bloom: 0.7, halation: 0.3, ca: 1.0, zoom: 1 + 0.06 * ease.inOutCubic(clamp((f.p - 0.45) / 0.55)) };
   }
 }

@@ -26,12 +26,12 @@ export default class Town extends Scene {
     if (shot === 'open') { o.streamer = 'none'; o.camY = -26 * (1 - ease.outCubic(p)); o.camX = 6 * (1 - p); }
     if (shot === 'tour') { o.streamer = 'tripod'; o.sx = 74; o.camX = -4 + 8 * p; }
     if (shot === 'neon') { o.streamer = 'tripod'; o.sx = 74; o.camX = 4 + 4 * p; }
-    if (shot === 'outro') { o.streamer = 'none'; o.camX = -30 + 60 * p; o.camY = 1.5 * Math.sin(t * 4.1); sky = { ...sky, sunEl: -0.04, skyExp: 3.6 }; }
+    if (shot === 'outro') { o.streamer = 'none'; o.camX = -20 + 40 * p; o.camY = 1.5 * Math.sin(t * 4.1); sky = { ...sky, sunEl: -0.1, skyExp: 4.5, clouds: 0.3 }; }   // full night now, a closer framing (below)
     if (shot === 'newday') { o.streamer = 'none'; o.day = 1; sky = { sunEl: 0.07, sunAz: -1.95, skyExp: 0.9, ambient: 1.2, stars: 0, clouds: 0.45 }; haze = 0.18; wet = 0.15; snow = 0; }   // dawn: pale sky above, low warm sun from the left
     paintTown(this.pc, o);
     if (shot === 'neon') return this.neon(f, out);
     this.pl.render(this.ctx.renderer, out, {
-      lights: townLights(o), t, ...sky, bands: shot === 'newday' ? 6 : 9, horizonY: 262, fov: 300, haze, snow, wet, groundY: 405,
+      lights: townLights(o), t, ...sky, zoom: shot === 'outro' ? [1.45 - 0.12 * p, 0.62, 0.45] as [number, number, number] : undefined, bands: shot === 'newday' ? 6 : 9, horizonY: 262, fov: 300, haze, snow, wet, groundY: 405,
       hazeCol: shot === 'newday' ? [0.06, 0.05, 0.05] : [0.015, 0.022, 0.05],
     });
     // text
@@ -53,10 +53,12 @@ export default class Town extends Scene {
       // the credit, small, at the bottom; then the film fades out with the song's last note
       const c = ov.c;
       c.save(); c.font = font(F.mono(500), 26); c.textAlign = 'center';
-      c.fillStyle = `rgba(6,7,11,${0.62 * a})`; roundRect(c, W / 2 - 420, H * 0.25 - 26, 840, 40, 12); c.fill();
+      // ("retold with permission" is added only once the author has said yes: DESCRIPTION.md)
+      const credit = 'Story shared by a streamer on Reddit', cw = c.measureText(credit).width + 56;
+      c.fillStyle = `rgba(6,7,11,${0.7 * a})`; roundRect(c, W / 2 - cw / 2, H * 0.25 - 30, cw, 46, 14); c.fill();
       c.fillStyle = `rgba(241,238,232,${0.95 * a})`;
       c.shadowColor = 'rgba(0,0,0,0.9)'; c.shadowBlur = 18;
-      c.fillText('Story shared by a streamer on Reddit, retold with permission', W / 2, H * 0.25); c.restore();   // under the closing line, clear of the caption zone
+      c.fillText(credit, W / 2, H * 0.25); c.restore();   // under the closing line, clear of the caption zone
       ov.caption('LIVE · IRL', W * 0.08, H * 0.1, { size: 30, dot: '#ff3b3b', a: clamp((t - f.start - 0.4) / 0.2) });
     }
     ov.draw(this.ctx.renderer, this.ctx.comp, out);
@@ -84,6 +86,6 @@ export default class Town extends Scene {
       y += 66;
     }
     ov.draw(this.ctx.renderer, this.ctx.comp, out);
-    return { grain: 0.05, vignette: 0.45, bloom: 0.8, bloomThreshold: 0.75, halation: 0.35, ca: 1.6 };
+    return { grain: 0.05, vignette: 0.45, bloom: 0.6, bloomThreshold: 0.8, halation: 0.3, ca: 1.6 };
   }
 }

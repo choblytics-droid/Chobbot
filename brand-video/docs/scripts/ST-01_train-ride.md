@@ -41,7 +41,7 @@ Subtitles always show the **written** lyric. Lyric times: `data/lyrics_master.js
 | 10a | 37.52–39.48 | Hook, bar 1 | Front page slams in on the downbeat | `3 VIEWERS. ENOUGH.` | (wordless hook) | **Halftone** |
 | 10b | 39.48–41.43 | Hook, bar 2 | Pull back over the globe; a line of light from the train to one lit window on the other side | `the other side of the world` | (wordless hook) | Pixel globe (ink) |
 | 11 | 41.43–49.24 | Outro, bars 1–4 | Back in town like a visitor (handheld drift); the real message remembered | lyrics 13–14 | “Like showing a visitor my town / I saw it like a tourist too” | Pixel warm (pixel dissolve) |
-| 12 | 49.24–54.80 | Outro end | The next morning, `LIVE · IRL`; fades out with the song's last note | lyric 15 → `They kept streaming IRL.` (from 53.15) · credit `Story shared by a streamer on Reddit, retold with permission` | “That's why it's worth it” | Pixel morning (ink) |
+| 12 | 49.24–54.80 | Outro end | The next morning, `LIVE · IRL`; fades out with the song's last note | lyric 15 → `They kept streaming IRL.` (from 53.15) · credit `Story shared by a streamer on Reddit` (+ `, retold with permission` once the author says yes) | “That's why it's worth it” | Pixel morning (ink) |
 
 ## Story coverage (does the film tell the whole story?)
 

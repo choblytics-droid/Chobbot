@@ -6,7 +6,7 @@ import { ramp, plaster, wood, snow, mix, vnoise, dither } from '../../../kit/mat
 
 const P = {
   wall: '#2a2d3a', wallD: '#22242f', floor: '#3a2f2a', floorL: '#45372f', desk: '#4a3a2e', deskL: '#5a4636', deskD: '#33281f',
-  mon: '#141519', monL: '#24262c', key: '#1b1c21', chair: '#2a2c35', chairS: '#1d1e25', chairR: '#b0343a', metal: '#5c616e',
+  mon: '#141519', monL: '#24262c', key: '#1b1c21', chair: '#3c4050', chairS: '#262833', chairR: '#b0343a', metal: '#5c616e',
   door: '#5a4a3c', doorL: '#6d5a48', frame: '#3a2f27', poster: '#3b4a6b', snow: '#cdd8ea', plant: '#2f5a3e', mug: '#d8d2c4', black: '#101114',
 };
 
@@ -82,13 +82,25 @@ export function paintDesk(pc: PixelCanvas, o: { t: number; k: number }) {
   // the game on screen: a night platformer level (cave, platforms, a coin, the player sprite) with a HUD
   for (let y = 180; y < 238; y++) for (let x = 64; x < 166; x++) {
     const lx = x - 64, ly = y - 180;
-    let col = ly < 30 ? (ly < 15 ? '#1a1f3a' : '#232a4a') : '#2a2440';                      // cave backdrop
-    if ((lx * 7 + ly * 13) % 41 === 0 && ly < 26) col = '#8fa6d0';                            // stars through the cave mouth
-    const plat = (ly === 40 && lx > 8 && lx < 40) || (ly === 32 && lx > 52 && lx < 80) || (ly >= 50);
-    if (plat) col = ly >= 50 ? ((lx + ly) % 4 ? '#5a3a2a' : '#7a4a32') : '#7a6a5a';
-    if (ly === 49 && lx % 6 < 3) col = '#3d8a4a';                                             // grass on the floor
-    if (Math.abs(lx - 64) < 2 && Math.abs(ly - 27) < 2) col = '#ffd04a';                     // a coin
-    if (lx >= 22 && lx < 26 && ly >= 34 && ly < 40) col = ly < 36 ? '#e8c27a' : '#c0392b';   // the player sprite
+    // a night platformer: gradient sky, a moon, far hills and a pine line, brick ground with tile seams,
+    // floating brick ledges, a ? block, a pipe, a coin row, an enemy and the player, the HUD on top
+    let col = ly < 18 ? '#141a36' : ly < 30 ? '#1d2448' : '#262c52';
+    if ((lx * 37 + ly * 91) % 113 === 0 && ly < 22) col = '#c8d4f0';                            // a few stars
+    if ((lx - 84) ** 2 + (ly - 11) ** 2 < 10) col = '#f0e6c0';                                 // the moon
+    const hill = 38 - Math.round(6 * Math.sin(lx * 0.09) + 3 * Math.sin(lx * 0.23));
+    if (ly >= hill) col = '#1e3a3a';
+    if (ly >= hill + 2 && (lx + ly) % 7 === 0) col = '#24464a';
+    if (ly >= 44 - ((lx * 5) % 7 < 3 ? 3 : 0) && ly < 50) col = '#173028';                   // pines
+    const ground = ly >= 50;
+    if (ground) col = (ly - 50) % 4 === 0 || ((lx + ((ly - 50) >> 2) * 3) % 6 === 0) ? '#3a2018' : ly === 50 ? '#c86a3a' : '#9a4a2a';
+    if (ly === 49 && lx % 4 < 3) col = '#4aa85a';                                              // grass on the floor
+    const ledge = (x0: number, x1: number, yy: number) => lx >= x0 && lx < x1 && ly >= yy && ly < yy + 4;
+    if (ledge(10, 34, 36) || ledge(56, 76, 28)) col = (ly - 28) % 4 === 0 || lx % 4 === 0 ? '#5a2a18' : '#c0602f';
+    if (lx >= 40 && lx < 44 && ly >= 36 && ly < 40) col = lx === 40 || ly === 36 ? '#ffe08a' : (lx === 42 && ly === 38) ? '#7a4a10' : '#e8a82a';   // ? block
+    if (lx >= 88 && lx < 96 && ly >= 40 && ly < 50) col = ly < 43 ? (lx === 88 ? '#9af08a' : '#3aa04a') : lx < 90 ? '#7ad86a' : lx > 93 ? '#1e6a2a' : '#3aa04a';   // pipe
+    for (const cx of [58, 64, 70]) if (Math.abs(lx - cx) < 1.5 && Math.abs(ly - 22) < 2) col = Math.abs(lx - cx) < 0.6 ? '#fff2a0' : '#ffc23a';   // coins
+    if (lx >= 72 && lx < 77 && ly >= 46 && ly < 50) col = ly === 46 ? '#5a2a10' : ly === 47 && (lx === 73 || lx === 75) ? '#ffffff' : '#8a4a20';   // a walker
+    if (lx >= 20 && lx < 24 && ly >= 30 && ly < 36) col = ly < 31 ? '#c0392b' : ly < 33 ? '#e8c27a' : ly < 35 ? '#3a5ac8' : '#5a3a2a';   // the player
     if (ly < 5) col = lx < 30 ? (lx % 5 < 3 && ly > 1 && ly < 4 ? '#e5484d' : '#101216') : (lx > 80 && ly > 1 && ly < 4 && lx % 3 ? '#e8e2d6' : '#101216');   // HUD: hearts, score
     const refl = Math.max(0, 1 - Math.abs(lx - 78 - ly * 0.35) / 14) * (1 - on) * k;   // the door's light on the dark glass
     pc.px(x, y, { a: P.black, d: 0.44, id: 11, e: on > 0.05 ? col : '#ffd9a0', ei: on > 0.05 ? 1.5 * on : 0.35 * refl + 0.04 * k });

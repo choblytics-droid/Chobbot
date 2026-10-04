@@ -261,6 +261,7 @@ export function paintTown(pc: PixelCanvas, o: TownOpts) {
   lay(0.4);
   carousel(pc, 186, o.rot ?? t * 0.6, t, lightsOn);
 
+  const hash01 = (x: number, y: number) => { const h = Math.sin(x * 127.1 + y * 311.7) * 43758.5453; return h - Math.floor(h); };
   // ---- ground: wet cobbles in perspective (rows and stones grow toward the camera), snow at the edges
   lay(0.3);
   let gy = GROUND, row = 0;
@@ -285,6 +286,14 @@ export function paintTown(pc: PixelCanvas, o: TownOpts) {
         // footprints through the snow toward the tripod
         const fp = snowy && Math.abs(gx - (20 + (yy - GROUND) * 0.6)) < 1.5 && (yy % 4 === 0);
         const C = snowy ? [P.snowS, '#c6d2e3', P.snow, '#eef3fa'] : [P.cobD, P.cob, '#4d505c', P.cobL];
+        if (day > 0.5) {
+          // fresh snow over the whole square: soft drifts, blue hollows, cobbles only hinted, the odd sparkle
+          const dv = vnoise(gx * 0.05, yy * 0.22, 31) * 0.7 + vnoise(gx * 0.2, yy * 0.6, 32) * 0.3;
+          const hint = joint && vnoise(gx * 0.1, yy * 0.3, 33) > 0.72 ? -0.8 : 0;
+          const sv = 1.4 + dv * 1.8 + hint + (hash01(gx, yy) > 0.985 ? 1.2 : 0);
+          pc.px(gx, yy, { a: fp ? '#8a96ad' : C[Math.max(0, Math.min(3, dither(sv, gx, yy)))]!, d, n: [-0.5 + (dv - 0.5) * 0.5, 0.75], id: 5 });   // tilted toward the low sun on the left: fresh snow catches it
+          continue;
+        }
         const v = joint ? 0 : 1 + round * 1.6 + (rnd - 0.5) * 0.8;
         pc.px(gx, yy, { a: fp ? '#8a96ad' : C[Math.max(0, Math.min(3, Math.round(v)))]!, d, n: [0, joint ? 0.7 : 0.8 + round * 0.15], id: 5 });
       }

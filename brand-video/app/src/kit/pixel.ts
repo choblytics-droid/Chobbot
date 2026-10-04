@@ -318,6 +318,9 @@ vec3 skyAt(vec2 ap) {
     vec3 under = skyCol(normalize(vec3(s.x, 0.02, s.z)), s) * skyExp * 1.6;
     vec3 top = c * 0.55;
     float lit = sat(fbm(cp * vec2(0.55, 1.6) + vec2(0.0, -0.08), 4) * 0.5 + 0.5 - n + 0.55);
+    // pixel-art clouds: coverage and light stepped into a few flat tones (dithered at the steps)
+    cov = floor(cov * 3.0 + bayer4(ap) * 0.9) / 3.0;
+    lit = floor(lit * 4.0 + bayer4(ap + 2.0) * 0.9) / 4.0;
     c = mix(c, mix(top, under, lit), cov);
   }
   // stars, where the sky is dark enough
@@ -425,10 +428,11 @@ void main() {
 const COMPOSE_FRAG = /* glsl */ `
 uniform sampler2D litT, emiT, nrmT;
 uniform vec2 art, cam;             // cam: sub-art-pixel offset (smooth camera on crisp pixels)
+uniform vec3 zm;                   // camera zoom (x) about a focus point (y, z in uv): a closer framing of the same set
 uniform float t, haze, snow, wet, groundY, hazeWarm;
 uniform vec3 hazeCol;
 void main() {
-  vec2 px = vUv * art + cam;        // art px space (y up)
+  vec2 px = ((vUv - zm.yz) / zm.x + zm.yz) * art + cam;        // art px space (y up)
   vec2 cell = floor(px);
   vec4 L = texture(litT, (cell + 0.5) / art);
   vec3 c = L.rgb;
@@ -500,9 +504,9 @@ vec3 neonAt(vec2 ap) {
         if (No.a < 0.5 || abs(Ao.a * 255.0 - id) > 0.5) near = max(near, 1.0 - float(r - 1) / 6.0);
       }
     }
-    c += col * (near * near * 0.34 + 0.025) * flick * (1.0 - d * 0.6);
+    c += col * (near * near * near * 0.4 + 0.008) * flick * (1.0 - d * 0.6);
   }
-  c += toLinear(E.rgb) * E.a * 8.0 * 0.45;      // what glows stays a point of light (kept below blowing out)
+  c += min(toLinear(E.rgb) * E.a * 8.0 * 0.45, vec3(0.9));      // what glows stays a point of light (capped: big screens don't blow out)
   return c;
 }
 void main() {
@@ -537,7 +541,7 @@ export class PixelLight {
     clouds: { value: 0.6 }, t: { value: 0 }, starsK: { value: 1 }, ambNear: { value: 1 }, horizon: { value: [AH * 0.45, 300] },
   });
   compose = new FSPass(COMPOSE_FRAG, {
-    litT: { value: null }, emiT: { value: null }, nrmT: { value: null }, art: { value: [AW, AH] }, cam: { value: [0, 0] },
+    litT: { value: null }, emiT: { value: null }, nrmT: { value: null }, art: { value: [AW, AH] }, cam: { value: [0, 0] }, zm: { value: [1, 0.5, 0.5] },
     t: { value: 0 }, haze: { value: 0.5 }, snow: { value: 1 }, wet: { value: 0.5 }, groundY: { value: 80 }, hazeWarm: { value: 0 }, hazeCol: { value: [0.02, 0.03, 0.06] },
   });
 
@@ -559,7 +563,7 @@ export class PixelLight {
   /** Light the G-buffer and compose into `out` (full res, HDR linear). */
   render(r: THREE.WebGLRenderer, out: THREE.WebGLRenderTarget, o: {
     lights: Light[]; t: number; ambNear?: number; sunEl?: number; sunAz?: number; skyExp?: number; ambient?: number; ambTint?: [number, number, number]; bands?: number; clouds?: number; stars?: number;
-    horizonY?: number; fov?: number; haze?: number; snow?: number; wet?: number; groundY?: number; hazeCol?: [number, number, number]; cam?: [number, number];
+    horizonY?: number; fov?: number; haze?: number; snow?: number; wet?: number; groundY?: number; hazeCol?: [number, number, number]; cam?: [number, number]; zoom?: [number, number, number];
   }) {
     const u = this.light.u, pc = this.pc;
     pc.upload();
@@ -580,7 +584,7 @@ export class PixelLight {
     const c = this.compose.u;
     c.litT!.value = this.litRT.texture; c.emiT!.value = pc.tex.emi; c.nrmT!.value = pc.tex.nrm;
     c.t!.value = o.t; c.haze!.value = o.haze ?? 0.5; c.snow!.value = o.snow ?? 0; c.wet!.value = o.wet ?? 0;
-    c.groundY!.value = AH - (o.groundY ?? AH * 0.83); c.hazeCol!.value = o.hazeCol ?? [0.02, 0.03, 0.06]; c.cam!.value = o.cam ?? [0, 0];
+    c.groundY!.value = AH - (o.groundY ?? AH * 0.83); c.hazeCol!.value = o.hazeCol ?? [0.02, 0.03, 0.06]; c.cam!.value = o.cam ?? [0, 0]; c.zm!.value = o.zoom ?? [1, 0.5, 0.5];
     this.compose.render(r, out);
   }
 }

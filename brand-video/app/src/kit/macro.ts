@@ -74,6 +74,11 @@ export class Macro {
       // the glass: a soft diagonal reflection and out-of-focus lights from the carriage
       float streak = smoothstep(0.35, 0.0, abs((vUv.x - vUv.y * 0.6) - 0.15 + 0.03 * sin(t * 0.3)));
       c += vec3(0.05, 0.045, 0.04) * streak;
+      // the train window mirrored in the glass: a cold rectangle with a bar, lights sliding through it
+      vec2 wr = uv - vec2(0.62 + 0.04 * sin(t * 0.2), 0.7);
+      float wnd = smoothstep(0.08, -0.02, max(abs(wr.x) - 0.22, abs(wr.y) - 0.14)) * (1.0 - 0.5 * smoothstep(0.02, 0.0, abs(wr.x + 0.05)));
+      float pass = 0.6 + 0.4 * sin(uv.x * 30.0 - t * 9.0) * sin(uv.y * 7.0);
+      c += vec3(0.012, 0.018, 0.032) * wnd * pass;
       fragColor = vec4(c, 1.0);
     }`, { src: { value: null }, t: { value: 0 }, tilt: { value: -0.06 }, focusY: { value: 0.5 }, blurK: { value: 0.012 }, cell: { value: 7 }, glow: { value: 1.3 }, warm: { value: 0 }, zoom: { value: 1.07 }, bgK: { value: 1 } });
 
