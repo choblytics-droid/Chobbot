@@ -117,6 +117,44 @@ export class PixelCanvas {
         if (dx * dx + dy * dy <= r * r) this.px(x, y, typeof m === 'function' ? m(x, y, dx / r, dy / r) : m);
       }
   }
+  /**
+   * A screen showing part of the picture (a phone filming the scene): copies the art pixels of the
+   * source rect (current buffer, before the offset) into the destination rect as emission, box-filtered.
+   * Call after painting what it films.
+   */
+  screen(sx: number, sy: number, sw: number, sh: number, dx: number, dy: number, dw: number, dh: number, o: { ei?: number; d?: number; id?: number; sky?: [number, number, number] } = {}) {
+    const ei = o.ei ?? 1, d = o.d ?? 0.1, id = o.id ?? 200, sky = o.sky ?? [38, 52, 84];
+    const at = (x: number, y: number) => ((AH - 1 - y) * AW + x) * 4;
+    const out: [number, number, number][] = [];
+    for (let j = 0; j < dh; j++)
+      for (let i = 0; i < dw; i++) {
+        let r = 0, g = 0, b = 0, n = 0;
+        const x0 = Math.floor(sx + (i * sw) / dw), x1 = Math.max(x0 + 1, Math.floor(sx + ((i + 1) * sw) / dw));
+        const y0 = Math.floor(sy + (j * sh) / dh), y1 = Math.max(y0 + 1, Math.floor(sy + ((j + 1) * sh) / dh));
+        for (let y = y0; y < y1; y++) for (let x = x0; x < x1; x++) {
+          if (x < 0 || y < 0 || x >= AW || y >= AH) continue;
+          const k = at(x, y);
+          if (this.nrm[k + 3]! < 128) { r += sky[0]; g += sky[1]; b += sky[2]; n++; continue; }
+          const e = this.emi[k + 3]! / 255 * 8;
+          r += Math.min(255, this.alb[k]! * 0.3 + this.emi[k]! * e * 0.5);
+          g += Math.min(255, this.alb[k + 1]! * 0.3 + this.emi[k + 1]! * e * 0.5);
+          b += Math.min(255, this.alb[k + 2]! * 0.3 + this.emi[k + 2]! * e * 0.5);
+          n++;
+        }
+        out.push(n ? [r / n, g / n, b / n] : [0, 0, 0]);
+      }
+    const ix = Math.round(this.ox), iy = Math.round(this.oy);
+    for (let j = 0; j < dh; j++)
+      for (let i = 0; i < dw; i++) {
+        const x = dx + i + ix, y = dy + j + iy;
+        if (x < 0 || y < 0 || x >= AW || y >= AH) continue;
+        const k = at(x, y), c = out[j * dw + i]!;
+        this.alb.set([8, 8, 10, id], k);
+        this.nrm.set([128, 128, Math.round(d * 255), 255], k);
+        this.emi.set([Math.round(c[0]), Math.round(c[1]), Math.round(c[2]), Math.round((ei / 8) * 255)], k);
+      }
+  }
+
   /** Bresenham line. */
   line(x0: number, y0: number, x1: number, y1: number, m: Mat) {
     x0 = Math.round(x0); y0 = Math.round(y0); x1 = Math.round(x1); y1 = Math.round(y1);
@@ -158,7 +196,7 @@ uniform vec2 art;                 // AW, AH
 uniform vec4 lp[${MAXL}];         // x, y (art px, y up), depth, radius
 uniform vec4 lc[${MAXL}];         // linear colour * intensity, shadow flag in w
 uniform int nl;
-uniform float sunEl, sunAz, skyExp, ambient, bands, night, clouds, t, starsK;
+uniform float sunEl, sunAz, skyExp, ambient, bands, night, clouds, t, starsK, ambNear;
 uniform vec3 ambTint;
 uniform vec2 horizon;              // art y of the horizon (y up), and the sky's vertical field (art px per radian)
 
@@ -277,8 +315,9 @@ void main() {
   vec3 s = sunDir();
   vec3 zen = skyCol(vec3(0.0, 1.0, 0.0), s) * skyExp;
   vec3 hor = skyCol(normalize(vec3(s.x, 0.05, s.z)), s) * skyExp;
-  vec3 amb = mix(zen * 0.35, zen, n.y * 0.5 + 0.5) * ambient * ambTint;
-  amb += hor * 0.25 * ambient * sat(dot(n.xz, normalize(s.xz)) * 0.5 + 0.5) * (1.0 - abs(n.y));
+  float ambK = ambient * mix(ambNear, 1.0, smoothstep(0.4, 0.6, d));
+  vec3 amb = mix(zen * 0.35, zen, n.y * 0.5 + 0.5) * ambK * ambTint;
+  amb += hor * 0.25 * ambK * sat(dot(n.xz, normalize(s.xz)) * 0.5 + 0.5) * (1.0 - abs(n.y));
   vec3 lit = amb;
   // direct sun (day shots): a warm key from the sun's side, soft
   if (sunEl > 0.0) {
@@ -372,7 +411,7 @@ export class PixelLight {
     alb: { value: null }, nrm: { value: null }, emi: { value: null }, art: { value: [AW, AH] },
     lp: { value: Array.from({ length: MAXL }, () => new THREE.Vector4()) }, lc: { value: Array.from({ length: MAXL }, () => new THREE.Vector4()) }, nl: { value: 0 },
     sunEl: { value: -0.05 }, sunAz: { value: -1.2 }, skyExp: { value: 1 }, ambient: { value: 1 }, ambTint: { value: [1, 1, 1] }, bands: { value: 10 }, night: { value: 0 },
-    clouds: { value: 0.6 }, t: { value: 0 }, starsK: { value: 1 }, horizon: { value: [AH * 0.45, 300] },
+    clouds: { value: 0.6 }, t: { value: 0 }, starsK: { value: 1 }, ambNear: { value: 1 }, horizon: { value: [AH * 0.45, 300] },
   });
   compose = new FSPass(COMPOSE_FRAG, {
     litT: { value: null }, emiT: { value: null }, nrmT: { value: null }, art: { value: [AW, AH] }, cam: { value: [0, 0] },
@@ -387,7 +426,7 @@ export class PixelLight {
 
   /** Light the G-buffer and compose into `out` (full res, HDR linear). */
   render(r: THREE.WebGLRenderer, out: THREE.WebGLRenderTarget, o: {
-    lights: Light[]; t: number; sunEl?: number; sunAz?: number; skyExp?: number; ambient?: number; ambTint?: [number, number, number]; bands?: number; clouds?: number; stars?: number;
+    lights: Light[]; t: number; ambNear?: number; sunEl?: number; sunAz?: number; skyExp?: number; ambient?: number; ambTint?: [number, number, number]; bands?: number; clouds?: number; stars?: number;
     horizonY?: number; fov?: number; haze?: number; snow?: number; wet?: number; groundY?: number; hazeCol?: [number, number, number]; cam?: [number, number];
   }) {
     const u = this.light.u, pc = this.pc;
@@ -403,7 +442,7 @@ export class PixelLight {
     u.t!.value = o.t;
     u.sunEl!.value = o.sunEl ?? -0.05; u.sunAz!.value = o.sunAz ?? -1.2; u.skyExp!.value = o.skyExp ?? 1;
     u.ambient!.value = o.ambient ?? 1; u.ambTint!.value = o.ambTint ?? [1, 1, 1]; u.bands!.value = o.bands ?? 10;
-    u.clouds!.value = o.clouds ?? 0.6; u.starsK!.value = o.stars ?? 1;
+    u.clouds!.value = o.clouds ?? 0.6; u.starsK!.value = o.stars ?? 1; u.ambNear!.value = o.ambNear ?? 1;
     u.horizon!.value = [AH - (o.horizonY ?? AH * 0.55), o.fov ?? 300];
     this.light.render(r, this.litRT);
     const c = this.compose.u;

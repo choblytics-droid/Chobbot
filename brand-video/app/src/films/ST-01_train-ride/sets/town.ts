@@ -1,7 +1,7 @@
 // Set 1: the old town at Christmas, blue hour. Pixel art painted into the G-buffer every frame.
 // Layout in art px (270 x 480 in 9:16, y down): sky above ~y 262, the castle on its hill, a row of
 // gabled houses, string lights across the square, market huts, the carousel, wet cobbles, and the
-// streamer from behind next to the tripod.
+// phone on its tripod filming the carousel (no people: the stream is the character).
 import { PixelCanvas, type Light, type Mat, AW } from '../../../kit/pixel';
 import { mulberry32 } from '../../../engine/util';
 
@@ -13,10 +13,9 @@ export interface TownOpts {
   rot?: number;
   /** 0 = blue hour, 1 = the next morning (lights off, warm low sun) */
   day?: number;
-  streamer?: 'tripod' | 'walk' | 'none';
-  /** streamer x (art px) */
+  streamer?: 'tripod' | 'none';
+  /** the tripod's x (art px) */
   sx?: number;
-  walk?: number;
 }
 
 const GROUND = 405;
@@ -33,50 +32,6 @@ const P = {
   jeans: '#2b3651', jeansS: '#1f2840', shoe: '#1a1a1f', hand: '#c79a7c', black: '#14161c', metal: '#5c616e',
 };
 const WALLS = ['#8a6a4f', '#b39b80', '#6f7f95', '#7d3b33', '#4f6650', '#a8865f', '#86707a', '#5f6f7f'];
-
-const STREAMER = [
-  '.......HHHHHH.......',
-  '......HhhhhhhH......',
-  '.....HhhhhhhhhH.....',
-  '....HhhhhhhhhhhH....',
-  '....HhhhhhhhhhhH....',
-  '....HhhhhhhhhhhH....',
-  '....HhhhhhhhhhhH....',
-  '....HhhhhhhhhhhH....',
-  '.....HhhhhhhhhH.....',
-  '.....HHhhhhhhHH.....',
-  '....HHHhhhhhhHHH....',
-  '..HHhhhhhhhhhhhhHH..',
-  '.HhhhhhhhhhhhhhhhhH.',
-  '.HhhhhhhhhhhhhhhhhH.',
-  'HhhhhhhhhhhhhhhhhhhH',
-  'HhhhhhhhhhhhhhhhhhhH',
-  'HhhhHhhhhhhhhhhHhhhH',
-  'HhhhHhhhhkhhhhhHhhhH',
-  'HhhhHhhhhkhhhhhHhhhH',
-  'HhhhHhhhhkhhhhhHhhhH',
-  'HhhhHhhhhhhhhhhHhhhH',
-  'HhhhHhhhhhhhhhhHhhhH',
-  'HhhhHhhhhhhhhhhHhhhH',
-  'HhhhHHhhhhhhhhHHhhhH',
-  'HhhH.HhhhhhhhhH.HhhH',
-  '.ss..HhhhhhhhhH..ss.',
-  '.ss..HHHHHHHHHH..ss.',
-  '......jjjjJjjjj.....',
-  '......jjjjJjjjj.....',
-  '......jjjj.jjjj.....',
-  '......jjjj.jjjj.....',
-  '......jjjJ.Jjjj.....',
-  '......jjjJ.Jjjj.....',
-  '......jjjJ.Jjjj.....',
-  '......jjjJ.Jjjj.....',
-  '......jjjJ.Jjjj.....',
-  '......jjjJ.Jjjj.....',
-  '......JJJJ.JJJJ.....',
-  '......JJJJ.JJJJ.....',
-  '.....oooo..oooo.....',
-  '.....oooo..oooo.....',
-];
 
 const HORSE = [
   '........wW..',
@@ -253,26 +208,41 @@ export function paintTown(pc: PixelCanvas, o: TownOpts) {
     gy += rh; row++;
   }
 
-  // ---- the streamer from behind, the tripod with the phone
+  // ---- the phone on its tripod, filming the carousel (no people: the stream is the character)
   lay(0.1);
-  if ((o.streamer ?? 'tripod') !== 'none') {
-    const sx = o.sx ?? 58, sy = 436;
-    const step = o.streamer === 'walk' ? Math.floor((o.walk ?? 0) * 4) % 2 : 0;
-    const pal: Record<string, Mat> = {
-      H: { a: P.hoodS, d: 0.1, id: 90 }, h: { a: P.hood, d: 0.1, id: 90 }, k: { a: P.hoodS, d: 0.1, id: 90 },
-      s: { a: P.hand, d: 0.1, id: 90 }, j: { a: P.jeans, d: 0.1, id: 90 }, J: { a: P.jeansS, d: 0.1, id: 90 }, o: { a: P.shoe, d: 0.1, id: 90 },
-    };
-    pc.sprite(step ? STREAMER.map((r, i) => (i >= 29 ? r.replace('jjjj.jjjj', 'jjj...jjj') : r)) : STREAMER, sx, sy, pal);
-    if (o.streamer === 'tripod') {
-      const tx = sx + 36, ty = sy + 12;
-      const tm: Mat = { a: P.metal, d: 0.12, id: 91 };
-      pc.line(tx, ty + 6, tx - 7, ty + 29, tm); pc.line(tx, ty + 6, tx + 7, ty + 29, tm); pc.line(tx, ty + 6, tx, ty + 29, tm);
-      pc.rect(tx - 4, ty - 2, 9, 7, { a: P.black, d: 0.12, id: 91 });
-      pc.rect(tx - 3, ty - 1, 7, 5, { a: P.black, d: 0.12, id: 91, e: '#9fc4ff', ei: 1.2 });
-      pc.px(tx + 2, ty - 1, { a: P.red, d: 0.11, id: 91, e: '#ff3b3b', ei: 6 * (0.6 + 0.4 * Math.round(Math.sin(t * 6) * 0.5 + 0.5)) });
-    }
-  }
+  if ((o.streamer ?? 'tripod') === 'tripod') phoneOnTripod(pc, o.sx ?? 70, t, o.camX ?? 0);
   pc.ox = 0; pc.oy = 0;
+}
+
+/** The phone on a tripod, its screen facing us and showing what it films (the carousel). */
+export function phoneOnTripod(pc: PixelCanvas, cx: number, t: number, camX = 0) {
+  const D = 0.06;
+  const metal: Mat = { a: P.metal, d: D, id: 91 }, metalD: Mat = { a: '#3d414a', d: D, id: 91 }, blk: Mat = { a: P.black, d: D - 0.005, id: 92 };
+  // legs splayed toward the camera (running out of frame), the centre column, the head
+  const head = 452;
+  for (let k = 0; k < 3; k++) {
+    pc.line(cx + k - 1, head + 4, cx - 34 + k, 492, k === 1 ? metalD : metal);
+    pc.line(cx + k - 1, head + 4, cx + 30 + k, 492, k === 1 ? metalD : metal);
+  }
+  pc.rect(cx - 1, head + 4, 3, 30, metalD);
+  pc.rect(cx - 4, head, 9, 7, metal);
+  pc.rect(cx - 5, head - 4, 11, 4, metalD);
+  // the clamp and the phone (portrait), screen toward us
+  const pw = 30, ph = 54, px0 = cx - pw / 2, py0 = head - 4 - ph;
+  pc.rect(px0 - 3, py0 + 18, 3, 16, metalD); pc.rect(px0 + pw, py0 + 18, 3, 16, metalD);
+  for (let y = 0; y < ph; y++) for (let x = 0; x < pw; x++) {
+    const cxk = x < 2 ? 2 - x : x > pw - 3 ? x - (pw - 3) : 0, cyk = y < 2 ? 2 - y : y > ph - 3 ? y - (ph - 3) : 0;
+    if (cxk * cxk + cyk * cyk <= 4) pc.px(px0 + x, py0 + y, blk);
+  }
+  // the screen shows the carousel as the phone sees it
+  const cxs = 186 - camX * 0.6; // the carousel's x in the buffer (its layer's parallax)
+  pc.screen(cxs - 46, 304, 92, 112, px0 + 2, py0 + 4, pw - 4, ph - 8, { ei: 1.15, d: D - 0.01, id: 93 });
+  // LIVE: a red pill with a blinking dot
+  const on = Math.sin(t * 6) > -0.3 ? 1 : 0.3;
+  pc.rect(px0 + 4, py0 + 6, 9, 4, { a: P.red, d: D - 0.02, id: 94, e: '#ff3b3b', ei: 2.5 });
+  pc.rect(px0 + 5, py0 + 7, 2, 2, { a: P.cream, d: D - 0.025, id: 94, e: '#ffffff', ei: 4 * on });
+  // the viewer count: three little dots
+  for (let k = 0; k < 3; k++) pc.px(px0 + 16 + k * 2, py0 + 8, { a: P.cream, d: D - 0.02, id: 95, e: '#ffffff', ei: 2.5 });
 }
 
 function carousel(pc: PixelCanvas, cx: number, rot: number, t: number, on: number) {
@@ -340,6 +310,6 @@ export function townLights(o: TownOpts): Light[] {
     { x: 230 + cxs, y: 300, d: 0.54, col: '#ffe2a8', i: 0.7 * on, r: 50 },
     { x: 135 + cxs, y: 326, d: 0.54, col: '#ffd08a', i: 0.6 * on, r: 46 },
   ];
-  if ((o.streamer ?? 'tripod') === 'tripod') L.push({ x: (o.sx ?? 64) + 30, y: 448, d: 0.08, col: '#9fc4ff', i: 0.5, r: 12 });
+  if ((o.streamer ?? 'tripod') === 'tripod') L.push({ x: o.sx ?? 70, y: 420, d: 0.02, col: '#ffd9a8', i: 1.0, r: 26 });
   return L;
 }

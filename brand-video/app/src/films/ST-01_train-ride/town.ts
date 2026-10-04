@@ -22,8 +22,8 @@ export default class Town extends Scene {
     let sky = { sunEl: -0.045, sunAz: -0.9, skyExp: 3.2, ambient: 0.9, stars: 1, clouds: 0.5 };
     let haze = 0.55, wet = 0.6, snow = 1;
     if (shot === 'open') { o.streamer = 'none'; o.camY = -26 * (1 - ease.outCubic(p)); o.camX = 6 * (1 - p); }
-    if (shot === 'tour') { o.streamer = 'tripod'; o.camX = -4 + 8 * p; }
-    if (shot === 'outro') { o.streamer = 'walk'; o.sx = 20 + 70 * p; o.walk = t; o.camX = 10 * p; sky = { ...sky, sunEl: -0.04, skyExp: 3.6 }; }
+    if (shot === 'tour') { o.streamer = 'tripod'; o.sx = 74; o.camX = -4 + 8 * p; }
+    if (shot === 'outro') { o.streamer = 'none'; o.camX = -30 + 60 * p; o.camY = 1.5 * Math.sin(t * 4.1); sky = { ...sky, sunEl: -0.04, skyExp: 3.6 }; }
     if (shot === 'newday') { o.streamer = 'none'; o.day = 1; sky = { sunEl: 0.12, sunAz: 2.3, skyExp: 0.42, ambient: 1.3, stars: 0, clouds: 0.6 }; haze = 0.25; wet = 0.35; snow = 0.4; }
     paintTown(this.pc, o);
     this.pl.render(this.ctx.renderer, out, {

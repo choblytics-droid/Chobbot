@@ -116,6 +116,79 @@ export class Overlay {
     c.restore();
   }
 
+  /**
+   * The stream as seen on the phone (our own generic IRL-stream UI, no real platform): LIVE pill,
+   * viewer count, stream time and signal on top; the chat panel at the bottom; an optional
+   * "End stream?" prompt. Everything the muted viewer needs to read the situation.
+   */
+  streamUI(o: { t: number; viewers: number; time: string; bars?: number; chat?: { user: string; text: string; hot?: boolean; at: number }[]; prompt?: { a: number; keep: number } }) {
+    const c = this.c, t = o.t;
+    // top bar
+    const y = 92;
+    c.save();
+    roundRect(c, 40, y - 28, 118, 56, 14); c.fillStyle = 'rgba(229,72,77,0.95)'; c.fill();
+    c.font = font(F.mono(700), 30); c.textBaseline = 'middle'; c.fillStyle = rgba('bone', 1); c.fillText('LIVE', 62, y + 2);
+    roundRect(c, 172, y - 28, 150, 56, 14); c.fillStyle = 'rgba(11,11,14,0.6)'; c.fill();
+    // eye icon
+    c.strokeStyle = rgba('bone', 1); c.lineWidth = 3;
+    c.beginPath(); c.ellipse(204, y, 16, 10, 0, 0, Math.PI * 2); c.stroke();
+    c.beginPath(); c.arc(204, y, 4.5, 0, Math.PI * 2); c.fillStyle = rgba('bone', 1); c.fill();
+    c.font = font(F.mono(700), 30); c.fillText(String(o.viewers), 232, y + 2);
+    c.font = font(F.mono(500), 26); c.fillStyle = rgba('bone', 0.85); c.fillText(o.time, 340, y + 2);
+    const bars = o.bars ?? 4;
+    for (let i = 0; i < 4; i++) { c.fillStyle = i < bars ? rgba('bone', 0.95) : rgba('bone', 0.25); c.fillRect(W - 140 + i * 22, y + 18 - (12 + i * 10), 14, 12 + i * 10); }
+    c.restore();
+    // chat panel, bottom: newest at the bottom, a new message slides in
+    const msgs = (o.chat ?? []).filter((m) => t >= m.at);
+    const size = 34, lh = size * 1.45, x0 = 44, yb = H - 150;
+    c.save();
+    const g = c.createLinearGradient(0, yb - 420, 0, H);
+    g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,0.72)');
+    c.fillStyle = g; c.fillRect(0, yb - 420, W, H - yb + 420);
+    const shown = msgs.slice(-5);
+    shown.forEach((m, i) => {
+      const k = shown.length - 1 - i;
+      const slide = clamp((t - m.at) / 0.2);
+      const yy = yb - k * lh + (1 - ease.outCubic(slide)) * lh * 0.6;
+      const a = slide * (1 - k * 0.12);
+      if (m.hot) {
+        const tw = measure(m.user + '  ' + m.text, F.mono(500), size);
+        roundRect(c, x0 - 16, yy - size * 1.0, Math.min(W - 60, tw + 40), size * 1.5, 12);
+        c.fillStyle = `rgba(255,178,36,${0.22 * a})`; c.fill();
+        c.lineWidth = 2; c.strokeStyle = `rgba(255,178,36,${0.8 * a})`; c.stroke();
+      }
+      c.font = font(F.mono(700), size); c.fillStyle = m.hot ? rgba('signal', a) : rgba('frost', a);
+      c.fillText(m.user, x0, yy);
+      const uw = measure(m.user + '  ', F.mono(700), size);
+      c.font = font(F.mono(500), size); c.fillStyle = rgba('bone', a);
+      c.fillText(m.text, x0 + uw, yy);
+    });
+    // input row
+    roundRect(c, x0 - 8, H - 110, W - 2 * x0 + 16, 64, 32); c.fillStyle = 'rgba(241,238,232,0.12)'; c.fill();
+    c.font = font(F.mono(400), 28); c.fillStyle = rgba('ash', 0.8); c.textBaseline = 'middle'; c.fillText('Say something…', x0 + 22, H - 78);
+    c.restore();
+    // the "End stream?" prompt
+    if (o.prompt && o.prompt.a > 0) {
+      const a = o.prompt.a, k = o.prompt.keep, pw = W * 0.78, ph = 300, px = (W - pw) / 2, py = H * 0.44;
+      c.save();
+      c.globalAlpha = a;
+      roundRect(c, px, py, pw, ph, 28); c.fillStyle = 'rgba(16,17,22,0.92)'; c.fill();
+      c.lineWidth = 2; c.strokeStyle = 'rgba(241,238,232,0.18)'; c.stroke();
+      c.font = font(F.archivo(100, 700), 52); c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillStyle = rgba('bone', 1);
+      c.fillText('End stream?', W / 2, py + 80);
+      const bw = (pw - 90) / 2, by = py + 160, bh = 92;
+      // End: fades as "keep" grows
+      roundRect(c, px + 30, by, bw, bh, 20); c.fillStyle = `rgba(229,72,77,${0.85 * (1 - k * 0.75)})`; c.fill();
+      c.font = font(F.mono(700), 34); c.fillStyle = rgba('bone', 1 - k * 0.6); c.fillText('End', px + 30 + bw / 2, by + bh / 2 + 2);
+      roundRect(c, px + 60 + bw, by, bw, bh, 20);
+      c.fillStyle = `rgba(255,178,36,${0.15 + 0.8 * k})`; c.fill();
+      c.lineWidth = 3; c.strokeStyle = rgba('signal', 0.9); c.stroke();
+      c.fillStyle = k > 0.5 ? rgba('ink', 1) : rgba('bone', 1); c.font = font(F.mono(700), 30);
+      c.fillText('Keep streaming', px + 60 + bw * 1.5, by + bh / 2 + 2);
+      c.restore();
+    }
+  }
+
   /** One chat message as a floating bubble (the chat as a character). */
   chat(user: string, text: string | { line: Line }, t: number, x: number, y: number, o: { size?: number; a?: number; w?: number; hot?: boolean } = {}) {
     const c = this.c, size = o.size ?? 38, A = o.a ?? 1;
