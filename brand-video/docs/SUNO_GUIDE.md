@@ -36,9 +36,8 @@ film are in the media plan, tab **Story & Song**.
 
 - **Section tags** on their own lines: `[Intro]`, `[Verse]`, `[Pre-Chorus]`, `[Break]`, `[Chorus]`,
   `[Outro]`, `[End]`. Notes per section go inside the tag: `[Verse: soft vocal, piano only]`.
-- **Get to the hook fast.** No long intro, no bridge in short songs. Exception: **Streamer Stories need
-  an instrumental intro of 2 bars** (about 3–4 s) to hold the “Based on a true story” card; tag it
-  `[Intro: 2 bars, instrumental]`.
+- **Get to the hook fast.** No long intro, no bridge in short songs. Streamer Stories don't need an
+  instrumental intro: the “Based on a true story” hook pops on over the first shot while the song plays.
 - **`[Break]`** before the chorus gives our "silence" moment (signal lost, the freeze before the
   answer). `[End]` closes the song cleanly instead of fading on.
 - **Short, plain lines** with concrete words. They go on screen word by word, so they must read
@@ -51,7 +50,7 @@ film are in the media plan, tab **Story & Song**.
 ## Making it catchy (what works on TikTok now), without leaving the story
 
 - **Hook in the first 3 seconds**, often before any lyric: start with an instrumental hook melody
-  (Stories: it plays under the “Based on a true story” card) and bring it back in the chorus and outro.
+  (Stories: under the “Based on a true story” hook) and bring it back in the chorus and outro.
 - **120–140 BPM, plain 4/4.**
 - **One “hook moment”**: a drop after a short break. Ours is the `[Break]` before the chorus.
 - **A short repeated phrase** people can sing back, taken from the story itself (ST-01: “keep it on,
@@ -83,8 +82,8 @@ Sources: [TikTok 2026: hook-first songs](https://www.inspiredbybeatz.com/en/hook
 4. Every lyric line is sung, in order, and means what was written (small word slips are fixed by
    the subtitles).
 5. It ends cleanly (`[End]` respected) and is at least 45 s.
-6. No need to reject a take for a missing intro: Suno often ignores `[Intro]`, and we splice the
-   song's own hook in front (standard rule, `PIPELINE.md` step 4).
+6. No need to reject a take for a missing intro: Suno often ignores `[Intro]`. The film starts with
+   the song as it is and the hook pops on over the first shot (`PIPELINE.md` step 4).
 
 Download the **WAV** (and stems if your plan has them: the vocal stem makes word timing much more
 accurate) and send it in the chat, or upload it to `brand-video/films/<film-id>/audio/` on GitHub (Add file → Upload files) as `song.wav` and `vocals.wav`. Each film folder has a README there that names the files.

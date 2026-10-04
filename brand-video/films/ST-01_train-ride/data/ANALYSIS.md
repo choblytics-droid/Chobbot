@@ -9,17 +9,12 @@ second opinion, librosa beat grid). Raw output: `words.json`, `beats.json`.
 - **123 BPM**, steady (beat 0.488 s, bar 1.95 s). The prompt asked for 120; 123 is fine.
 - First beat at 0.44 s. Downbeats used below: 0.44, 37.50, 41.40.
 
-## The intro problem and the proposed fix
+## The opening (owner decision, 2026-10-04)
 
-Suno skipped the 2-bar instrumental intro: **the vocal starts at 0.8 s**, so there is no room for
-the "Based on a true story" card.
-
-Proposed fix, no new take needed: `audio/song_with_intro.wav` (58.26 s). The song's own wordless
-"oh-oh" hook (37.50–40.96 s, after the chorus) is placed in front of the song, so the film opens on
-its catchiest sound and the verse starts exactly 2 bars later (3.90 s). Checked: the beat grid runs
-on without a jump across the splice, and the splice is no louder than a normal transient (no click).
-**Approved by the owner (2026-10-04): `song_with_intro.wav` is the master audio.** Add **+3.46 s**
-to every time below; master times are in `lyrics_master.json`.
+Suno skipped the instrumental intro: **the vocal starts at 0.8 s**. A splice of the song's own hook
+in front was tried and then dropped by the owner: **the master audio is `audio/song.wav` as it is**
+(54.80 s). The film starts with the song; the “Based on a true story” hook pops on as a sticker over
+the first shot (0.05–2.75 s). All times below are master times (`lyrics_master.json`).
 
 ## Sung-as-written check
 
@@ -60,4 +55,4 @@ Every line is sung, in order. Two lines differ or are unclear on both models:
 | Ending | 53.4–54.8 | tail | end card |
 
 Takes checklist (`SUNO_GUIDE.md`): vocal clear ✓ · tempo steady ✓ · structure ✓ (except the
-missing intro, fixed above) · sung as written: 13 of 15 lines ✓, 2 accepted with the written lyric as subtitle (owner, 2026-10-04) · ≥ 45 s ✓.
+missing intro: not needed, see above) · sung as written: 13 of 15 lines ✓, 2 accepted with the written lyric as subtitle (owner, 2026-10-04) · ≥ 45 s ✓.

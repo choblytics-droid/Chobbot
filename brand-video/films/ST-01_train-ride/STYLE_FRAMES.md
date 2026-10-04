@@ -62,3 +62,10 @@ Re-render any frame: `cd app && CHROME=<chromium> bun scripts/render.ts stills -
 
 1. The tagline (`never stream alone` is a placeholder) and brand colours.
 2. The permission message to the Reddit author (draft in the script).
+
+## Change after approval (owner, 2026-10-04)
+
+The spliced intro is gone: the song starts at once and frames 1a + 1b merge into one opening shot
+(the desk), with **“Based on a true story” popping on as a sticker** over it (0.05–2.75 s, carried
+across the first cut into the town). Frame 9 lost its invented `· reconnected ·` line. Timings:
+script v0.8.

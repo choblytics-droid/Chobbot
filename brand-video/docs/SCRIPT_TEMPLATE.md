@@ -17,7 +17,7 @@ or asset work starts (see `PIPELINE.md`).
 | Mood / music reference | genre, tempo range, references |
 | Quality level | from `TIER_LIST.md` (minimum 6) |
 | Arc status (Stories) | From Story Context: complete · to be continued · open ended · unknown. Never invent an ending |
-| Opening card | Streamer Stories only: “Based on a true story”, 1.5 bars (2.5–3 s), over the first shot, out on a downbeat |
+| Hook | Streamer Stories only: “Based on a true story” pops on as a sticker over the first shot for 2.5–3 s; the song starts at once (no intro needed) |
 
 ## Beat sheet
 

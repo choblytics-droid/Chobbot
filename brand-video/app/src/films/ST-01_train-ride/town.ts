@@ -35,7 +35,7 @@ export default class Town extends Scene {
     // text
     const ov = this.ov;
     ov.begin();
-    if (shot === 'open') ov.card('Based on a true story', t, f.start, this.ctx.params.cardOut ?? f.end, { y: H * 0.24 });
+    if (shot === 'tour') ov.hook('Based on a true story', t, 0.05, this.ctx.params.hookEnd ?? 0);
     if (shot === 'tour' || shot === 'outro' || (shot === 'newday' && t < (this.ctx.params.keptAt ?? 1e9))) ov.lyric(this.ly.lineAt(t, 0.35, 0.3), t, { y: H * 0.2 });
     if (shot === 'outro') {
       // the last chat message, remembered; the companion's first glimpse beside it (≈1 s)

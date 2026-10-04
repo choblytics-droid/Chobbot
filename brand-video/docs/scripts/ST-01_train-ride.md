@@ -1,6 +1,6 @@
-# ST-01 · “The train ride” · script v0.7 (approved 2026-10-03; v0.4 fact fixes, v0.5 full picture, v0.6 catchier song, v0.7 timed to the real song; ≈61 s)
+# ST-01 · “The train ride” · script v0.8 (approved 2026-10-03; v0.4 fact fixes, v0.5 full picture, v0.6 catchier song, v0.7 timed to the real song, v0.8 no intro + hook sticker, no people; ≈57 s)
 
-**Status:** song done (2026-10-04), master audio `song_with_intro.wav` approved; beat sheet retimed to it (v0.7). Next: style frames. Earlier: v0.4 corrects lyrics and pictures to the full post text (no rain, no phone, no night; added the real details: the viewer's first train, city to farmland, the other side of the world). Next: the song.
+**Status:** song done, style frames approved (2026-10-04). v0.8: the song starts at once, the hook pops on over the first shot (master `song.wav`). Next: animatic approval. Earlier: v0.4 corrects lyrics and pictures to the full post text (no rain, no phone, no night; added the real details: the viewer's first train, city to farmland, the other side of the world). Next: the song.
 
 ## Brief
 
@@ -14,38 +14,35 @@
 | Facts we use (only these, checked against the full post) | A desk-bound game streamer did a proper IRL: a tour of their city at Christmas (Christmas market, a castle, street food, a flea market, a lit-up carousel they let viewers watch). 3 viewers at peak. At the end they had a train to catch and meant to stop, but one chatty viewer wanted to keep watching until the connection dropped: they had **never been on a train** and were surprised how fast it moved. The view went from the city to **open farmland**. The viewer thanked them “for being so chill” and said it had been “an amazing stream”. The streamer was nearly in tears that it resonated with someone **on the other side of the world**. |
 | Persona / pains | Starter · pains 8 (loneliness), 15 (stuck small) |
 | The one message | Three viewers can be enough. Someone is there. |
-| Length / format | ≈61 s: 58.3 s song + end card (minimum 45 s) · 9:16 first, 16:9 cut |
+| Length / format | ≈57 s: 54.8 s song + end card (minimum 45 s) · 9:16 first, 16:9 cut |
 | Audio | A short song, played as background. **Nobody sings on screen.** Lyrics appear as on-screen text and chat messages |
 | Quality level | **6 (the minimum for every film)**: two dressed sets (the street with Christmas lights, the train carriage); lit pixel art with soft shadows and bounce light; haze and volumetric light around the market lights and the carousel; a physical winter sky at dusk; window reflections and speed on the train; lit particles (market lights, sparks of the carousel bulbs); 60 fps adaptive motion blur; one hero shot (beat 4: through the train window the city falls away into open farmland, fast) |
 | Style deck | Home: **pixel art** · switches: **neon line**, **halftone** |
 | Characters | **No people on screen (owner, 2026-10-04).** The phone is the protagonist (on its tripod, propped at the train window, the stream's own screen); the chat is the second character; the companion only as a 1-second mascot cameo (a warm spark). Style frames: `films/ST-01_train-ride/STYLE_FRAMES.md` |
 
-## Beat sheet (v0.7, timed to the master audio `films/ST-01_train-ride/audio/song_with_intro.wav`)
+## Beat sheet (v0.8, timed to the master audio `films/ST-01_train-ride/audio/song.wav`)
 
-123 BPM · 1 bar = 1.95 s · downbeats at 3.90 + n × 1.95 s. Song 58.3 s; the end card holds 2.5 s
-past the song with the sonic logo → film ≈ 61 s. Lyric times: `data/lyrics_master.json`. Subtitles
-always show the **written** lyric (lines 9 and 10 are sung slightly differently, accepted).
+123 BPM · 1 bar = 1.95 s · downbeats at 0.41 + n × 1.95 s. The song starts at once (no intro): the
+hook “Based on a true story” pops on over the first shot. Song 54.8 s; the end card holds 2.5 s past
+it with the sonic logo → film ≈ 57.3 s. No people on screen (the phone is the protagonist).
+Subtitles always show the **written** lyric. Lyric times: `data/lyrics_master.json`.
 
 | # | Time (s) | Music | Picture | On-screen text | Lyric (background) | Style |
 |---|---|---|---|---|---|---|
-| 1a | 0.00–2.93 | Intro hook (wordless “oh-oh”), 1.5 bars | Slow push into the pixel city at dusk, Christmas-market lights glowing in haze | **`Based on a true story`** (frame 1, out on beat 3 of bar 2) | (hook) | Pixel |
-| 1b | 2.93–3.90 | Intro, last half bar | The pixel desk with a gaming monitor goes dark; the streamer stands up and steps out; a tiny `LIVE` badge blinks on | `first real IRL` → `LIVE · IRL` | (hook) | Pixel |
-| 2 | 3.90–11.70 | Verse, bars 1–4 | The tour: market stalls, a castle on the hill, a lit carousel turning (the tripod set down in front of it) | lyrics 1–2 | “Took the stream out for Christmas in town / Market lights, a castle, a carousel” | Pixel |
-| 3 | 11.70–15.60 | Verse, bars 5–6 | The viewer counter climbs `1 … 2 … 3`; chat lines pop up beside the carousel, one name lighting up again and again (the regular who chats for an hour) | `3 watching` + lyrics 3–4 | “Three people watching, that's my crowd / Talking to the street out loud” | **Neon line** |
-| 4 | 15.60–21.45 | Verse, bars 7–9 | The station; the streamer is about to end the stream. A chat line pops up: `wait, I've never been on a train` | lyric 5 + the chat line | “Train to catch, I'll say goodbye / ‘Wait, I've never been on a train’” | Pixel |
-| 5 | 21.45–23.40 | **Break**, 1 bar | The streamer boards; the train pulls out; through the window the city starts to slide away (no text: the picture carries it) | — | (instrumental) | Pixel, carriage set |
-| 6 | 23.40–25.35 | Pre-chorus, 1 bar | The chat line fills the frame, typed letter by letter; the phone's signal bars are full | `can you keep it on?` | “Can you keep it on?” | Chat |
-| 7 | 25.35–33.15 | Chorus, bars 1–4 | **Hero shot:** through the carriage window the city falls away into open farmland, fast; the signal bars drop one by one | lyrics 8–10 | “Keep it on, keep it on, till the signal's gone / You watched the city turn to fields / Your first train, it moved so fast” | Pixel, motion |
-| 8 | 33.15–37.05 | Chorus, bars 5–6 | Fields rush past; on “gone” (≈36.5) the picture pixelates, freezes on `reconnecting…`, then cuts to black for 1 beat | lyric 11 → `signal lost` | “Keep it on, keep it on, till the signal's gone” | Pixel → **glitch** |
-| 9 | 37.05–40.95 | Chorus, bars 7–8 | The last chat message, big, as the hero of the frame | `thanks for being so chill. amazing stream` + lyric 12 | “Said it was amazing, from the other side of the world” | Chat |
-| 10 | 40.95–44.85 | Hook (wordless), 2 bars | Bar 1: front-page burst on the downbeat. Bar 2: pull back from the train across the fields and over the curve of the globe to one lit window on the other side of the world | `3 VIEWERS. ENOUGH.` → `the other side of the world` | (hook) | **Halftone** → pixel globe |
-| 11 | 44.85–52.65 | Outro, bars 1–4 | The streamer back in town, walking the market like a visitor; a small warm spark next to the last chat message (companion cameo, ≈1 s at 50.70) | lyrics 13–14 | “Like showing a visitor my town / I saw it like a tourist too” | Pixel warm |
-| 12 | 52.65–58.26 | Outro end, ~3 bars | The carousel lights, then the `LIVE · IRL` badge on a new day | lyric 15 → `They kept streaming IRL.` (from 56.55) | “That's why it's worth it” | Pixel warm |
-| 13 | 58.26–60.8 | Sonic logo | End card with a small credit line under it | `Chobbot · never stream alone` (placeholder) · `Story shared by a streamer on Reddit, retold with permission` | — | End card |
-
-Every line above comes from the post. Style switches land on downbeats: pixel → neon line (11.70) →
-pixel (15.60) → chat (23.40) → pixel motion (25.35) → glitch (≈36.5) → chat (37.05) → halftone
-(40.95) → pixel globe (42.90) → pixel warm (44.85) → end card (58.26).
+| 1 | 0.00–2.36 | Verse, pickup + bar 1 | The game desk: the monitor goes dark, the door opens on warm light, the phone on the desk wakes up LIVE on “stream” | Hook sticker **`Based on a true story`** (0.05–2.75, pops on/off) · `first real IRL` → `LIVE · IRL` · lyric 1 | “Took the stream out for Christmas in town” | Pixel interior |
+| 2 | 2.36–8.22 | Verse, bars 2–4 | The town at Christmas: market, castle, carousel; the phone on its tripod, its screen showing the carousel | lyrics 1–2 (hook sticker pops off at 2.75) | “…for Christmas in town / Market lights, a castle, a carousel” | Pixel (flash cut) |
+| 3 | 8.22–12.13 | Verse, bars 5–6 | The same square as neon lines; the viewer counter climbs `1 → 3`; one regular's name keeps lighting up (reactions only) | `3 watching` + lyrics 3–4 | “Three people watching, that's my crowd / Talking to the street out loud” | **Neon line** (scan) |
+| 4 | 12.13–17.99 | Verse, bars 7–9 | The station seen through the stream UI; “End stream?” comes up, then the real chat line lands | `End stream?` · `wait, I've never been on a train` · lyrics 5–6 | “Train to catch, I'll say goodbye / ‘Wait, I've never been on a train’” | Pixel + stream UI (pixel dissolve) |
+| 5 | 17.99–19.94 | **Break** | The train pulls out past the platform lamps; the phone propped at the window | — | (instrumental) | Pixel interior (dip) |
+| 6 | 19.94–21.90 | Pre-chorus | Macro of the phone screen: the words type in on the vocal | `can you keep it on?` | “Can you keep it on?” | Screen macro (pixel dissolve) |
+| 7 | 21.90–29.71 | Chorus, bars 1–4 | **Hero shot:** the city falls away into open farmland, fast; signal bars dropping | lyrics 8–10 | “Keep it on… / You watched the city turn to fields / Your first train, it moved so fast” | Pixel, motion blur (flash) |
+| 8 | 29.71–33.62 | Chorus, bars 5–6 | Same shot; on “gone” (33.06) it pixelates, freezes on `reconnecting…`, one beat of black | lyric 11 → `signal lost` | “Keep it on, keep it on, till the signal's gone” | **Glitch** → black |
+| 9 | 33.62–37.52 | Chorus, bars 7–8 | Macro of the screen, warm: the real thank-you | `thanks for being so chill. amazing stream` + lyric 12 | “Said it was amazing, from the other side of the world” | Screen macro (scan) |
+| 10a | 37.52–39.48 | Hook, bar 1 | Front page slams in on the downbeat | `3 VIEWERS. ENOUGH.` | (wordless hook) | **Halftone** |
+| 10b | 39.48–41.43 | Hook, bar 2 | Pull back over the globe; a line of light from the train to one lit window on the other side | `the other side of the world` | (wordless hook) | Pixel globe (ink) |
+| 11 | 41.43–49.24 | Outro, bars 1–4 | Back in town like a visitor (handheld drift); the real message remembered, the companion spark beside it (~1 s at 47.3) | lyrics 13–14 | “Like showing a visitor my town / I saw it like a tourist too” | Pixel warm (pixel dissolve) |
+| 12 | 49.24–54.80 | Outro end | The next morning, `LIVE · IRL` | lyric 15 → `They kept streaming IRL.` (from 53.15) | “That's why it's worth it” | Pixel morning (ink) |
+| 13 | 54.80–57.30 | Sonic logo | End card | `Chobbot · never stream alone` (placeholder) · credit | — | End card (dip) |
 
 ## Story coverage (does the film tell the whole story?)
 

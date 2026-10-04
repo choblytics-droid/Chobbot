@@ -3,655 +3,655 @@
   {
    "id": "l1",
    "text": "Took the stream out for Christmas in town",
-   "start": 4.24,
-   "end": 7.36,
+   "start": 0.8,
+   "end": 3.9,
    "words": [
     {
      "w": "Took",
-     "start": 4.24,
-     "end": 4.64
+     "start": 0.8,
+     "end": 1.253
     },
     {
      "w": "the",
-     "start": 4.64,
-     "end": 5.04
+     "start": 1.253,
+     "end": 1.707
     },
     {
      "w": "stream",
-     "start": 5.04,
-     "end": 5.44
+     "start": 1.707,
+     "end": 2.16
     },
     {
      "w": "out",
-     "start": 5.44,
-     "end": 5.84
+     "start": 2.16,
+     "end": 2.32
     },
     {
      "w": "for",
-     "start": 5.84,
-     "end": 6.08
+     "start": 2.32,
+     "end": 2.56
     },
     {
      "w": "Christmas",
-     "start": 6.08,
-     "end": 6.72
+     "start": 2.56,
+     "end": 3.28
     },
     {
      "w": "in",
-     "start": 6.72,
-     "end": 7.04
+     "start": 3.28,
+     "end": 3.52
     },
     {
      "w": "town",
-     "start": 7.04,
-     "end": 7.36
+     "start": 3.52,
+     "end": 3.9
     }
    ]
   },
   {
    "id": "l2",
    "text": "Market lights, a castle, a carousel",
-   "start": 8.24,
-   "end": 11.06,
+   "start": 4.72,
+   "end": 7.6,
    "words": [
     {
      "w": "Market",
-     "start": 8.24,
-     "end": 8.88
+     "start": 4.72,
+     "end": 5.36
     },
     {
      "w": "lights,",
-     "start": 8.88,
-     "end": 9.52
+     "start": 5.36,
+     "end": 6.16
     },
     {
      "w": "a",
-     "start": 9.52,
-     "end": 9.68
+     "start": 6.16,
+     "end": 6.32
     },
     {
      "w": "castle,",
-     "start": 9.68,
-     "end": 10.14
+     "start": 6.32,
+     "end": 6.6
     },
     {
      "w": "a",
-     "start": 10.14,
-     "end": 10.6
+     "start": 6.6,
+     "end": 6.88
     },
     {
      "w": "carousel",
-     "start": 10.6,
-     "end": 11.06
+     "start": 6.88,
+     "end": 7.6
     }
    ]
   },
   {
    "id": "l3",
    "text": "Three people watching, that's my crowd",
-   "start": 12.08,
-   "end": 14.16,
+   "start": 8.56,
+   "end": 10.7,
    "words": [
     {
      "w": "Three",
-     "start": 12.08,
-     "end": 12.48
+     "start": 8.56,
+     "end": 8.96
     },
     {
      "w": "people",
-     "start": 12.48,
-     "end": 12.72
+     "start": 8.96,
+     "end": 9.28
     },
     {
      "w": "watching,",
-     "start": 12.72,
-     "end": 13.36
+     "start": 9.28,
+     "end": 9.84
     },
     {
      "w": "that's",
-     "start": 13.36,
-     "end": 13.6
+     "start": 9.84,
+     "end": 10.16
     },
     {
      "w": "my",
-     "start": 13.6,
-     "end": 13.84
+     "start": 10.16,
+     "end": 10.4
     },
     {
      "w": "crowd",
-     "start": 13.84,
-     "end": 14.16
+     "start": 10.4,
+     "end": 10.7
     }
    ]
   },
   {
    "id": "l4",
    "text": "Talking to the street out loud",
-   "start": 14.4,
-   "end": 16.06,
+   "start": 10.96,
+   "end": 12.6,
    "words": [
     {
      "w": "Talking",
-     "start": 14.4,
-     "end": 14.8
+     "start": 10.96,
+     "end": 11.36
     },
     {
      "w": "to",
-     "start": 14.8,
-     "end": 14.96
+     "start": 11.36,
+     "end": 11.52
     },
     {
      "w": "the",
-     "start": 14.96,
-     "end": 15.12
+     "start": 11.52,
+     "end": 11.68
     },
     {
      "w": "street",
-     "start": 15.12,
-     "end": 15.52
+     "start": 11.68,
+     "end": 12.08
     },
     {
      "w": "out",
-     "start": 15.52,
-     "end": 15.76
+     "start": 12.08,
+     "end": 12.24
     },
     {
      "w": "loud",
-     "start": 15.76,
-     "end": 16.06
+     "start": 12.24,
+     "end": 12.6
     }
    ]
   },
   {
    "id": "l5",
    "text": "Train to catch, I'll say goodbye",
-   "start": 16.24,
-   "end": 18.06,
+   "start": 12.8,
+   "end": 14.6,
    "words": [
     {
      "w": "Train",
-     "start": 16.24,
-     "end": 16.4
+     "start": 12.8,
+     "end": 13.0
     },
     {
      "w": "to",
-     "start": 16.4,
-     "end": 16.56
+     "start": 13.0,
+     "end": 13.2
     },
     {
      "w": "catch,",
-     "start": 16.56,
-     "end": 17.04
+     "start": 13.2,
+     "end": 13.6
     },
     {
      "w": "I'll",
-     "start": 17.04,
-     "end": 17.36
+     "start": 13.6,
+     "end": 13.92
     },
     {
      "w": "say",
-     "start": 17.36,
-     "end": 17.52
+     "start": 13.92,
+     "end": 14.08
     },
     {
      "w": "goodbye",
-     "start": 17.52,
-     "end": 18.06
+     "start": 14.08,
+     "end": 14.6
     }
    ]
   },
   {
    "id": "l6",
    "text": "\"Wait, I've never been on a train\"",
-   "start": 18.56,
-   "end": 20.76,
+   "start": 15.1,
+   "end": 17.3,
    "words": [
     {
      "w": "\"Wait,",
-     "start": 18.56,
-     "end": 18.96
+     "start": 15.1,
+     "end": 15.52
     },
     {
      "w": "I've",
-     "start": 18.96,
-     "end": 19.28
+     "start": 15.52,
+     "end": 15.84
     },
     {
      "w": "never",
-     "start": 19.28,
-     "end": 19.52
+     "start": 15.84,
+     "end": 16.08
     },
     {
      "w": "been",
-     "start": 19.52,
-     "end": 19.84
+     "start": 16.08,
+     "end": 16.4
     },
     {
      "w": "on",
-     "start": 19.84,
-     "end": 20.16
+     "start": 16.4,
+     "end": 16.64
     },
     {
      "w": "a",
-     "start": 20.16,
-     "end": 20.32
+     "start": 16.64,
+     "end": 16.88
     },
     {
      "w": "train\"",
-     "start": 20.32,
-     "end": 20.76
+     "start": 16.88,
+     "end": 17.3
     }
    ]
   },
   {
    "id": "l7",
    "text": "\"Can you keep it on?\"",
-   "start": 23.04,
-   "end": 24.66,
+   "start": 19.6,
+   "end": 21.2,
    "words": [
     {
      "w": "\"Can",
-     "start": 23.04,
-     "end": 23.36
+     "start": 19.6,
+     "end": 19.92
     },
     {
      "w": "you",
-     "start": 23.36,
-     "end": 23.68
+     "start": 19.92,
+     "end": 20.16
     },
     {
      "w": "keep",
-     "start": 23.68,
-     "end": 24.08
+     "start": 20.16,
+     "end": 20.64
     },
     {
      "w": "it",
-     "start": 24.08,
-     "end": 24.32
+     "start": 20.64,
+     "end": 20.8
     },
     {
      "w": "on?\"",
-     "start": 24.32,
-     "end": 24.66
+     "start": 20.8,
+     "end": 21.2
     }
    ]
   },
   {
    "id": "l8",
    "text": "Keep it on, keep it on, till the signal's gone",
-   "start": 25.04,
-   "end": 28.66,
+   "start": 21.6,
+   "end": 25.2,
    "words": [
     {
      "w": "Keep",
-     "start": 25.04,
-     "end": 25.36
+     "start": 21.6,
+     "end": 21.92
     },
     {
      "w": "it",
-     "start": 25.36,
-     "end": 25.6
+     "start": 21.92,
+     "end": 22.16
     },
     {
      "w": "on,",
-     "start": 25.6,
-     "end": 26.0
+     "start": 22.16,
+     "end": 22.56
     },
     {
      "w": "keep",
-     "start": 26.0,
-     "end": 26.4
+     "start": 22.56,
+     "end": 22.96
     },
     {
      "w": "it",
-     "start": 26.4,
-     "end": 26.56
+     "start": 22.96,
+     "end": 23.12
     },
     {
      "w": "on,",
-     "start": 26.56,
-     "end": 26.96
+     "start": 23.12,
+     "end": 23.52
     },
     {
      "w": "till",
-     "start": 26.96,
-     "end": 27.28
+     "start": 23.52,
+     "end": 23.84
     },
     {
      "w": "the",
-     "start": 27.28,
-     "end": 27.44
+     "start": 23.84,
+     "end": 24.0
     },
     {
      "w": "signal's",
-     "start": 27.44,
-     "end": 28.16
+     "start": 24.0,
+     "end": 24.72
     },
     {
      "w": "gone",
-     "start": 28.16,
-     "end": 28.66
+     "start": 24.72,
+     "end": 25.2
     }
    ]
   },
   {
    "id": "l9",
    "text": "You watched the city turn to fields",
-   "start": 28.8,
-   "end": 30.66,
+   "start": 25.36,
+   "end": 27.2,
    "words": [
     {
      "w": "You",
-     "start": 28.8,
-     "end": 29.04
+     "start": 25.36,
+     "end": 25.56
     },
     {
      "w": "watched",
-     "start": 29.04,
-     "end": 29.28
+     "start": 25.56,
+     "end": 25.76
     },
     {
      "w": "the",
-     "start": 29.28,
-     "end": 29.44
+     "start": 25.76,
+     "end": 25.92
     },
     {
      "w": "city",
-     "start": 29.44,
-     "end": 29.76
+     "start": 25.92,
+     "end": 26.32
     },
     {
      "w": "turn",
-     "start": 29.76,
-     "end": 30.06
+     "start": 26.32,
+     "end": 26.64
     },
     {
      "w": "to",
-     "start": 30.06,
-     "end": 30.36
+     "start": 26.64,
+     "end": 26.92
     },
     {
      "w": "fields",
-     "start": 30.36,
-     "end": 30.66
+     "start": 26.92,
+     "end": 27.2
     }
    ]
   },
   {
    "id": "l10",
    "text": "Your first train, it moved so fast",
-   "start": 30.82,
-   "end": 32.76,
+   "start": 27.36,
+   "end": 29.3,
    "words": [
     {
      "w": "Your",
-     "start": 30.82,
-     "end": 30.96
+     "start": 27.36,
+     "end": 27.52
     },
     {
      "w": "first",
-     "start": 30.96,
-     "end": 31.28
+     "start": 27.52,
+     "end": 27.84
     },
     {
      "w": "train,",
-     "start": 31.28,
-     "end": 31.573
+     "start": 27.84,
+     "end": 28.24
     },
     {
      "w": "it",
-     "start": 31.573,
-     "end": 31.867
+     "start": 28.24,
+     "end": 28.48
     },
     {
      "w": "moved",
-     "start": 31.867,
-     "end": 32.16
+     "start": 28.48,
+     "end": 28.72
     },
     {
      "w": "so",
-     "start": 32.16,
-     "end": 32.32
+     "start": 28.72,
+     "end": 28.88
     },
     {
      "w": "fast",
-     "start": 32.32,
-     "end": 32.76
+     "start": 28.88,
+     "end": 29.3
     }
    ]
   },
   {
    "id": "l11",
    "text": "Keep it on, keep it on, till the signal's gone",
-   "start": 32.96,
-   "end": 36.46,
+   "start": 29.52,
+   "end": 33.0,
    "words": [
     {
      "w": "Keep",
-     "start": 32.96,
-     "end": 33.2
+     "start": 29.52,
+     "end": 29.76
     },
     {
      "w": "it",
-     "start": 33.2,
-     "end": 33.44
+     "start": 29.76,
+     "end": 30.0
     },
     {
      "w": "on,",
-     "start": 33.44,
-     "end": 33.84
+     "start": 30.0,
+     "end": 30.4
     },
     {
      "w": "keep",
-     "start": 33.84,
-     "end": 34.08
+     "start": 30.4,
+     "end": 30.64
     },
     {
      "w": "it",
-     "start": 34.08,
-     "end": 34.32
+     "start": 30.64,
+     "end": 30.88
     },
     {
      "w": "on,",
-     "start": 34.32,
-     "end": 34.8
+     "start": 30.88,
+     "end": 31.28
     },
     {
      "w": "till",
-     "start": 34.8,
-     "end": 35.04
+     "start": 31.28,
+     "end": 31.6
     },
     {
      "w": "the",
-     "start": 35.04,
-     "end": 35.2
+     "start": 31.6,
+     "end": 31.76
     },
     {
      "w": "signal's",
-     "start": 35.2,
-     "end": 35.92
+     "start": 31.76,
+     "end": 32.48
     },
     {
      "w": "gone",
-     "start": 35.92,
-     "end": 36.46
+     "start": 32.48,
+     "end": 33.0
     }
    ]
   },
   {
    "id": "l12",
    "text": "Said it was amazing, from the other side of the world",
-   "start": 36.56,
-   "end": 40.46,
+   "start": 33.12,
+   "end": 37.0,
    "words": [
     {
      "w": "Said",
-     "start": 36.56,
-     "end": 36.8
+     "start": 33.12,
+     "end": 33.28
     },
     {
      "w": "it",
-     "start": 36.8,
-     "end": 36.88
+     "start": 33.28,
+     "end": 33.44
     },
     {
      "w": "was",
-     "start": 36.88,
-     "end": 37.04
+     "start": 33.44,
+     "end": 33.6
     },
     {
      "w": "amazing,",
-     "start": 37.04,
-     "end": 37.76
+     "start": 33.6,
+     "end": 34.32
     },
     {
      "w": "from",
-     "start": 37.76,
-     "end": 38.24
+     "start": 34.32,
+     "end": 34.8
     },
     {
      "w": "the",
-     "start": 38.24,
-     "end": 38.56
+     "start": 34.8,
+     "end": 35.12
     },
     {
      "w": "other",
-     "start": 38.56,
-     "end": 39.04
+     "start": 35.12,
+     "end": 35.6
     },
     {
      "w": "side",
-     "start": 39.04,
-     "end": 39.52
+     "start": 35.6,
+     "end": 36.08
     },
     {
      "w": "of",
-     "start": 39.52,
-     "end": 39.76
+     "start": 36.08,
+     "end": 36.4
     },
     {
      "w": "the",
-     "start": 39.76,
-     "end": 40.08
+     "start": 36.4,
+     "end": 36.56
     },
     {
      "w": "world",
-     "start": 40.08,
-     "end": 40.46
+     "start": 36.56,
+     "end": 37.0
     }
    ]
   },
   {
    "id": "l13",
    "text": "Like showing a visitor my town",
-   "start": 44.66,
-   "end": 48.26,
+   "start": 41.2,
+   "end": 44.8,
    "words": [
     {
      "w": "Like",
-     "start": 44.66,
-     "end": 45.04
+     "start": 41.2,
+     "end": 41.6
     },
     {
      "w": "showing",
-     "start": 45.04,
-     "end": 45.68
+     "start": 41.6,
+     "end": 42.24
     },
     {
      "w": "a",
-     "start": 45.68,
-     "end": 46.44
+     "start": 42.24,
+     "end": 43.0
     },
     {
      "w": "visitor",
-     "start": 46.44,
-     "end": 47.2
+     "start": 43.0,
+     "end": 43.76
     },
     {
      "w": "my",
-     "start": 47.2,
-     "end": 47.68
+     "start": 43.76,
+     "end": 44.24
     },
     {
      "w": "town",
-     "start": 47.68,
-     "end": 48.26
+     "start": 44.24,
+     "end": 44.8
     }
    ]
   },
   {
    "id": "l14",
    "text": "I saw it like a tourist too",
-   "start": 50.64,
-   "end": 54.06,
+   "start": 47.12,
+   "end": 50.6,
    "words": [
     {
      "w": "I",
-     "start": 50.64,
-     "end": 50.8
+     "start": 47.12,
+     "end": 47.413
     },
     {
      "w": "saw",
-     "start": 50.8,
-     "end": 51.2
+     "start": 47.413,
+     "end": 47.707
     },
     {
      "w": "it",
-     "start": 51.2,
-     "end": 51.44
+     "start": 47.707,
+     "end": 48.0
     },
     {
      "w": "like",
-     "start": 51.44,
-     "end": 51.6
+     "start": 48.0,
+     "end": 48.16
     },
     {
      "w": "a",
-     "start": 51.6,
-     "end": 51.76
+     "start": 48.16,
+     "end": 48.4
     },
     {
      "w": "tourist",
-     "start": 51.76,
-     "end": 52.66
+     "start": 48.4,
+     "end": 49.3
     },
     {
      "w": "too",
-     "start": 53.6,
-     "end": 54.06
+     "start": 50.16,
+     "end": 50.6
     }
    ]
   },
   {
    "id": "l15",
    "text": "That's why it's worth it",
-   "start": 54.96,
-   "end": 56.86,
+   "start": 51.52,
+   "end": 53.4,
    "words": [
     {
      "w": "That's",
-     "start": 54.96,
-     "end": 55.28
+     "start": 51.52,
+     "end": 51.84
     },
     {
      "w": "why",
-     "start": 55.28,
-     "end": 55.52
+     "start": 51.84,
+     "end": 52.08
     },
     {
      "w": "it's",
-     "start": 55.52,
-     "end": 55.92
+     "start": 52.08,
+     "end": 52.56
     },
     {
      "w": "worth",
-     "start": 55.92,
-     "end": 56.4
+     "start": 52.56,
+     "end": 52.96
     },
     {
      "w": "it",
-     "start": 56.4,
-     "end": 56.86
+     "start": 52.96,
+     "end": 53.4
     }
    ]
   }

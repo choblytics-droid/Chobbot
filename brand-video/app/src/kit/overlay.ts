@@ -87,6 +87,28 @@ export class Overlay {
     c.restore();
   }
 
+  /**
+   * The hook: "Based on a true story" as a sticker that pops on over the first shot (no silent intro:
+   * the song starts at once). Overshoots in, holds, pops off at `t1`. Same place in every shot it spans.
+   */
+  hook(s: string, t: number, t0: number, t1: number, o: { y?: number; size?: number } = {}) {
+    const inK = clamp((t - t0) / 0.28), outK = clamp((t - (t1 - 0.18)) / 0.18);
+    if (inK <= 0 || outK >= 1) return;
+    const sc = ease.outBack(inK) * (1 - ease.inCubic(outK));
+    const c = this.c, size = o.size ?? (PORTRAIT ? 58 : 52), fam = F.archivo(100, 800), y = o.y ?? H * 0.33;
+    const tw = measure(s, fam, size), pw = tw + size * 1.3, ph = size * 1.9;
+    c.save();
+    c.translate(W / 2, y); c.rotate(-0.045); c.scale(sc, sc);
+    c.shadowColor = 'rgba(0,0,0,0.55)'; c.shadowBlur = 30; c.shadowOffsetY = 8;
+    roundRect(c, -pw / 2, -ph / 2, pw, ph, ph * 0.28); c.fillStyle = rgba('bone', 1); c.fill();
+    c.shadowColor = 'transparent';
+    // a warm tab on the left edge
+    c.fillStyle = rgba('signal', 1); roundRect(c, -pw / 2, -ph / 2, size * 0.32, ph, ph * 0.12); c.fill();
+    c.font = font(fam, size); c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillStyle = rgba('ink', 1);
+    c.fillText(s, size * 0.12, size * 0.04);
+    c.restore();
+  }
+
   /** The opening card: "Based on a true story". */
   card(s: string, t: number, t0: number, t1: number, o: { y?: number; size?: number } = {}) {
     const a = clamp((t - t0) / 0.25) * (1 - clamp((t - (t1 - 0.12)) / 0.12));
