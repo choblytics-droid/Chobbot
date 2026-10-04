@@ -38,7 +38,7 @@ export default class Town extends Scene {
     // text
     const ov = this.ov;
     ov.begin();
-    if (shot === 'tour') ov.hook('Based on a true story', t, 0.05, this.ctx.params.hookEnd ?? 0);
+    if (shot === 'tour') ov.hook('Based on a true story', t, 0.05, this.ctx.params.hookEnd ?? 0, { y: H * 0.57 });   // same place as on the desk shot
     if (shot === 'tour' || shot === 'outro' || (shot === 'newday' && t < (this.ctx.params.keptAt ?? 1e9))) ov.lyric(this.ly.lineAt(t, 0.35, 0.3), t, { y: H * 0.2, plate: 0.7 });
     if (shot === 'outro') {
       // the last chat message, remembered (no brand, no companion: a Story is not a brand video)

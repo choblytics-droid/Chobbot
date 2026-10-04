@@ -179,13 +179,13 @@ export class Overlay {
     const msgs = (o.chat ?? []).filter((m) => t >= m.at);
     const size = 34, lh = size * 1.45, x0 = 44, yb = H - 530;   // the chat ends above the platform caption zone
     c.save();
-    const g = c.createLinearGradient(0, yb - 320, 0, yb + 140);
+    const g = c.createLinearGradient(0, yb - 360, 0, yb + 140);
     g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(0.3, 'rgba(0,0,0,0.6)'); g.addColorStop(0.65, 'rgba(0,0,0,0.78)'); g.addColorStop(1, 'rgba(0,0,0,0)');
-    c.fillStyle = g; c.fillRect(0, yb - 320, 930, 460);
+    c.fillStyle = g; c.fillRect(0, yb - 360, 930, 500);
     // fade the scrim out before the platform's buttons column
     c.globalCompositeOperation = 'destination-out';
     const gx = c.createLinearGradient(760, 0, 930, 0); gx.addColorStop(0, 'rgba(0,0,0,0)'); gx.addColorStop(1, 'rgba(0,0,0,1)');
-    c.fillStyle = gx; c.fillRect(760, yb - 320, 170, 460);
+    c.fillStyle = gx; c.fillRect(760, yb - 360, 170, 500);
     c.globalCompositeOperation = 'source-over';
     const shown = msgs.slice(-5);
     shown.forEach((m, i) => {

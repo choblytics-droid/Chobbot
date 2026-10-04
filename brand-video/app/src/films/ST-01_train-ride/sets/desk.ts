@@ -6,7 +6,7 @@ import { ramp, plaster, wood, snow, mix, vnoise, dither } from '../../../kit/mat
 
 const P = {
   wall: '#2a2d3a', wallD: '#22242f', floor: '#3a2f2a', floorL: '#45372f', desk: '#4a3a2e', deskL: '#5a4636', deskD: '#33281f',
-  mon: '#141519', monL: '#24262c', key: '#1b1c21', chair: '#3c4050', chairS: '#262833', chairR: '#b0343a', metal: '#5c616e',
+  mon: '#141519', monL: '#24262c', key: '#1b1c21', chair: '#4a5064', chairS: '#2e3140', chairR: '#b0343a', metal: '#5c616e',
   door: '#5a4a3c', doorL: '#6d5a48', frame: '#3a2f27', poster: '#3b4a6b', snow: '#cdd8ea', plant: '#2f5a3e', mug: '#d8d2c4', black: '#101114',
 };
 
@@ -130,12 +130,17 @@ export function paintDesk(pc: PixelCanvas, o: { t: number; k: number }) {
   const CH = ramp(P.chair, 0.9), CR = ramp(P.chairR, 0.8);
   pc.poly([[cx - 30, cy - 62], [cx - 22, cy - 74], [cx + 18, cy - 78], [cx + 26, cy - 68], [cx + 30, cy + 40], [cx - 30, cy + 44]], (x, y) => {
     const side = x < cx - 24 || x > cx + 24, stitch = (x === cx - 24 || x === cx + 24 || (y - cy) % 14 === 0) && (x + y) % 2 === 0;
-    // quilted rows: each puffs up between stitch lines (lit top, a shadow under the seam), a leather sheen
-    const ry = ((y - cy) % 14 + 14) % 14;
-    const sheen = Math.exp(-(((x - (cx - 6 + (y - cy) * 0.05)) / 3.5) ** 2)) * (vnoise(x * 0.3, y * 0.08, 5) > 0.35 ? 1 : 0.4);
-    const fall = (cx + 10 - x) / 40 + (cy - y) / 160;   // lit from the monitor (upper left), falling off to the lower right
-    const v = 1.8 + fall * 0.9 + (side ? -0.7 : 0) + (vnoise(x * 0.12, y * 0.12, 2) - 0.5) * 0.9 + (y < cy - 60 ? 0.6 : 0) + (ry === 1 ? -1.1 : ry < 5 ? 0.5 : ry > 11 ? -0.45 : 0) + sheen * 1.6;
-    return { a: stitch ? CH[3]! : CH[Math.max(0, Math.min(4, dither(v, x, y)))]!, d: 0.2, id: 20, n: [(x - cx) / 50, y < cy - 66 ? 0.6 : ry < 5 ? 0.45 : 0.1] };
+    // diamond quilting (never parallel to the floor planks or the desk edge), each diamond puffed
+    // (lit upper left), a leather sheen, a dark outline so the chair reads as one solid object
+    const qa = ((x + y) % 12 + 12) % 12, qb = ((x - y) % 12 + 12) % 12;
+    const seamQ = qa === 0 || qb === 0, puff = (Math.min(qa, 12 - qa) + Math.min(qb, 12 - qb)) / 12;
+    const edge = x <= cx - 29 || x >= cx + 29 || y >= cy + 43;
+    const sheen = Math.exp(-(((x - (cx - 8 + (y - cy) * 0.05)) / 4) ** 2));
+    const fall = (cx + 10 - x) / 45 + (cy - y) / 180;
+    const v = 2 + fall * 0.8 + (side ? -0.6 : 0) + (puff - 0.5) * 1.4 + (y < cy - 60 ? 0.5 : 0) + sheen * 1.3 + (vnoise(x * 0.15, y * 0.15, 2) - 0.5) * 0.5;
+    if (edge) return { a: '#0b0c10', d: 0.2, id: 20 };
+    if (seamQ) return { a: (x + y) % 2 ? CH[0]! : CH[1]!, d: 0.2, id: 20, n: [(x - cx) / 50, 0.2] };
+    return { a: CH[Math.max(0, Math.min(4, dither(v, x, y)))]!, d: 0.2, id: 20, n: [(x - cx) / 50, y < cy - 66 ? 0.6 : 0.3] };
   });
   pc.rect(cx - 14, cy - 64, 26, 12, (x, y) => ({ a: y === cy - 64 ? CH[3]! : y === cy - 53 ? CH[0]! : (x + y) % 9 === 0 ? CH[3]! : CH[2]!, d: 0.198, id: 23, n: [0, 0.4] }));
   pc.poly([[cx - 22, cy - 66], [cx - 14, cy - 67], [cx - 10, cy + 38], [cx - 18, cy + 39]], (x, y) => ({ a: CR[x === cx - 21 ? 3 : (y % 7 === 0 ? 1 : 2)]!, d: 0.195, id: 20 }));

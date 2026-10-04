@@ -524,7 +524,7 @@ void main() {
   float below = groundY - ap.y;
   if (below > 0.0 && N.g > 0.85) {
     // ripples sway each row sideways; the reflection stretches into vertical streaks (several taps up the mirror)
-    float sway = sin(below * 0.7 + t * 3.0) * 1.2 + (hash12(vec2(floor(ap.y), floor(t * 6.0))) - 0.5) * 2.0;
+    float sway = sin(below * 0.5 + t * 2.0) * 0.6 + (hash12(vec2(floor(ap.y * 0.5), floor(t * 4.0))) - 0.5) * 0.8;
     vec2 m = vec2(ap.x + floor(sway + 0.5), groundY + below * 0.9);
     vec3 rc = vec3(0.0);
     for (int j = 0; j < 4; j++) rc += neonAt(floor(m + vec2(0.0, float(j) * 1.6 * (1.0 + below / 40.0)))) * (1.0 - float(j) * 0.2);

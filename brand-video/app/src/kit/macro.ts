@@ -32,7 +32,7 @@ export class Macro {
       c += vec3(0.5, 0.58, 0.72) * wnd * smoothstep(0.05, 0.0, fe) * (0.25 + 0.2 * fbm(v * vec2(14.0, 6.0), 3));
       // the carriage table the phone rests on: warm wood, grain running across, the screen's glow on it
       float tb = smoothstep(0.22, 0.2, v.y);
-      vec3 wood = vec3(0.16, 0.1, 0.06) * (0.8 + 0.3 * sin(v.x * 40.0 + fbm(v * vec2(3.0, 30.0), 3) * 4.0));
+      vec3 wood = vec3(0.16, 0.1, 0.06) * (0.85 + 0.25 * fbm(v * vec2(1.5, 45.0), 3));   // straight grain across the table, soft (out of focus)
       wood += vec3(0.25, 0.3, 0.4) * 0.25 * exp(-pow((v.x - 0.5) / 0.25, 2.0)) * smoothstep(0.0, 0.2, v.y);
       c = mix(c, wood, tb);
       for (int i = 0; i < 7; i++) {

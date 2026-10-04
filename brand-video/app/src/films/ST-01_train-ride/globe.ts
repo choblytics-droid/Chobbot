@@ -151,7 +151,7 @@ export default class Globe extends Scene {
     u.tilt!.value = tilt;
     const cs = Math.cos(spin), sn = Math.sin(spin), ct = Math.cos(tilt), st = Math.sin(tilt);
     const vx = cs * A[0] + sn * A[2], vz0 = -sn * A[0] + cs * A[2], vy = ct * A[1] - st * vz0; // M * A (rotX · rotY)
-    const end: [number, number] = [AW * 0.4, AH * 0.45];   // the arc bulges right: keep it left of the buttons column
+    const end: [number, number] = [AW * 0.37, AH * 0.45];   // the arc bulges right: keep it left of the buttons column
     const start: [number, number] = [AW * 0.55 - vx * R, AH * 0.4 - vy * R];
     u.C!.value = [start[0] + (end[0] - start[0]) * z, start[1] + (end[1] - start[1]) * z];
     u.expo!.value = 1.9 - 0.9 * z;

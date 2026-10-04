@@ -226,7 +226,7 @@ function outside(pc: PixelCanvas, o: CarriageOpts) {
         const ridge = base + Math.floor(hashI(house + 71) * vary);
         if (hx >= hw) {
           const gc = hw + (bw - hw) / 2, ph = ridge + wallH + Math.floor(hashI(house + 76) * 12) - 6;
-          for (let y = ridge + 4; y < y1; y++) { const pool = Math.exp(-(((y - ph) / 7) ** 2)) * Math.exp(-(((hx - gc) / 2.2) ** 2)) * (hashI(house + 77) < 0.7 ? 1 : 0); put(x, y, { a: pool > 0.4 ? '#3a3026' : (y + Math.floor(wx)) % 9 === 0 ? '#1e1b18' : '#16141a', d, id: 90, e: pool > 0.4 ? '#ffb45a' : undefined, ei: pool * 0.8 }); }
+          for (let y = ridge + 4; y < y1; y++) { const pool = Math.exp(-(((y - ph) / 7) ** 2)) * Math.exp(-(((hx - gc) / 2.2) ** 2)) * (hashI(house + 77) < 0.7 ? 1 : 0); put(x, y, { a: (y + Math.floor(wx)) % 9 === 0 ? '#1e1b18' : '#16141a', d, id: 90, e: pool > 0.25 ? '#ffb45a' : undefined, ei: pool * 0.35 }); }   // a dim lamp glow in the street, no hard tile
           continue;
         }
         // every house its own roof: pitch, colour (slate, red tile, green copper) or a flat roof
@@ -428,7 +428,6 @@ export function paintCarriage(pc: PixelCanvas, o: CarriageOpts) {
     pc.rect(0, py0 + phh, AW, 480 - py0 - phh, (x, y) => (y === py0 + phh ? { a: '#8a7f6c', d: 0.07, id: 7, n: [0, 0.9] } : wood(ramp('#4a3c30', 0.9), { d: 0.07, id: 7, pw: 14, seed: 4, n: [0, 0.9] })(x, y)));
     // its contact shadow on the sill, and the screen's cold light pooling in front of it
     for (let x = -6; x < pw + 6; x++) for (let k = 0; k < 4; k++) pc.px(px0 + x, py0 + phh + k, { a: k === 0 ? '#0e0c0a' : k === 1 ? '#1a1612' : '#2a231d', d: 0.065, id: 7 });
-    for (let x = 0; x < pw; x++) for (let k = 5; k < 22; k++) if (hashI(x * 7 + k) < 0.5 * (1 - k / 22)) pc.glow(px0 + x, py0 + phh + k, '#9ab8ff', 0.25 * (1 - k / 22));
   } else if (ph > 0) {
     const pw = 30, phh = 52, px0 = 52, py0 = y1 + 10 - phh + Math.round((1 - ph) * 60);
     const blk: Mat = { a: P.phone, d: 0.1, id: 63 };
