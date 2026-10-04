@@ -25,9 +25,9 @@
 | # | Time | Music | Picture | On-screen text | Lyric (background) | Style |
 |---|---|---|---|---|---|---|
 | 1a | 0:00–0:03 | Intro, bars 1–1.5 | Slow push into the pixel city at dusk, Christmas-market lights glowing in haze | **`Based on a true story`** (on from frame 1, out on the beat at 0:03) | (glockenspiel, train rhythm) | Pixel |
-| 1b | 0:03–0:04 | Intro, bar 2 | The pixel streamer steps out of a door, phone up; a tiny `LIVE` badge blinks on | `LIVE · IRL` | (intro continues) | Pixel |
+| 1b | 0:03–0:04 | Intro, bar 2 | A pixel desk with a gaming monitor goes dark; the streamer stands up and steps out of the door, a tiny `LIVE` badge blinks on | `first real IRL` → `LIVE · IRL` | (intro continues) | Pixel |
 | 2 | 0:04–0:08 | Verse, bars 1–2 | The tour: market stalls, a castle on the hill, a lit carousel turning (the tripod set down in front of it) | lyric as text | “Took the stream out for Christmas in town / Market lights, a castle, a carousel” | Pixel |
-| 3 | 0:08–0:12 | Verse, bars 3–4 | The viewer counter climbs `1 … 2 … 3`; chat lines pop up beside the carousel | `3 watching` | “Three people watching, that’s my crowd / Talking to the street out loud” | Pixel → **neon line** on the downbeat |
+| 3 | 0:08–0:12 | Verse, bars 3–4 | The viewer counter climbs `1 … 2 … 3`; chat lines pop up beside the carousel, one name lighting up again and again (the regular who chats for an hour) | `3 watching` | “Three people watching, that’s my crowd / Talking to the street out loud” | Pixel → **neon line** on the downbeat |
 | 4 | 0:12–0:20 | Verse, bars 5–8 | The station; the streamer is about to end the stream. A chat line: `wait, I've never been on a train`. **Hero shot:** through the carriage window the city falls away into open farmland, fast | `wait, I've never been on a train` | “Train to catch, I'll say goodbye / ‘Wait, I’ve never been on a train’” | Neon line → pixel |
 | 5 | 0:20–0:22 | Pre-chorus, 1 bar | Fields rush past; the signal bars fall one by one; the picture pixelates | `signal fading` | “Keep it on till the signal goes” | Pixel → glitch |
 | 6 | 0:22–0:24 | **Break**, 1 bar | Freeze, `reconnecting…`, then black and silence | `signal lost` | (silence) | Black |
@@ -38,6 +38,34 @@
 
 Every line above comes from the post. Style switches land on downbeats: pixel → neon line (0:08) → pixel (0:20) → glitch/black (0:20–0:24)
 → chat (0:24) → halftone (0:32) → pixel warm (0:40) → end card (0:48).
+
+## Story coverage (does the film tell the whole story?)
+
+Every beat of the full picture must reach the viewer through at least one channel. **Text** = lyrics
+shown on screen + on-screen captions (this is what a muted viewer gets, so text alone must tell the
+story). **Song** = what is sung. **Picture** = what is shown.
+
+| Story beat (full picture) | Song | Text | Picture |
+|---|---|---|---|
+| A year as a desk-bound game streamer; first real IRL | — | ✓ `first real IRL` | ✓ the dark gaming desk, stepping out |
+| Christmas tour: market, castle, carousel | ✓ verse 1–2 | ✓ (lyrics) | ✓ beat 2 |
+| Only 3 viewers | ✓ verse 3 | ✓ `3 watching` | ✓ counter |
+| One regular chats for an hour | — | — | ✓ one name lighting up again and again |
+| Train to catch, about to end the stream | ✓ verse 5 | ✓ (lyrics) | ✓ the station |
+| The viewer has never been on a train, wants to keep watching | ✓ verse 6, pre-chorus | ✓ chat line | ✓ chat line |
+| City turns to farmland until the signal drops | ✓ chorus 1–2 | ✓ `signal lost` | ✓ hero shot, freeze |
+| “Thanks for being so chill… amazing stream” | ✓ chorus 3 | ✓ the chat, full frame | ✓ |
+| Someone on the other side of the world; nearly tearful | ✓ chorus 4, outro | ✓ `the other side of the world` | ✓ globe pull-back |
+| What it meant: a tourist in your own town; worthwhile | ✓ outro | ✓ (lyrics) | ✓ warm city |
+| After: they kept streaming IRL | — | ✓ `They kept streaming IRL.` | — |
+| Left out on purpose: the test streams to work, the setup details, safety talk in the comments | | | |
+
+**Three checks before the build:**
+1. **Mute test:** read only the text track in order. It must tell the story start to end.
+2. **Listen test:** the song alone must give the arc (going out → the train → the thank-you → what it meant).
+3. **Sung-as-written check:** the chosen Suno take is transcribed during word timing and compared
+   line by line with the lyrics. A skipped or changed line means a new take, because a missing line
+   breaks the coverage above.
 
 ## Song (Suno, Custom mode, v5.5, Duration 0:52–1:00)
 

@@ -48,6 +48,14 @@ film are in the media plan, tab **Story & Song**.
   notes (`[Intro: solo felt piano]`, `[Build: strings enter]`, `[Climax: full orchestra]`), and the
   film's statements appear as on-screen text, not in the song.
 
+## Making sure the song tells the story
+
+- The lyrics come from the script's **story coverage table**: song structure follows the story
+  (intro = setup, verse = what happened, pre-chorus = the turn, break = the held breath, chorus =
+  the payoff, outro = what it meant). Facts the song can't fit go to on-screen text or the picture.
+- After picking a take, the vocal is **transcribed during word timing and compared line by line**
+  with the lyrics. Any skipped or changed line → generate a new take.
+
 ## Picking a take (checklist)
 
 1. The vocal is **clear and up front** (we sync every word on screen).

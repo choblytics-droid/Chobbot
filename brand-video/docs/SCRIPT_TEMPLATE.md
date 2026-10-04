@@ -33,6 +33,15 @@ The persuasion path from `USE_CASES.md`: recognition → cost → need → use c
 - Structure and tempo the script needs (bars per section, where the silence or the drop goes).
 - Lines that must be sung or spoken, word for word.
 
+## Story coverage (required for every film)
+
+| Story beat | Song | Text | Picture |
+|---|---|---|---|
+| (each beat of the full picture, start to end) | ✓ / — | ✓ / — | ✓ / — |
+
+Every beat needs at least one ✓; the **Text** column alone must tell the whole story (muted viewers).
+List beats left out on purpose. Before the build: mute test, listen test, sung-as-written check.
+
 ## Open questions
 
 - Anything to confirm (product facts, claims needing a source, rights).
