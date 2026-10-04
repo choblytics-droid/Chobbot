@@ -1,0 +1,659 @@
+{
+ "lines": [
+  {
+   "id": "l1",
+   "text": "Took the stream out for Christmas in town",
+   "start": 4.24,
+   "end": 7.36,
+   "words": [
+    {
+     "w": "Took",
+     "start": 4.24,
+     "end": 4.64
+    },
+    {
+     "w": "the",
+     "start": 4.64,
+     "end": 5.04
+    },
+    {
+     "w": "stream",
+     "start": 5.04,
+     "end": 5.44
+    },
+    {
+     "w": "out",
+     "start": 5.44,
+     "end": 5.84
+    },
+    {
+     "w": "for",
+     "start": 5.84,
+     "end": 6.08
+    },
+    {
+     "w": "Christmas",
+     "start": 6.08,
+     "end": 6.72
+    },
+    {
+     "w": "in",
+     "start": 6.72,
+     "end": 7.04
+    },
+    {
+     "w": "town",
+     "start": 7.04,
+     "end": 7.36
+    }
+   ]
+  },
+  {
+   "id": "l2",
+   "text": "Market lights, a castle, a carousel",
+   "start": 8.24,
+   "end": 11.06,
+   "words": [
+    {
+     "w": "Market",
+     "start": 8.24,
+     "end": 8.88
+    },
+    {
+     "w": "lights,",
+     "start": 8.88,
+     "end": 9.52
+    },
+    {
+     "w": "a",
+     "start": 9.52,
+     "end": 9.68
+    },
+    {
+     "w": "castle,",
+     "start": 9.68,
+     "end": 10.14
+    },
+    {
+     "w": "a",
+     "start": 10.14,
+     "end": 10.6
+    },
+    {
+     "w": "carousel",
+     "start": 10.6,
+     "end": 11.06
+    }
+   ]
+  },
+  {
+   "id": "l3",
+   "text": "Three people watching, that's my crowd",
+   "start": 12.08,
+   "end": 14.16,
+   "words": [
+    {
+     "w": "Three",
+     "start": 12.08,
+     "end": 12.48
+    },
+    {
+     "w": "people",
+     "start": 12.48,
+     "end": 12.72
+    },
+    {
+     "w": "watching,",
+     "start": 12.72,
+     "end": 13.36
+    },
+    {
+     "w": "that's",
+     "start": 13.36,
+     "end": 13.6
+    },
+    {
+     "w": "my",
+     "start": 13.6,
+     "end": 13.84
+    },
+    {
+     "w": "crowd",
+     "start": 13.84,
+     "end": 14.16
+    }
+   ]
+  },
+  {
+   "id": "l4",
+   "text": "Talking to the street out loud",
+   "start": 14.4,
+   "end": 16.06,
+   "words": [
+    {
+     "w": "Talking",
+     "start": 14.4,
+     "end": 14.8
+    },
+    {
+     "w": "to",
+     "start": 14.8,
+     "end": 14.96
+    },
+    {
+     "w": "the",
+     "start": 14.96,
+     "end": 15.12
+    },
+    {
+     "w": "street",
+     "start": 15.12,
+     "end": 15.52
+    },
+    {
+     "w": "out",
+     "start": 15.52,
+     "end": 15.76
+    },
+    {
+     "w": "loud",
+     "start": 15.76,
+     "end": 16.06
+    }
+   ]
+  },
+  {
+   "id": "l5",
+   "text": "Train to catch, I'll say goodbye",
+   "start": 16.24,
+   "end": 18.06,
+   "words": [
+    {
+     "w": "Train",
+     "start": 16.24,
+     "end": 16.4
+    },
+    {
+     "w": "to",
+     "start": 16.4,
+     "end": 16.56
+    },
+    {
+     "w": "catch,",
+     "start": 16.56,
+     "end": 17.04
+    },
+    {
+     "w": "I'll",
+     "start": 17.04,
+     "end": 17.36
+    },
+    {
+     "w": "say",
+     "start": 17.36,
+     "end": 17.52
+    },
+    {
+     "w": "goodbye",
+     "start": 17.52,
+     "end": 18.06
+    }
+   ]
+  },
+  {
+   "id": "l6",
+   "text": "\"Wait, I've never been on a train\"",
+   "start": 18.56,
+   "end": 20.76,
+   "words": [
+    {
+     "w": "\"Wait,",
+     "start": 18.56,
+     "end": 18.96
+    },
+    {
+     "w": "I've",
+     "start": 18.96,
+     "end": 19.28
+    },
+    {
+     "w": "never",
+     "start": 19.28,
+     "end": 19.52
+    },
+    {
+     "w": "been",
+     "start": 19.52,
+     "end": 19.84
+    },
+    {
+     "w": "on",
+     "start": 19.84,
+     "end": 20.16
+    },
+    {
+     "w": "a",
+     "start": 20.16,
+     "end": 20.32
+    },
+    {
+     "w": "train\"",
+     "start": 20.32,
+     "end": 20.76
+    }
+   ]
+  },
+  {
+   "id": "l7",
+   "text": "\"Can you keep it on?\"",
+   "start": 23.04,
+   "end": 24.66,
+   "words": [
+    {
+     "w": "\"Can",
+     "start": 23.04,
+     "end": 23.36
+    },
+    {
+     "w": "you",
+     "start": 23.36,
+     "end": 23.68
+    },
+    {
+     "w": "keep",
+     "start": 23.68,
+     "end": 24.08
+    },
+    {
+     "w": "it",
+     "start": 24.08,
+     "end": 24.32
+    },
+    {
+     "w": "on?\"",
+     "start": 24.32,
+     "end": 24.66
+    }
+   ]
+  },
+  {
+   "id": "l8",
+   "text": "Keep it on, keep it on, till the signal's gone",
+   "start": 25.04,
+   "end": 28.66,
+   "words": [
+    {
+     "w": "Keep",
+     "start": 25.04,
+     "end": 25.36
+    },
+    {
+     "w": "it",
+     "start": 25.36,
+     "end": 25.6
+    },
+    {
+     "w": "on,",
+     "start": 25.6,
+     "end": 26.0
+    },
+    {
+     "w": "keep",
+     "start": 26.0,
+     "end": 26.4
+    },
+    {
+     "w": "it",
+     "start": 26.4,
+     "end": 26.56
+    },
+    {
+     "w": "on,",
+     "start": 26.56,
+     "end": 26.96
+    },
+    {
+     "w": "till",
+     "start": 26.96,
+     "end": 27.28
+    },
+    {
+     "w": "the",
+     "start": 27.28,
+     "end": 27.44
+    },
+    {
+     "w": "signal's",
+     "start": 27.44,
+     "end": 28.16
+    },
+    {
+     "w": "gone",
+     "start": 28.16,
+     "end": 28.66
+    }
+   ]
+  },
+  {
+   "id": "l9",
+   "text": "You watched the city turn to fields",
+   "start": 28.8,
+   "end": 30.66,
+   "words": [
+    {
+     "w": "You",
+     "start": 28.8,
+     "end": 29.04
+    },
+    {
+     "w": "watched",
+     "start": 29.04,
+     "end": 29.28
+    },
+    {
+     "w": "the",
+     "start": 29.28,
+     "end": 29.44
+    },
+    {
+     "w": "city",
+     "start": 29.44,
+     "end": 29.76
+    },
+    {
+     "w": "turn",
+     "start": 29.76,
+     "end": 30.06
+    },
+    {
+     "w": "to",
+     "start": 30.06,
+     "end": 30.36
+    },
+    {
+     "w": "fields",
+     "start": 30.36,
+     "end": 30.66
+    }
+   ]
+  },
+  {
+   "id": "l10",
+   "text": "Your first train, it moved so fast",
+   "start": 30.82,
+   "end": 32.76,
+   "words": [
+    {
+     "w": "Your",
+     "start": 30.82,
+     "end": 30.96
+    },
+    {
+     "w": "first",
+     "start": 30.96,
+     "end": 31.28
+    },
+    {
+     "w": "train,",
+     "start": 31.28,
+     "end": 31.573
+    },
+    {
+     "w": "it",
+     "start": 31.573,
+     "end": 31.867
+    },
+    {
+     "w": "moved",
+     "start": 31.867,
+     "end": 32.16
+    },
+    {
+     "w": "so",
+     "start": 32.16,
+     "end": 32.32
+    },
+    {
+     "w": "fast",
+     "start": 32.32,
+     "end": 32.76
+    }
+   ]
+  },
+  {
+   "id": "l11",
+   "text": "Keep it on, keep it on, till the signal's gone",
+   "start": 32.96,
+   "end": 36.46,
+   "words": [
+    {
+     "w": "Keep",
+     "start": 32.96,
+     "end": 33.2
+    },
+    {
+     "w": "it",
+     "start": 33.2,
+     "end": 33.44
+    },
+    {
+     "w": "on,",
+     "start": 33.44,
+     "end": 33.84
+    },
+    {
+     "w": "keep",
+     "start": 33.84,
+     "end": 34.08
+    },
+    {
+     "w": "it",
+     "start": 34.08,
+     "end": 34.32
+    },
+    {
+     "w": "on,",
+     "start": 34.32,
+     "end": 34.8
+    },
+    {
+     "w": "till",
+     "start": 34.8,
+     "end": 35.04
+    },
+    {
+     "w": "the",
+     "start": 35.04,
+     "end": 35.2
+    },
+    {
+     "w": "signal's",
+     "start": 35.2,
+     "end": 35.92
+    },
+    {
+     "w": "gone",
+     "start": 35.92,
+     "end": 36.46
+    }
+   ]
+  },
+  {
+   "id": "l12",
+   "text": "Said it was amazing, from the other side of the world",
+   "start": 36.56,
+   "end": 40.46,
+   "words": [
+    {
+     "w": "Said",
+     "start": 36.56,
+     "end": 36.8
+    },
+    {
+     "w": "it",
+     "start": 36.8,
+     "end": 36.88
+    },
+    {
+     "w": "was",
+     "start": 36.88,
+     "end": 37.04
+    },
+    {
+     "w": "amazing,",
+     "start": 37.04,
+     "end": 37.76
+    },
+    {
+     "w": "from",
+     "start": 37.76,
+     "end": 38.24
+    },
+    {
+     "w": "the",
+     "start": 38.24,
+     "end": 38.56
+    },
+    {
+     "w": "other",
+     "start": 38.56,
+     "end": 39.04
+    },
+    {
+     "w": "side",
+     "start": 39.04,
+     "end": 39.52
+    },
+    {
+     "w": "of",
+     "start": 39.52,
+     "end": 39.76
+    },
+    {
+     "w": "the",
+     "start": 39.76,
+     "end": 40.08
+    },
+    {
+     "w": "world",
+     "start": 40.08,
+     "end": 40.46
+    }
+   ]
+  },
+  {
+   "id": "l13",
+   "text": "Like showing a visitor my town",
+   "start": 44.66,
+   "end": 48.26,
+   "words": [
+    {
+     "w": "Like",
+     "start": 44.66,
+     "end": 45.04
+    },
+    {
+     "w": "showing",
+     "start": 45.04,
+     "end": 45.68
+    },
+    {
+     "w": "a",
+     "start": 45.68,
+     "end": 46.44
+    },
+    {
+     "w": "visitor",
+     "start": 46.44,
+     "end": 47.2
+    },
+    {
+     "w": "my",
+     "start": 47.2,
+     "end": 47.68
+    },
+    {
+     "w": "town",
+     "start": 47.68,
+     "end": 48.26
+    }
+   ]
+  },
+  {
+   "id": "l14",
+   "text": "I saw it like a tourist too",
+   "start": 50.64,
+   "end": 54.06,
+   "words": [
+    {
+     "w": "I",
+     "start": 50.64,
+     "end": 50.8
+    },
+    {
+     "w": "saw",
+     "start": 50.8,
+     "end": 51.2
+    },
+    {
+     "w": "it",
+     "start": 51.2,
+     "end": 51.44
+    },
+    {
+     "w": "like",
+     "start": 51.44,
+     "end": 51.6
+    },
+    {
+     "w": "a",
+     "start": 51.6,
+     "end": 51.76
+    },
+    {
+     "w": "tourist",
+     "start": 51.76,
+     "end": 52.66
+    },
+    {
+     "w": "too",
+     "start": 53.6,
+     "end": 54.06
+    }
+   ]
+  },
+  {
+   "id": "l15",
+   "text": "That's why it's worth it",
+   "start": 54.96,
+   "end": 56.86,
+   "words": [
+    {
+     "w": "That's",
+     "start": 54.96,
+     "end": 55.28
+    },
+    {
+     "w": "why",
+     "start": 55.28,
+     "end": 55.52
+    },
+    {
+     "w": "it's",
+     "start": 55.52,
+     "end": 55.92
+    },
+    {
+     "w": "worth",
+     "start": 55.92,
+     "end": 56.4
+    },
+    {
+     "w": "it",
+     "start": 56.4,
+     "end": 56.86
+    }
+   ]
+  }
+ ]
+}
