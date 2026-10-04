@@ -87,7 +87,10 @@ async function stills(page: Page, times: number[], outDir: string) {
     else await page.screenshot({ path: f, clip: { x: 0, y: 0, width: LW, height: LH } });
     files.push(f);
     // QA: the G-buffer's object stats next to each still (tools/qa_frames.py reads them)
-    if (qa) await Bun.write(f.replace(/\.png$/, '.gbuf.json'), JSON.stringify(await page.evaluate(() => (window as any).__pdoom.qaStats())));
+    if (qa) {
+      await Bun.write(f.replace(/\.png$/, '.gbuf.json'), JSON.stringify(await page.evaluate(() => (window as any).__pdoom.qaStats())));
+      await Bun.write(f.replace(/\.png$/, '.text.json'), JSON.stringify(await page.evaluate(() => (window as any).__pdoom.qaText())));
+    }
   }
   return files;
 }

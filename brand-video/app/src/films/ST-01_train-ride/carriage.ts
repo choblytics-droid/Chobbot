@@ -47,7 +47,7 @@ export default class Carriage extends Scene {
     const ov = this.ov;
     ov.begin();
     const black = t >= (P.black ?? 1e9);
-    if (!black) ov.lyric(this.ly.lineAt(t, 0.35, 0.3), t, { y: H * 0.875 });
+    if (!black) ov.lyric(this.ly.lineAt(t, 0.35, 0.3), t, { y: H * 0.72 }); // above the platform caption zone (docs/QA.md)
     const bars = P.shot === 'board' ? 4 : Math.max(0, 4 - Math.floor(clamp((t - P.t0 - 4) / 9) * 4.999));
     if (!black) this.signal(frozen ? 0 : bars, W - 170, 300);
     if (frozen && !black) ov.caption('reconnecting…', W / 2, H * 0.36, { size: 38, align: 'center' });

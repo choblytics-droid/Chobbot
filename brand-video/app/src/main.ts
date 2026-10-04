@@ -1,6 +1,7 @@
 // Entry: preview player (default) or export mode (?export=1, driven by scripts/render.ts).
 import { Engine, type AdaptiveSampling } from './engine/engine';
 import { PixelCanvas } from './kit/pixel';
+import { Overlay } from './kit/overlay';
 import { PW, PH, W, H, SCALE } from './engine/gl';
 import { FILM, FILM_DIR } from './engine/scale';
 import type { TimelineEntry } from './engine/engine';
@@ -52,10 +53,25 @@ function setupExport() {
     width: PW,
     height: PH,
     timeline: TIMELINE.map(({ id, start, end }) => ({ id, start, end })),
+    /** QA: share of each platform UI zone (9:16, logical px) covered by text drawn this frame. */
+    qaText() {
+      const zones: [number, number, number, number, string][] = [[0, 0, 1080, 150, 'top bar'], [940, 700, 1080, 1700, 'buttons'], [0, 1560, 1080, 1920, 'caption']];
+      const out: Record<string, number> = {};
+      for (const [x0, y0, x1, y1, name] of zones) {
+        let hit = 0, n = 0;
+        for (const cv of Overlay.drawn) {
+          const k = cv.width / W, ctx = cv.getContext('2d')!;
+          const d = ctx.getImageData(Math.round(x0 * k), Math.round(y0 * k), Math.round((x1 - x0) * k), Math.round((y1 - y0) * k)).data;
+          for (let i = 3; i < d.length; i += 16) { n++; if (d[i]! > 80) hit++; }
+        }
+        out[name] = n ? +(hit / n).toFixed(4) : 0;
+      }
+      return out;
+    },
     /** QA: object stats of the pixel-art G-buffer on screen after the last render (docs/QA.md). */
     qaStats() { return PixelCanvas.last ? PixelCanvas.last.qaStats() : []; },
     /** Render a single frame at t (seeks as needed). */
-    still(t: number, samples: number | AdaptiveSampling = 1, shutter = 0.5) { PixelCanvas.last = null; return engine.render(t, 1 / 60, true, samples, shutter); },
+    still(t: number, samples: number | AdaptiveSampling = 1, shutter = 0.5) { PixelCanvas.last = null; Overlay.drawn = []; return engine.render(t, 1 / 60, true, samples, shutter); },
     /** The last rendered frame as a full-resolution (PW x PH) PNG, base64 (for stills at scale > 1). */
     async png() {
       const px = await engine.readPixelsAsync(), row = PW * 4;

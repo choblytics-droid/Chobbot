@@ -70,13 +70,13 @@ export default class Chat extends Scene {
       focusY = 1 - (y + 300) / H;
     }
     // the input row
-    c.fillStyle = 'rgba(241,238,232,0.08)'; c.fillRect(60, H - 220, W - 120, 90);
-    c.font = font(F.mono(400), 34); c.fillStyle = rgba('ash', 0.6); c.fillText('Say something…', 100, H - 168);
+    c.fillStyle = 'rgba(241,238,232,0.08)'; c.fillRect(60, H * 0.62, W - 200, 90);
+    c.font = font(F.mono(400), 34); c.fillStyle = rgba('ash', 0.6); c.fillText('Say something…', 100, H * 0.62 + 52);
     this.mc.render(this.ctx.renderer, out, { t, focusY, tilt: shot === 'keep' ? -0.05 + 0.02 * f.p : 0.04 - 0.02 * f.p, blur: 0.014, warm: shot === 'thanks' ? 1 : 0 });
     // the sung lyric (subtitle) over the macro, low
     const ov = this.ov;
     ov.begin();
-    if (shot === 'thanks') ov.lyric(this.ly.lineAt(t, 0.35, 0.3), t, { y: H * 0.87 });
+    if (shot === 'thanks') ov.lyric(this.ly.lineAt(t, 0.35, 0.3), t, { y: H * 0.74 });
     ov.draw(this.ctx.renderer, this.ctx.comp, out);
     const punch = shot === 'keep' ? 1 + 0.03 * ease.outCubic(clamp((t - f.start) / 1.8)) : 1;
     return { grain: 0.05, vignette: 0.5, bloom: 0.8, halation: 0.35, ca: 1.6, zoom: punch };

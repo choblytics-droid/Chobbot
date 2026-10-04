@@ -10,11 +10,14 @@ import { clamp, ease } from '../engine/util';
 import { roundRect, wrap, typedChars } from './kit';
 
 export class Overlay {
+  /** Text layers drawn for the frame on screen (QA: tools/qa_frames.py checks them against the platform UI zones). */
+  static drawn: HTMLCanvasElement[] = [];
   layer = new Layer2D();
   get c() { return this.layer.ctx; }
   begin() { this.layer.clear(); }
   draw(r: THREE.WebGLRenderer, comp: Compositor, out: THREE.WebGLRenderTarget) {
     comp.draw(r, this.layer.upload(), out, { mode: 'normal' });
+    Overlay.drawn.push(this.layer.canvas);
   }
 
   /**
@@ -27,7 +30,9 @@ export class Overlay {
     const inA = clamp((t - (l.words[0]!.start - 0.35)) / 0.2), outA = 1 - clamp((t - (l.end + 0.35)) / 0.25);
     const A = (o.a ?? 1) * inA * outA;
     if (A <= 0) return;
-    const maxW = W * 0.84, sp = measure(' ', fam, size);
+    // in the band of the platform's right-hand buttons (y 700–1700) the line wraps narrower to stay clear of them
+    const yc = o.y ?? H * 0.8;
+    const maxW = PORTRAIT && yc > 640 && yc < 1760 ? 2 * (900 - W / 2) : W * 0.84, sp = measure(' ', fam, size);
     const words = l.words.map((w) => w.w);
     const rows: number[][] = [[]];
     let rw = 0;
@@ -145,8 +150,8 @@ export class Overlay {
    */
   streamUI(o: { t: number; viewers: number; time: string; bars?: number; chat?: { user: string; text: string; hot?: boolean; at: number }[]; prompt?: { a: number; keep: number } }) {
     const c = this.c, t = o.t;
-    // top bar
-    const y = 92;
+    // top bar (below the platform's own top bar, docs/QA.md)
+    const y = 205;
     c.save();
     roundRect(c, 40, y - 28, 118, 56, 14); c.fillStyle = 'rgba(229,72,77,0.95)'; c.fill();
     c.font = font(F.mono(700), 30); c.textBaseline = 'middle'; c.fillStyle = rgba('bone', 1); c.fillText('LIVE', 62, y + 2);
@@ -158,15 +163,20 @@ export class Overlay {
     c.font = font(F.mono(700), 30); c.fillText(String(o.viewers), 232, y + 2);
     c.font = font(F.mono(500), 26); c.fillStyle = rgba('bone', 0.85); c.fillText(o.time, 340, y + 2);
     const bars = o.bars ?? 4;
-    for (let i = 0; i < 4; i++) { c.fillStyle = i < bars ? rgba('bone', 0.95) : rgba('bone', 0.25); c.fillRect(W - 140 + i * 22, y + 18 - (12 + i * 10), 14, 12 + i * 10); }
+    for (let i = 0; i < 4; i++) { c.fillStyle = i < bars ? rgba('bone', 0.95) : rgba('bone', 0.25); c.fillRect(W - 230 + i * 22, y + 18 - (12 + i * 10), 14, 12 + i * 10); }
     c.restore();
     // chat panel, bottom: newest at the bottom, a new message slides in
     const msgs = (o.chat ?? []).filter((m) => t >= m.at);
-    const size = 34, lh = size * 1.45, x0 = 44, yb = H - 150;
+    const size = 34, lh = size * 1.45, x0 = 44, yb = H - 470;   // the chat ends above the platform caption zone
     c.save();
-    const g = c.createLinearGradient(0, yb - 420, 0, H);
-    g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,0.72)');
-    c.fillStyle = g; c.fillRect(0, yb - 420, W, H - yb + 420);
+    const g = c.createLinearGradient(0, yb - 320, 0, yb + 140);
+    g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(0.6, 'rgba(0,0,0,0.62)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+    c.fillStyle = g; c.fillRect(0, yb - 320, 930, 460);
+    // fade the scrim out before the platform's buttons column
+    c.globalCompositeOperation = 'destination-out';
+    const gx = c.createLinearGradient(760, 0, 930, 0); gx.addColorStop(0, 'rgba(0,0,0,0)'); gx.addColorStop(1, 'rgba(0,0,0,1)');
+    c.fillStyle = gx; c.fillRect(760, yb - 320, 170, 460);
+    c.globalCompositeOperation = 'source-over';
     const shown = msgs.slice(-5);
     shown.forEach((m, i) => {
       const k = shown.length - 1 - i;
@@ -175,7 +185,7 @@ export class Overlay {
       const a = slide * (1 - k * 0.12);
       if (m.hot) {
         const tw = measure(m.user + '  ' + m.text, F.mono(500), size);
-        roundRect(c, x0 - 16, yy - size * 1.0, Math.min(W - 60, tw + 40), size * 1.5, 12);
+        roundRect(c, x0 - 16, yy - size * 1.0, Math.min(880, tw + 40), size * 1.5, 12);
         c.fillStyle = `rgba(255,178,36,${0.22 * a})`; c.fill();
         c.lineWidth = 2; c.strokeStyle = `rgba(255,178,36,${0.8 * a})`; c.stroke();
       }
@@ -186,12 +196,12 @@ export class Overlay {
       c.fillText(m.text, x0 + uw, yy);
     });
     // input row
-    roundRect(c, x0 - 8, H - 110, W - 2 * x0 + 16, 64, 32); c.fillStyle = 'rgba(241,238,232,0.12)'; c.fill();
-    c.font = font(F.mono(400), 28); c.fillStyle = rgba('ash', 0.8); c.textBaseline = 'middle'; c.fillText('Say something…', x0 + 22, H - 78);
+    roundRect(c, x0 - 8, H - 420, 880, 64, 32); c.fillStyle = 'rgba(241,238,232,0.12)'; c.fill();
+    c.font = font(F.mono(400), 28); c.fillStyle = rgba('ash', 0.8); c.textBaseline = 'middle'; c.fillText('Say something…', x0 + 22, H - 388);
     c.restore();
     // the "End stream?" prompt
     if (o.prompt && o.prompt.a > 0) {
-      const a = o.prompt.a, k = o.prompt.keep, pw = W * 0.78, ph = 300, px = (W - pw) / 2, py = H * 0.44;
+      const a = o.prompt.a, k = o.prompt.keep, pw = 800, ph = 300, px = 140, py = H * 0.44;   // clear of the right-hand buttons column
       c.save();
       c.globalAlpha = a;
       roundRect(c, px, py, pw, ph, 28); c.fillStyle = 'rgba(16,17,22,0.92)'; c.fill();

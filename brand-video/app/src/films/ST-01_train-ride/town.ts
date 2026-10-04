@@ -53,8 +53,8 @@ export default class Town extends Scene {
       const c = ov.c;
       c.save(); c.font = font(F.mono(400), 24); c.textAlign = 'center'; c.fillStyle = `rgba(241,238,232,${0.85 * a})`;
       c.shadowColor = 'rgba(0,0,0,0.7)'; c.shadowBlur = 12;
-      c.fillText('Story shared by a streamer on Reddit, retold with permission', W / 2, H * 0.94); c.restore();
-      ov.caption('LIVE · IRL', W * 0.08, H * 0.07, { size: 30, dot: '#ff3b3b', a: clamp((t - f.start - 0.4) / 0.2) });
+      c.fillText('Story shared by a streamer on Reddit, retold with permission', W / 2, H * 0.25); c.restore();   // under the closing line, clear of the caption zone
+      ov.caption('LIVE · IRL', W * 0.08, H * 0.1, { size: 30, dot: '#ff3b3b', a: clamp((t - f.start - 0.4) / 0.2) });
     }
     ov.draw(this.ctx.renderer, this.ctx.comp, out);
     const fade = shot === 'newday' ? clamp((t - (f.end - 0.6)) / 0.6) : 0;
