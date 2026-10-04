@@ -143,7 +143,7 @@ export function paintTown(pc: PixelCanvas, o: TownOpts) {
       pc.rect(ax - 1, Math.round(top - gh * 0.85), 3, 2, { a: TB[2]!, d, id });
     } else {
       const SLR = ramp('#2c303c', 0.8), SLD = SLR.map((c) => mix(c, '#0e1018', 0.3));
-      pc.poly([[x - 2, top + 1], [x + w / 2, top - gh], [x + w + 2, top + 1]], (px, py) => slate(px < x + w / 2 ? SLR : SLD, { d, id, tw: 4, th: 3, snow: P.snowS, snowK: 0.3, seed: hi, n: [px < x + w / 2 ? -0.5 : 0.5, 0.6] })(px, py));
+      pc.poly([[x - 2, top + 1], [x + w / 2, top - gh], [x + w + 2, top + 1]], (px, py) => slate(px < x + w / 2 ? SLR : SLD, { d, id, tw: 4, th: 3, snow: day > 0.5 ? '#eef3fa' : P.snowS, snowK: day > 0.5 ? 0.85 : 0.3, seed: hi, n: [px < x + w / 2 ? -0.5 : 0.5, 0.6] })(px, py));
       // snow on the roof edges
       for (let k = 0; k <= gh; k++) {
         const fx = k / gh;
@@ -241,7 +241,7 @@ export function paintTown(pc: PixelCanvas, o: TownOpts) {
     for (let k = 0; k < 8; k += 2) pc.px(hx + w / 2 - 4 + k, top + 25, { a: '#e8d6a8', d: d - 0.005, id });
     pc.rect(hx + w - 2, top + 5, 2, 3, { a: '#2a2a30', d: d - 0.006, id, e: '#ffd08a', ei: 3.2 * lightsOn });
     // shingle roof, a thick snow cap with icicles
-    pc.poly([[hx - 4, top + 1], [hx + w / 2, top - 14], [hx + w + 4, top + 1]], (px, py) => slate(px < hx + w / 2 ? SHG : SHG.map((c) => mix(c, '#000000', 0.25)), { d, id, tw: 3, th: 2, seed: id, n: [px < hx + w / 2 ? -0.5 : 0.5, 0.6] })(px, py));
+    pc.poly([[hx - 4, top + 1], [hx + w / 2, top - 14], [hx + w + 4, top + 1]], (px, py) => slate(px < hx + w / 2 ? SHG : SHG.map((c) => mix(c, '#000000', 0.25)), { d, id, tw: 3, th: 2, seed: id, snow: day > 0.5 ? '#eef3fa' : undefined, snowK: 0.8, n: [px < hx + w / 2 ? -0.5 : 0.5, 0.6] })(px, py));
     pc.poly([[hx - 5, top + 1], [hx + w / 2, top - 15], [hx + w + 5, top + 1], [hx + w + 5, top - 1], [hx + w / 2, top - 18], [hx - 5, top - 1]], snow(SNR, { d: d - 0.003, id, seed: id }));
     for (let k = hx - 3; k < hx + w + 4; k += 3) { const l = 1 + Math.floor(((k * 13) % 7) / 3); pc.rect(k, top + 2, 1, l, { a: '#dbe8f6', d: d - 0.004, id, n: [0, 0] }); }
     // garland with bulbs along the fascia
@@ -291,7 +291,7 @@ export function paintTown(pc: PixelCanvas, o: TownOpts) {
           const dv = vnoise(gx * 0.05, yy * 0.22, 31) * 0.7 + vnoise(gx * 0.2, yy * 0.6, 32) * 0.3;
           const hint = joint && vnoise(gx * 0.1, yy * 0.3, 33) > 0.72 ? -0.8 : 0;
           const sv = 1.4 + dv * 1.8 + hint + (hash01(gx, yy) > 0.985 ? 1.2 : 0);
-          pc.px(gx, yy, { a: fp ? '#8a96ad' : C[Math.max(0, Math.min(3, dither(sv, gx, yy)))]!, d, n: [-0.5 + (dv - 0.5) * 0.5, 0.75], id: 5 });   // tilted toward the low sun on the left: fresh snow catches it
+          pc.px(gx, yy, { a: fp ? '#8a96ad' : C[Math.max(0, Math.min(3, dither(sv, gx, yy)))]!, d, n: [-0.5 + (dv - 0.5) * 0.5, 0.75], id: 5, e: fp ? undefined : '#dbe6fa', ei: 0.12 + dv * 0.12 });   // a cool lift: fresh snow reads blue-white, not beige   // tilted toward the low sun on the left: fresh snow catches it
           continue;
         }
         const v = joint ? 0 : 1 + round * 1.6 + (rnd - 0.5) * 0.8;

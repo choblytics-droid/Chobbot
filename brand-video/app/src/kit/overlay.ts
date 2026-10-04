@@ -171,7 +171,7 @@ export class Overlay {
     c.beginPath(); c.ellipse(204, y, 16, 10, 0, 0, Math.PI * 2); c.stroke();
     c.beginPath(); c.arc(204, y, 4.5, 0, Math.PI * 2); c.fillStyle = rgba('bone', 1); c.fill();
     c.font = font(F.mono(700), 30); c.fillText(String(o.viewers), 232, y + 2);
-    c.font = font(F.mono(500), 26); c.fillStyle = rgba('bone', 0.85); c.fillText(o.time, 340, y + 2);
+    if (o.time) { c.font = font(F.mono(500), 26); c.fillStyle = rgba('bone', 0.85); c.fillText(o.time, 340, y + 2); }
     const bars = o.bars ?? 4;
     for (let i = 0; i < 4; i++) { c.fillStyle = i < bars ? rgba('bone', 0.95) : rgba('bone', 0.25); c.fillRect(W - 230 + i * 22, y + 18 - (12 + i * 10), 14, 12 + i * 10); }
     c.restore();

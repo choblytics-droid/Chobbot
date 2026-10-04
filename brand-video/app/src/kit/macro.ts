@@ -7,13 +7,13 @@ import { FSPass, Layer2D, W, H } from '../engine/gl';
 export class Macro {
   layer = new Layer2D();
   pass = new FSPass(/* glsl */ `
-    uniform sampler2D src; uniform float t, tilt, focusY, blurK, cell, glow, warm, zoom, bgK;
+    uniform sampler2D src; uniform float t, tilt, focusY, blurK, cell, glow, warm, zoom, bgK; uniform vec2 pan;
     vec2 warp(vec2 uv) {
       // a gentle keystone and rotation: the phone held at an angle; zoom > 1 pulls back to show more of the room
       vec2 p = uv - 0.5;
       p = rot2(tilt) * p;
       p.x *= 1.0 + (p.y) * 0.18;
-      return p * zoom + 0.5;
+      return p * zoom + 0.5 + pan;   // pan > 0 moves the phone down / right in frame
     }
     vec3 screenAt(vec2 q) {
       vec4 s = texture(src, q);
@@ -80,13 +80,13 @@ export class Macro {
       float pass = 0.6 + 0.4 * sin(uv.x * 30.0 - t * 9.0) * sin(uv.y * 7.0);
       c += vec3(0.012, 0.018, 0.032) * wnd * pass;
       fragColor = vec4(c, 1.0);
-    }`, { src: { value: null }, t: { value: 0 }, tilt: { value: -0.06 }, focusY: { value: 0.5 }, blurK: { value: 0.012 }, cell: { value: 7 }, glow: { value: 1.3 }, warm: { value: 0 }, zoom: { value: 1.07 }, bgK: { value: 1 } });
+    }`, { src: { value: null }, t: { value: 0 }, tilt: { value: -0.06 }, focusY: { value: 0.5 }, blurK: { value: 0.012 }, cell: { value: 7 }, glow: { value: 1.3 }, warm: { value: 0 }, zoom: { value: 1.07 }, bgK: { value: 1 }, pan: { value: [0, 0] } });
 
-  render(r: THREE.WebGLRenderer, out: THREE.WebGLRenderTarget, o: { t: number; tilt?: number; focusY?: number; blur?: number; cell?: number; glow?: number; warm?: number; zoom?: number; bg?: number }) {
+  render(r: THREE.WebGLRenderer, out: THREE.WebGLRenderTarget, o: { t: number; tilt?: number; focusY?: number; blur?: number; cell?: number; glow?: number; warm?: number; zoom?: number; bg?: number; pan?: [number, number] }) {
     const u = this.pass.u;
     u.src!.value = this.layer.upload();
     u.t!.value = o.t; u.tilt!.value = o.tilt ?? -0.06; u.focusY!.value = o.focusY ?? 0.5; u.blurK!.value = o.blur ?? 0.012;
-    u.cell!.value = o.cell ?? 7; u.glow!.value = o.glow ?? 1.3; u.warm!.value = o.warm ?? 0; u.zoom!.value = o.zoom ?? 1.07; u.bgK!.value = o.bg ?? 1;
+    u.cell!.value = o.cell ?? 7; u.glow!.value = o.glow ?? 1.3; u.warm!.value = o.warm ?? 0; u.zoom!.value = o.zoom ?? 1.07; u.bgK!.value = o.bg ?? 1; u.pan!.value = o.pan ?? [0, 0];
     this.pass.render(r, out);
   }
 }

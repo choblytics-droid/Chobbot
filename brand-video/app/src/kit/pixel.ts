@@ -164,7 +164,7 @@ export class PixelCanvas {
    * source rect (current buffer, before the offset) into the destination rect as emission, box-filtered.
    * Call after painting what it films.
    */
-  screen(sx: number, sy: number, sw: number, sh: number, dx: number, dy: number, dw: number, dh: number, o: { ei?: number; d?: number; id?: number; sky?: [number, number, number] } = {}) {
+  screen(sx: number, sy: number, sw: number, sh: number, dx: number, dy: number, dw: number, dh: number, o: { ei?: number; d?: number; id?: number; sky?: [number, number, number]; glare?: number } = {}) {
     const ei = o.ei ?? 1, d = o.d ?? 0.1, id = o.id ?? 200, sky = o.sky ?? [38, 52, 84];
     const at = (x: number, y: number) => ((AH - 1 - y) * AW + x) * 4;
     const out: [number, number, number][] = [];
@@ -191,6 +191,8 @@ export class PixelCanvas {
         const x = dx + i + ix, y = dy + j + iy;
         if (x < 0 || y < 0 || x >= AW || y >= AH) continue;
         const k = at(x, y), c = out[j * dw + i]!;
+        // glass glare: a soft diagonal band lifts the picture toward white
+        if (o.glare) { const b = Math.max(0, 1 - Math.abs((i / dw) - (j / dh) * 0.55 - 0.18) / 0.16) ** 2 * o.glare; for (let q = 0; q < 3; q++) c[q] = c[q]! + (235 - c[q]!) * b; }
         this.alb.set([8, 8, 10, id], k);
         this.nrm.set([128, 128, Math.round(d * 255), 255], k);
         this.emi.set([Math.round(c[0]), Math.round(c[1]), Math.round(c[2]), Math.round((ei / 8) * 255)], k);

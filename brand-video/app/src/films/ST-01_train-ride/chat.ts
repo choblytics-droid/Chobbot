@@ -55,40 +55,42 @@ export default class Chat extends Scene {
       return y + o.size * 1.25 * (lines.length + 0.9);
     };
     let focusY = 0.5;
+    // the chat so far, in the same order as at the station (neutral reactions and the one real line)
+    const HIST = [['viewer_1', '<3'], ['viewer_2', ':)'], ['viewer_1', 'o/'], ['viewer_3', "wait, I've never been on a train"]] as const;
+    // a received message pops in on the sung words (no cursor: nobody sees a viewer typing)
+    const pop = (at: number) => ease.outBack(clamp((t - at) / 0.25));
     if (shot === 'keep') {
       const l = this.ly.get('Can you keep it on');
-      // the chat so far (neutral reactions and the real line), then the new message typing in
-      let y = 400;
-      for (const [u, m] of [['viewer_1', 'o/'], ['viewer_2', ':)'], ['viewer_1', '<3']] as const) y = msg(u, m, y, { size: 44, a: 0.3 });
-      y = msg('viewer_3', "wait, I've never been on a train", y, { size: 52, a: 0.5 });
-      const s = 'can you keep it on?';
-      msg('viewer_3', this.typed(s, t, l.words[0]!.start - 0.1, l.end), y + 80, { size: big, a: 1, hot: true, caret: true });
+      let y = 360;
+      for (const [u, m] of HIST) y = msg(u, m, y, { size: u === 'viewer_3' ? 52 : 44, a: u === 'viewer_3' ? 0.5 : 0.3 });
+      const k = pop(l.words[0]!.start - 0.05);
+      if (k > 0) { c.save(); c.translate(80, y + 80); c.scale(0.85 + 0.15 * k, 0.85 + 0.15 * k); c.translate(-80, -(y + 80)); msg('viewer_3', 'can you keep it on?', y + 80, { size: big, a: clamp(k), hot: true }); c.restore(); }
       focusY = 1 - (y + 260) / H;
     } else {
       const l = this.ly.get('Said it was amazing');
-      // (no "reconnected" line: the post doesn't say when the thank-you came, only that it did)
       // the chat log (no live header, no input box: the stream is over; the post doesn't say when it came)
       let y = 300;
-      for (const [u, m] of [['viewer_1', '<3'], ['viewer_3', "wait, I've never been on a train"], ['viewer_2', ':)']] as const) y = msg(u, m, y, { size: 44, a: 0.3 });
-      const s = 'thanks for being so chill. amazing stream';
-      // revealed word by word on the sung words, no cursor (a received message, not one being typed)
-      const words = s.split(' '), n = Math.ceil(clamp((t - f.start) / Math.max(0.1, l.words[3]!.end - f.start)) * words.length);
-      msg('viewer_3', words.slice(0, Math.max(1, n)).join(' '), y + 40, { size: 92, a: 1, hot: true });
-      focusY = 1 - (y + 300) / H;
+      for (const [u, m] of [...HIST, ['viewer_3', 'can you keep it on?']] as const) y = msg(u, m, y, { size: 44, a: 0.3 });
+      const k = pop(f.start + 0.15);
+      if (k > 0) { c.save(); c.translate(80, y + 60); c.scale(0.85 + 0.15 * k, 0.85 + 0.15 * k); c.translate(-80, -(y + 60)); msg('viewer_3', 'thanks for being so chill. amazing stream', y + 60, { size: 96, a: clamp(k), hot: true }); c.restore(); }
+      focusY = 1 - (y + 320) / H;
     }
-    // the input row
     if (shot === 'keep') {
       const iy = H * 0.7;
       c.fillStyle = 'rgba(241,238,232,0.08)'; c.fillRect(60, iy, W - 200, 90);
       c.font = font(F.mono(400), 34); c.fillStyle = rgba('ash', 0.6); c.fillText('Say something…', 100, iy + 52);
     }
     // keep: tight on the screen, the room barely there; thanks: pulled back, the phone in the carriage, pushing in slowly
-    const zoom = shot === 'keep' ? 1.1 : 1.5 - 0.36 * ease.inOutCubic(f.p);
-    this.mc.render(this.ctx.renderer, out, { t, focusY, zoom, tilt: shot === 'keep' ? -0.05 + 0.02 * f.p : 0.12 - 0.08 * ease.inOutCubic(f.p), blur: shot === 'keep' ? 0.008 : 0.012, warm: shot === 'thanks' ? 1 : 0 });
+    // keep: close on the top of the screen, the room barely there; thanks: the phone low in frame
+    // under the lyric, a big move (push in and a turn) across the shot
+    const e = ease.inOutCubic(f.p);
+    const zoom = shot === 'keep' ? 1.08 : 1.55 - 0.4 * e;
+    const pan: [number, number] = shot === 'keep' ? [-0.03, 0.07] : [0.03 - 0.06 * e, 0.07 + 0.09 * e];
+    this.mc.render(this.ctx.renderer, out, { t, focusY, zoom, pan, tilt: shot === 'keep' ? -0.05 + 0.02 * f.p : 0.16 - 0.24 * e, blur: shot === 'keep' ? 0.005 : 0.012, warm: shot === 'thanks' ? 1 : 0 });
     // the sung lyric (subtitle) over the macro, low
     const ov = this.ov;
     ov.begin();
-    if (shot === 'thanks') ov.lyric(this.ly.lineAt(t, 0.35, 0.3), t, { y: H * 0.6 });
+    if (shot === 'thanks') ov.lyric(this.ly.lineAt(t, 0.35, 0.3), t, { y: H * 0.15, plate: 0.7 });   // above the phone
     ov.draw(this.ctx.renderer, this.ctx.comp, out);
     const punch = shot === 'keep' ? 1 + 0.03 * ease.outCubic(clamp((t - f.start) / 1.8)) : 1;
     return { grain: 0.05, vignette: 0.5, bloom: 0.8, halation: 0.35, ca: 1.6, zoom: punch };

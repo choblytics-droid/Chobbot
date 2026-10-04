@@ -82,8 +82,8 @@ export function paintDesk(pc: PixelCanvas, o: { t: number; k: number }) {
   // the game on screen: a night platformer level (cave, platforms, a coin, the player sprite) with a HUD
   for (let y = 180; y < 238; y++) for (let x = 64; x < 166; x++) {
     const lx = x - 64, ly = y - 180;
-    // a night platformer: gradient sky, a moon, far hills and a pine line, brick ground with tile seams,
-    // floating brick ledges, a ? block, a pipe, a coin row, an enemy and the player, the HUD on top
+    // an original night platformer: sky, a moon, hills and pines, violet stone tiles with glowing moss,
+    // floating teal stones, a lantern, a crystal, gems, a slime and a small hooded hero, the HUD on top
     let col = ly < 18 ? '#141a36' : ly < 30 ? '#1d2448' : '#262c52';
     if ((lx * 37 + ly * 91) % 113 === 0 && ly < 22) col = '#c8d4f0';                            // a few stars
     if ((lx - 84) ** 2 + (ly - 11) ** 2 < 10) col = '#f0e6c0';                                 // the moon
@@ -92,15 +92,15 @@ export function paintDesk(pc: PixelCanvas, o: { t: number; k: number }) {
     if (ly >= hill + 2 && (lx + ly) % 7 === 0) col = '#24464a';
     if (ly >= 44 - ((lx * 5) % 7 < 3 ? 3 : 0) && ly < 50) col = '#173028';                   // pines
     const ground = ly >= 50;
-    if (ground) col = (ly - 50) % 4 === 0 || ((lx + ((ly - 50) >> 2) * 3) % 6 === 0) ? '#3a2018' : ly === 50 ? '#c86a3a' : '#9a4a2a';
-    if (ly === 49 && lx % 4 < 3) col = '#4aa85a';                                              // grass on the floor
+    if (ground) col = (ly - 50) % 4 === 0 || ((lx + ((ly - 50) >> 2) * 5) % 8 === 0) ? '#231a33' : ly === 50 ? '#8a7ab8' : (lx + ly) % 5 === 0 ? '#4a3d6a' : '#5a4a80';   // violet stone tiles
+    if (ly === 49 && lx % 5 < 2) col = '#6ae0c8';                                              // glowing moss
     const ledge = (x0: number, x1: number, yy: number) => lx >= x0 && lx < x1 && ly >= yy && ly < yy + 4;
-    if (ledge(10, 34, 36) || ledge(56, 76, 28)) col = (ly - 28) % 4 === 0 || lx % 4 === 0 ? '#5a2a18' : '#c0602f';
-    if (lx >= 40 && lx < 44 && ly >= 36 && ly < 40) col = lx === 40 || ly === 36 ? '#ffe08a' : (lx === 42 && ly === 38) ? '#7a4a10' : '#e8a82a';   // ? block
-    if (lx >= 88 && lx < 96 && ly >= 40 && ly < 50) col = ly < 43 ? (lx === 88 ? '#9af08a' : '#3aa04a') : lx < 90 ? '#7ad86a' : lx > 93 ? '#1e6a2a' : '#3aa04a';   // pipe
-    for (const cx of [58, 64, 70]) if (Math.abs(lx - cx) < 1.5 && Math.abs(ly - 22) < 2) col = Math.abs(lx - cx) < 0.6 ? '#fff2a0' : '#ffc23a';   // coins
-    if (lx >= 72 && lx < 77 && ly >= 46 && ly < 50) col = ly === 46 ? '#5a2a10' : ly === 47 && (lx === 73 || lx === 75) ? '#ffffff' : '#8a4a20';   // a walker
-    if (lx >= 20 && lx < 24 && ly >= 30 && ly < 36) col = ly < 31 ? '#c0392b' : ly < 33 ? '#e8c27a' : ly < 35 ? '#3a5ac8' : '#5a3a2a';   // the player
+    if (ledge(10, 34, 36) || ledge(56, 76, 28)) col = ly === 36 || ly === 28 ? '#9ad8e8' : lx % 6 === 0 ? '#1e3a4a' : '#3a6a7a';   // floating teal stone
+    if (lx >= 40 && lx < 44 && ly >= 35 && ly < 40) col = ly === 35 ? '#3a2a1a' : (lx === 41 || lx === 42) && ly > 36 ? '#ffe9a0' : '#c88a3a';   // a hanging lantern
+    if (lx >= 88 && lx < 96 && ly >= 50 - Math.max(0, 10 - Math.abs(lx - 91.5) * 2.4) && ly < 50) col = lx < 91 ? '#e88af0' : '#a04ab8';   // a crystal
+    for (const cx of [58, 64, 70]) if (Math.abs(lx - cx) + Math.abs(ly - 22) < 2) col = Math.abs(lx - cx) + Math.abs(ly - 22) < 1 ? '#e0fbff' : '#6ad8ff';   // floating gems
+    if (lx >= 72 && lx < 77 && ly >= 47 - (lx > 72 && lx < 76 ? 1 : 0) && ly < 50) col = ly === 48 && (lx === 73 || lx === 75) ? '#10301a' : '#7ae06a';   // a slime
+    if (lx >= 20 && lx < 24 && ly >= 30 && ly < 36) col = ly < 32 ? (lx === 22 && ly === 31 ? '#ffe9a0' : '#e8e2d6') : ly < 35 ? '#e8e2d6' : '#8a7ab8';   // the hero: a small hooded figure, blank face
     if (ly < 5) col = lx < 30 ? (lx % 5 < 3 && ly > 1 && ly < 4 ? '#e5484d' : '#101216') : (lx > 80 && ly > 1 && ly < 4 && lx % 3 ? '#e8e2d6' : '#101216');   // HUD: hearts, score
     const refl = Math.max(0, 1 - Math.abs(lx - 78 - ly * 0.35) / 14) * (1 - on) * k;   // the door's light on the dark glass
     pc.px(x, y, { a: P.black, d: 0.44, id: 11, e: on > 0.05 ? col : '#ffd9a0', ei: on > 0.05 ? 1.5 * on : 0.35 * refl + 0.04 * k });
@@ -140,6 +140,11 @@ export function paintDesk(pc: PixelCanvas, o: { t: number; k: number }) {
   pc.poly([[cx - 22, cy - 66], [cx - 14, cy - 67], [cx - 10, cy + 38], [cx - 18, cy + 39]], (x, y) => ({ a: CR[x === cx - 21 ? 3 : (y % 7 === 0 ? 1 : 2)]!, d: 0.195, id: 20 }));
   pc.poly([[cx + 6, cy - 69], [cx + 14, cy - 70], [cx + 16, cy + 37], [cx + 8, cy + 37]], (x, y) => ({ a: CR[x === cx + 7 ? 3 : (y % 7 === 0 ? 1 : 2)]!, d: 0.195, id: 20 }));
   for (let y = cy - 64; y < cy + 37; y += 2) { pc.px(cx - 23, y, { a: CR[4]!, d: 0.194, id: 20 }); pc.px(cx + 15, y, { a: CR[4]!, d: 0.194, id: 20 }); }   // contrast stitching
+  // the monitor's cold light catching the chair's left edge and top (rim light), the door's warm light on the right edge
+  pc.line(cx - 30, cy - 62, cx - 30, cy + 40, { a: '#8a9ac0', d: 0.189, id: 20, n: [-0.8, 0.2] });
+  pc.line(cx - 22, cy - 74, cx + 18, cy - 78, { a: '#9aa8c8', d: 0.189, id: 20, n: [0, 0.9] });
+  pc.line(cx - 30, cy - 62, cx - 22, cy - 74, { a: '#8a9ac0', d: 0.189, id: 20, n: [-0.6, 0.6] });
+  pc.line(cx + 29, cy - 60, cx + 30, cy + 38, { a: '#b8895a', d: 0.189, id: 20, n: [0.8, 0] });
   pc.rect(cx - 28, cy + 40, 56, 12, (x, y) => ({ a: y === cy + 40 ? CH[4]! : y === cy + 51 ? CH[0]! : y === cy + 41 ? CH[3]! : CH[(x + y) % 11 === 0 ? 2 : 1]!, d: 0.19, id: 21, n: [0, 0.6] }));
   pc.rect(cx - 2, cy + 52, 5, 40, (x) => ({ a: x === cx - 2 ? '#8d929c' : x === cx + 2 ? '#2a2c33' : P.metal, d: 0.18, id: 22 }));
   for (const dx of [-36, -14, 12, 34]) { pc.line(cx, cy + 92, cx + dx, cy + 104, { a: P.metal, d: 0.17, id: 22 }); pc.disc(cx + dx, cy + 105, 2, { a: '#1a1b20', d: 0.169, id: 22 }); }

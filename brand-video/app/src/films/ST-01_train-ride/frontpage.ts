@@ -94,14 +94,11 @@ export default class FrontPage extends Scene {
     const sy = 340 + size * 1.74 + 52;
     const sf = F.serif(600, true);
     c.font = font(sf, 34);
-    wrap('A streamer took the stream outside for the first time. Three people were watching.', sf, 34, W - 220).forEach((l, i) => c.fillText(l, W / 2, sy + i * 38));
+    wrap('A streamer did their first proper IRL stream. Three people were watching.', sf, 34, W - 220).forEach((l, i) => c.fillText(l, W / 2, sy + i * 38));
     c.fillRect(60, PHOTO.y - 30, W - 120, 3);
     c.fillRect(PHOTO.x - 2, PHOTO.y - 2, PHOTO.w + 4, 2); c.fillRect(PHOTO.x - 2, PHOTO.y + PHOTO.h, PHOTO.w + 4, 2);
     c.textAlign = 'left';
-    c.font = font(F.mono(500), 17); c.globalAlpha = 0.8;
-    c.fillText('The carousel, as the stream saw it.', PHOTO.x, PHOTO.y + PHOTO.h + 26);
-    c.globalAlpha = 1;
-    const body = 'After a year of streaming games from their desk, they took the stream outside for the first time: a Christmas tour of their town. The market, the castle, a lit-up carousel. They had a train to catch and were about to end the stream. Then one viewer said they had never been on a train. So the stream stayed on, out of the city and across open farmland, until the signal dropped. The viewer thanked them for being so chill and called it an amazing stream. They were watching from the other side of the world. The streamer kept streaming IRL.';
+    const body = 'After a year of streaming games from their desk, they did their first proper IRL stream: a Christmas tour of their town. The market, the castle, a lit-up carousel. They had a train to catch and were about to end the stream. Then one viewer said they had never been on a train. So the stream stayed on, out of the city and across open farmland, until the signal dropped. The viewer thanked them for being so chill and called it an amazing stream. They were watching from the other side of the world. The streamer kept streaming IRL.';
     const bf = F.serif(600), bs = 19, colW = 300, rows = 9;
     const lines = wrap(body, bf, bs, colW);
     c.font = font(bf, bs);

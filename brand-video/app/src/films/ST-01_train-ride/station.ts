@@ -23,13 +23,14 @@ export default class Station extends Scene {
     this.pl.render(this.ctx.renderer, out, {
       lights: stationLights(t), t, sunEl: -0.1, sunAz: -0.6, skyExp: 4.5, ambient: 0.9, ambNear: 0.7, stars: 1, clouds: 0.4,
       bands: 9, horizonY: 230, fov: 280, haze: 0.5, snow: 1, wet: 0.25, groundY: 378, hazeCol: [0.012, 0.016, 0.03],
+      zoom: [1 + 0.16 * ease.inOutCubic(clamp((f.p - 0.4) / 0.6)), 0.5, 0.42],   // push in on the train as the chat line lands (text stays put)
     });
     const ov = this.ov;
     ov.begin();
     const l5 = this.ly.get('Train to catch'), l6 = this.ly.get('never been on a train');
     const s0 = f.start;
     ov.streamUI({
-      t, viewers: 3, time: `1:${String(12 + Math.floor((t - s0) / 60)).padStart(2, '0')}:${String(40 + Math.floor(t - s0)).padStart(2, '0')}`,
+      t, viewers: 3, time: ''   /* no stream time: the post gives none */,
       chat: [
         // neutral reactions only (no invented lines); the one real line is viewer_3's
         { user: 'viewer_1', text: '<3', at: s0 - 10 },
@@ -41,7 +42,6 @@ export default class Station extends Scene {
     });
     ov.lyric(this.ly.lineAt(t, 0.35, 0.3), t, { y: H * 0.375, plate: 0.85 });   // a denser plate: the snowy ridge runs behind it
     ov.draw(this.ctx.renderer, this.ctx.comp, out);
-    // a slow push in as the chat line lands
-    return { grain: 0.05, vignette: 0.35, bloom: 0.7, halation: 0.3, ca: 1.0, zoom: 1 + 0.06 * ease.inOutCubic(clamp((f.p - 0.45) / 0.55)) };
+    return { grain: 0.05, vignette: 0.35, bloom: 0.7, halation: 0.3, ca: 1.0 };
   }
 }

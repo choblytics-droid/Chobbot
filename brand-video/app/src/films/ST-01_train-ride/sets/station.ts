@@ -20,7 +20,7 @@ export function paintStation(pc: PixelCanvas, o: { t: number; camX?: number }) {
 
   // far: a hill and a few town lights under the sky (seen past the canopy's edge)
   lay(0.95);
-  const hy = (x: number) => 200 - Math.round(10 * Math.sin(x * 0.02) + 5 * Math.sin(x * 0.07));
+  const hy = (x: number) => 214 - Math.round(7 * Math.sin(x * 0.02) + 4 * Math.sin(x * 0.07));   // kept low: the lyric sits above its snowy crest
   const HR = ramp('#232838', 0.9);
   for (let x = -20; x < AW + 20; x++) {
     for (let y = hy(x); y < 240; y++) pc.px(x, y, hillside(HR, CASTLE_SNOW, { d: 0.96, id: 2, ty: hy, seed: 5 })(x, y));

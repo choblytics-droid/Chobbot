@@ -14,7 +14,7 @@ A streamer's first real IRL. 3 viewers. One of them had never been on a train. B
 ```
 Based on a true story, shared by a streamer on Reddit.
 
-After a year of streaming games from their desk, they took the stream outside for the first time: a Christmas tour of their town. The market, the castle, a lit-up carousel. Three people were watching.
+After a year of streaming games from their desk, they did their first proper IRL stream: a Christmas tour of their town. The market, the castle, a lit-up carousel. Three people were watching.
 
 They had a train to catch and were about to end the stream. Then one viewer said they had never been on a train. So the stream stayed on, out of the city and across open farmland, until the signal dropped.
 
