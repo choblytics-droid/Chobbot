@@ -17,6 +17,30 @@ each would be on screen for a fraction of a second, and the product message woul
 (2026-10-03) and each film is pushed as high in the band as it allows (2026-10-04). Lower levels below
 are reference only.
 
+## Effort = level × path × style deck (merged list, owner 2026-10-04)
+
+A film's effort is three choices made together at step 1: its **level** (the tiers below), its
+**path** (depth / mixed / breadth, above) and its **style deck** (one home style + 3–5 switch
+styles from the A list in [`STYLE_DECK.md`](STYLE_DECK.md); a style not yet built in the engine costs
+a build in the first film that uses it). The full merged list, with every style's build state and the
+hours per film, is the **"Effort Levels" tab** of the media plan (rebuilt by `tools/effort_sheet.py`).
+
+| Film(s) | Section | Level | Path | Home | Switch styles | New to build | Hours each |
+|---|---|---|---|---|---|---|---|
+| ST-01 The train ride | 1 Streamer Stories | 6 | Mixed | Pixel art | Neon line · Halftone · CRT/glitch | — (built) | 9 (done) |
+| ST-02 The raid from the hero | 1 Streamer Stories | 6 | Mixed | Voxel diorama | CRT/VHS · LED dot-matrix · Kinetic type · Stained glass | Voxel, LED, Stained glass | 9 |
+| ST-04, ST-06, ST-09 (wholesome) | 1 Streamer Stories | 6 | Mixed | Pixel art | Papercut · Neon line · Constellations · Halftone | Papercut, Constellations | 3.5 |
+| ST-05 (sad) | 1 Streamer Stories | 6 | Mixed | Engraving | Blueprint · Thermal · Terminal/ASCII | all four | 9 |
+| ST-10 (sad) | 1 Streamer Stories | 6 | Mixed | Engraving | as ST-05 | — | 3.5 |
+| ST-03, ST-07, ST-08 (funny / bittersweet) | 1 Streamer Stories | 6 | Mixed | picked at step 1 | picked at step 1 | depends | 3.5 |
+| GN-U1A … U8A | 2 Brand · Generic A | 6 | Depth | Raymarched + blueprint | Constellations · Data/UI · Engraving | all (first film) | 9, then 3.5 |
+| GN-U1B … U8B | 3 Brand · Generic B | 6 | Mixed | Pixel or voxel room | CRT · Halftone · Kinetic type · Neon line | the room (first film) | 8, then 3.5 |
+| MA-A | 4 Brand · Master | 8 | Depth | picked at step 1 | picked at step 1 | depends | 12 |
+| MA-B | 4 Brand · Master | 7 | Mixed | picked at step 1 | picked at step 1 | reuses MA-A | 7 |
+
+Built in the engine after ST-01: pixel art, neon line, newspaper halftone, kinetic typography; partly
+CRT/glitch (datamosh) and data/UI (stream UI, chat, phone macro). Everything else is a new build.
+
 ## The tiers
 
 | Tier | Level | What it looks like | Rendering (渲染) effects added at this tier | Opus agent-hours | GPU final render |
