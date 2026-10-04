@@ -116,7 +116,12 @@ not committed. Send files to the owner with SendUserFile.
 ## Measured on ST-01 (this cloud container, CPU / SwiftShader)
 
 - A still: 3–7 s (12 motion-blur sub-frames: ~10 s). 1080p frame at 1 sample: ~0.6 s.
-- Animatic (55–61 s at 30 fps): ~21 min. The 60 fps level-8 build with adaptive motion blur needs a GPU machine.
+- Animatic (55–61 s at 30 fps): ~21–27 min. A postable 1080p60 build with 4 motion-blur samples:
+  ~2.8 s/frame, ~2.6 h for 55 s; render it in two `--from/--to` halves with `--noaudio` (each fits a
+  2 h background job), join with ffmpeg concat (`-c:v copy`) and mux `audio/song.wav`. Re-encode at
+  CRF 19 / maxrate 20M for posting (~75 MB) and keep it in `films/<id>/release/` (the box is
+  temporary). Files over ~50 MB don't send in chat: send a ~25 MB two-pass copy.
+  The 4K level-8 build with adaptive motion blur needs a GPU machine.
 - Agent time is the owner's usage bar: note it before and after each film to calibrate `docs/TIER_LIST.md`.
 
 ## Lessons from ST-01
