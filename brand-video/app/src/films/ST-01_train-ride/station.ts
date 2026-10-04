@@ -31,9 +31,10 @@ export default class Station extends Scene {
     ov.streamUI({
       t, viewers: 3, time: `1:${String(12 + Math.floor((t - s0) / 60)).padStart(2, '0')}:${String(40 + Math.floor(t - s0)).padStart(2, '0')}`,
       chat: [
-        { user: 'viewer_1', text: 'the carousel!!', at: s0 - 10 },
-        { user: 'viewer_2', text: 'so pretty with the snow', at: s0 - 6 },
-        { user: 'viewer_1', text: 'safe trip home', at: l5.start + 0.6 },
+        // neutral reactions only (no invented lines); the one real line is viewer_3's
+        { user: 'viewer_1', text: '<3', at: s0 - 10 },
+        { user: 'viewer_2', text: ':)', at: s0 - 6 },
+        { user: 'viewer_1', text: 'o/', at: l5.start + 0.6 },
         { user: 'viewer_3', text: "wait, I've never been on a train", hot: true, at: l6.start - 0.1 },
       ],
       prompt: { a: clamp((t - (l5.start + 0.2)) / 0.2), keep: clamp((t - (l6.end - 0.3)) / 0.25) },

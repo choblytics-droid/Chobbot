@@ -21,6 +21,12 @@ one *home* style plus 3–5 *switch* styles, all picked from the A-tier list bel
 | **Silhouettes** from behind (hoodie, headset), rim-lit | Realistic or semi-realistic humans |
 | **The chat itself as a character**: messages, usernames, emotes, typing dots | Many characters on screen at once |
 
+**Owner rule (2026-10-04): no people unless they are simple.** If a human figure can't be drawn
+well, use none: the object is the protagonist (ST-01: the phone on its tripod, at the train window,
+the stream's own screen), or a simple pixel prop or the mascot. Scenes explain the situation through
+objects, the stream UI and the chat. The companion is always a simple mascot (a warm spark), never a
+character.
+
 **Nobody sings on screen.** The song plays in the background like a soundtrack. No character
 performs it, mouths it or lip-syncs. The lyrics reach the screen as kinetic type, chat messages or
 on-screen text timed to the words, and the picture tells the story while the song carries the mood.

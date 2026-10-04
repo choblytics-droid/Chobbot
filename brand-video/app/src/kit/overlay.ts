@@ -189,6 +189,26 @@ export class Overlay {
     }
   }
 
+  /** The companion as a mascot: a warm spark with a halo and four soft rays (no face, no body). */
+  spark(x: number, y: number, r: number, t: number, a = 1) {
+    if (a <= 0) return;
+    const c = this.c, fl = 0.9 + 0.1 * Math.sin(t * 83.1) * Math.sin(t * 51.7);
+    c.save();
+    c.globalCompositeOperation = 'lighter';
+    c.globalAlpha = a;
+    const g = c.createRadialGradient(x, y, 0, x, y, r * 3);
+    g.addColorStop(0, `rgba(255,236,190,${0.95 * fl})`); g.addColorStop(0.18, `rgba(255,178,36,${0.7 * fl})`); g.addColorStop(1, 'rgba(255,140,20,0)');
+    c.fillStyle = g; c.beginPath(); c.arc(x, y, r * 3, 0, Math.PI * 2); c.fill();
+    c.strokeStyle = `rgba(255,214,140,${0.7 * fl})`; c.lineCap = 'round';
+    for (let i = 0; i < 4; i++) {
+      const ang = t * 0.9 + 0.3 + (i * Math.PI) / 2, len = r * (1.6 + 0.3 * Math.sin(t * 5 + i));
+      c.lineWidth = r * 0.16;
+      c.beginPath(); c.moveTo(x + Math.cos(ang) * r * 0.5, y + Math.sin(ang) * r * 0.5); c.lineTo(x + Math.cos(ang) * len, y + Math.sin(ang) * len); c.stroke();
+    }
+    c.fillStyle = 'rgba(255,250,240,1)'; c.beginPath(); c.arc(x, y, r * 0.32, 0, Math.PI * 2); c.fill();
+    c.restore();
+  }
+
   /** One chat message as a floating bubble (the chat as a character). */
   chat(user: string, text: string | { line: Line }, t: number, x: number, y: number, o: { size?: number; a?: number; w?: number; hot?: boolean } = {}) {
     const c = this.c, size = o.size ?? 38, A = o.a ?? 1;

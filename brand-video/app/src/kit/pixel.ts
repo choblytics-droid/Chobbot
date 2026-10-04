@@ -84,6 +84,13 @@ export class PixelCanvas {
     const i = ((AH - 1 - y) * AW + x) * 4; // stored bottom-up for GL
     this.alb.set(v.a, i); this.nrm.set(v.n, i); this.emi.set(v.e, i);
   }
+  /** Clear one pixel back to sky. */
+  erase(x: number, y: number) {
+    x = Math.round(x + this.ox); y = Math.round(y + this.oy);
+    if (x < 0 || y < 0 || x >= AW || y >= AH) return;
+    const i = ((AH - 1 - y) * AW + x) * 4;
+    this.alb.fill(0, i, i + 4); this.nrm.fill(0, i, i + 4); this.emi.fill(0, i, i + 4);
+  }
   /** Add emission only (a glow on top of what is there). */
   glow(x: number, y: number, e: string, ei: number) {
     x = Math.round(x + this.ox); y = Math.round(y + this.oy);
@@ -404,6 +411,39 @@ void main() {
   fragColor = vec4(c, 1.0);
 }`;
 
+// The neon-line material: the same G-buffer drawn as glowing outlines where objects meet, coloured
+// by what they are made of, on near black (the composition stays locked, the material changes).
+const NEON_FRAG = /* glsl */ `
+uniform sampler2D alb, nrm, emi;
+uniform vec2 art;
+uniform float t, k;
+vec3 hue(vec3 a) { float m = max(max(a.r, a.g), max(a.b, 1e-3)); vec3 c = a / m; float l = luma(c); return mix(vec3(l), c, 1.8); }
+void main() {
+  vec2 ap = floor(vUv * art);
+  vec4 A = texture(alb, (ap + 0.5) / art), N = texture(nrm, (ap + 0.5) / art), E = texture(emi, (ap + 0.5) / art);
+  vec3 c = vec3(0.004, 0.005, 0.012);
+  // faint perspective grid on the ground, and stars in the sky
+  if (N.a < 0.5) {
+    c += vec3(0.6, 0.7, 1.0) * step(0.9975, hash12(ap)) * 0.6;
+    fragColor = vec4(c, 1.0); return;
+  }
+  float id = A.a * 255.0, d = N.b;
+  float edge = 0.0;
+  for (int i = 0; i < 4; i++) {
+    vec2 o = i == 0 ? vec2(1, 0) : i == 1 ? vec2(-1, 0) : i == 2 ? vec2(0, 1) : vec2(0, -1);
+    vec4 Ao = texture(alb, (ap + o + 0.5) / art), No = texture(nrm, (ap + o + 0.5) / art);
+    if (No.a < 0.5 || abs(Ao.a * 255.0 - id) > 0.5 || abs(No.b - d) > 0.03) edge = 1.0;
+  }
+  vec3 col = hue(toLinear(A.rgb));
+  float flick = 0.85 + 0.15 * step(0.08, hash11(floor(t * 14.0) + id));
+  c += col * edge * 2.4 * flick * (1.0 - d * 0.6);
+  // what glows stays a point of light
+  c += toLinear(E.rgb) * E.a * 8.0 * 0.9;
+  // a dim fill so the shapes read
+  c += col * 0.008 * (1.0 - d);
+  fragColor = vec4(c, 1.0);
+}`;
+
 /** The two GL passes and their render targets. */
 export class PixelLight {
   litRT = makeRT(AW, AH, { pxScale: 1, depthBuffer: false, minFilter: THREE.LinearMipmapLinearFilter, magFilter: THREE.NearestFilter, generateMipmaps: true });
@@ -417,6 +457,15 @@ export class PixelLight {
     litT: { value: null }, emiT: { value: null }, nrmT: { value: null }, art: { value: [AW, AH] }, cam: { value: [0, 0] },
     t: { value: 0 }, haze: { value: 0.5 }, snow: { value: 1 }, wet: { value: 0.5 }, groundY: { value: 80 }, hazeWarm: { value: 0 }, hazeCol: { value: [0.02, 0.03, 0.06] },
   });
+
+  neon = new FSPass(NEON_FRAG, { alb: { value: null }, nrm: { value: null }, emi: { value: null }, art: { value: [AW, AH] }, t: { value: 0 }, k: { value: 1 } });
+  /** Draw the G-buffer in the neon-line material (no lighting) into `out`. */
+  renderNeon(r: THREE.WebGLRenderer, out: THREE.WebGLRenderTarget, t: number) {
+    const pc = this.pc, u = this.neon.u;
+    pc.upload();
+    u.alb!.value = pc.tex.alb; u.nrm!.value = pc.tex.nrm; u.emi!.value = pc.tex.emi; u.t!.value = t;
+    this.neon.render(r, out);
+  }
 
   constructor(public pc: PixelCanvas) {
     // the emission is sampled through mips for bounce light and haze: give it mipmaps and smooth filtering

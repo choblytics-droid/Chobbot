@@ -18,7 +18,7 @@
 | Audio | A short song, played as background. **Nobody sings on screen.** Lyrics appear as on-screen text and chat messages |
 | Quality level | **6 (the minimum for every film)**: two dressed sets (the street with Christmas lights, the train carriage); lit pixel art with soft shadows and bounce light; haze and volumetric light around the market lights and the carousel; a physical winter sky at dusk; window reflections and speed on the train; lit particles (market lights, sparks of the carousel bulbs); 60 fps adaptive motion blur; one hero shot (beat 4: through the train window the city falls away into open farmland, fast) |
 | Style deck | Home: **pixel art** · switches: **neon line**, **halftone** |
-| Characters | The streamer as a small pixel sprite from behind (hood, phone in hand). The chat as the second character. The companion only as a 1-second cameo at the end |
+| Characters | **No people on screen (owner, 2026-10-04).** The phone is the protagonist (on its tripod, propped at the train window, the stream's own screen); the chat is the second character; the companion only as a 1-second mascot cameo (a warm spark). Style frames: `films/ST-01_train-ride/STYLE_FRAMES.md` |
 
 ## Beat sheet (v0.7, timed to the master audio `films/ST-01_train-ride/audio/song_with_intro.wav`)
 

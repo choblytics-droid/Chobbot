@@ -16,16 +16,18 @@ export default class Town extends Scene {
   override async init() { this.ly = await loadLyrics(); }
 
   render(f: Frame, out: THREE.WebGLRenderTarget) {
-    const shot = this.ctx.params.shot as 'open' | 'tour' | 'outro' | 'newday';
+    const shot = this.ctx.params.shot as 'open' | 'tour' | 'neon' | 'outro' | 'newday';
     const t = f.t, p = f.p;
     const o: TownOpts = { t, rot: t * 0.55 };
     let sky = { sunEl: -0.045, sunAz: -0.9, skyExp: 3.2, ambient: 0.9, stars: 1, clouds: 0.5 };
     let haze = 0.55, wet = 0.6, snow = 1;
     if (shot === 'open') { o.streamer = 'none'; o.camY = -26 * (1 - ease.outCubic(p)); o.camX = 6 * (1 - p); }
     if (shot === 'tour') { o.streamer = 'tripod'; o.sx = 74; o.camX = -4 + 8 * p; }
+    if (shot === 'neon') { o.streamer = 'tripod'; o.sx = 74; o.camX = 4 + 4 * p; }
     if (shot === 'outro') { o.streamer = 'none'; o.camX = -30 + 60 * p; o.camY = 1.5 * Math.sin(t * 4.1); sky = { ...sky, sunEl: -0.04, skyExp: 3.6 }; }
     if (shot === 'newday') { o.streamer = 'none'; o.day = 1; sky = { sunEl: 0.12, sunAz: 2.3, skyExp: 0.42, ambient: 1.3, stars: 0, clouds: 0.6 }; haze = 0.25; wet = 0.35; snow = 0.4; }
     paintTown(this.pc, o);
+    if (shot === 'neon') return this.neon(f, out);
     this.pl.render(this.ctx.renderer, out, {
       lights: townLights(o), t, ...sky, bands: 9, horizonY: 262, fov: 300, haze, snow, wet, groundY: 405,
       hazeCol: shot === 'newday' ? [0.06, 0.05, 0.05] : [0.015, 0.022, 0.05],
@@ -35,6 +37,15 @@ export default class Town extends Scene {
     ov.begin();
     if (shot === 'open') ov.card('Based on a true story', t, f.start, this.ctx.params.cardOut ?? f.end, { y: H * 0.24 });
     if (shot === 'tour' || shot === 'outro' || (shot === 'newday' && t < (this.ctx.params.keptAt ?? 1e9))) ov.lyric(this.ly.lineAt(t, 0.35, 0.3), t, { y: H * 0.2 });
+    if (shot === 'outro') {
+      // the last chat message, remembered; the companion's first glimpse beside it (≈1 s)
+      const at = this.ctx.params.msgAt ?? 1e9, sp = this.ctx.params.sparkAt ?? 1e9;
+      const a = clamp((t - at) / 0.3);
+      if (a > 0) {
+        const r = ov.chat('viewer_3', 'thanks for being so chill. amazing stream', t, W * 0.12, H * 0.3, { a: a * 0.95, size: 32, w: W * 0.66, hot: true });
+        ov.spark(W * 0.12 + W * 0.66 + 34, H * 0.3 + (r?.h ?? 100) / 2, 16, t, clamp((t - sp) / 0.15) * (1 - clamp((t - sp - 1.0) / 0.3)));
+      }
+    }
     if (shot === 'newday') {
       const a = clamp((t - (this.ctx.params.keptAt ?? 1e9)) / 0.3);
       if (a > 0) ov.title('They kept streaming IRL.', W / 2, H * 0.2, { a });
@@ -42,5 +53,27 @@ export default class Town extends Scene {
     }
     ov.draw(this.ctx.renderer, this.ctx.comp, out);
     return { grain: 0.045, vignette: 0.4, bloom: 0.7, halation: 0.35, ca: 1.0 };
+  }
+
+  /** Frame 3: the market as neon lines; the viewer counter climbs 1, 2, 3 and the chat pops up by the carousel. */
+  neon(f: Frame, out: THREE.WebGLRenderTarget) {
+    const t = f.t;
+    this.pl.renderNeon(this.ctx.renderer, out, t);
+    const ov = this.ov;
+    ov.begin();
+    ov.lyric(this.ly.lineAt(t, 0.35, 0.3), t, { y: H * 0.2 });
+    const n = 1 + Math.min(2, Math.floor(f.p * 3.2));
+    ov.caption(`${n} watching`, W / 2, H * 0.31, { size: 44, align: 'center', dot: '#ff3b3b' });
+    // (only neutral reactions: the post doesn't say what the chat wrote, so no invented lines)
+    const msgs: [string, string, number][] = [['viewer_1', 'o/', 0.08], ['viewer_1', '<3', 0.3], ['viewer_2', ':)', 0.5], ['viewer_1', '<3 <3', 0.72]];
+    let y = H * 0.4;
+    for (const [u, m, at] of msgs) {
+      const a = clamp((f.p - at) / 0.04);
+      if (a <= 0) continue;
+      ov.caption(`${u}  ${m}`, W * 0.06, y, { size: 30, a, col: u === 'viewer_1' ? 'rgba(255,178,36,1)' : undefined });
+      y += 66;
+    }
+    ov.draw(this.ctx.renderer, this.ctx.comp, out);
+    return { grain: 0.05, vignette: 0.45, bloom: 1.1, bloomThreshold: 0.6, halation: 0.5, ca: 1.8 };
   }
 }
