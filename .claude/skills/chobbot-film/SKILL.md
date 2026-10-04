@@ -133,4 +133,14 @@ not committed. Send files to the owner with SendUserFile.
   Lyrics in the band y 700–1700 wrap narrower automatically.
 - Sky exposure that worked: blue hour `sunEl -0.045, skyExp 3.2`; night `sunEl -0.1, skyExp 4.5`; morning front-lit `sunEl 0.12, sunAz 2.3, skyExp 0.42`.
 
+- GLSL reserved words broke whole scenes silently (`out`, `half`): a scene that renders as the
+  previous scene or black means a shader compile error. Grep the browser log with `grep -a`.
+- `pc.screen()` copies what is already painted: paint the screen before the phone body over it.
+- Object ids are per canvas and shared by every painter: give each new object its own id and name,
+  or the QA stats merge unrelated things (far hills hid a flat window frame under id 2).
+- A credit must not claim permission before the author has said yes.
+- After the signal drops, nothing may look live again (no input row, cursor or live header).
+- Each hero beat needs its own staging: the reviewer flags any two frames with the same framing.
+  `PixelLight.render({ zoom: [k, fx, fy] })` gives a closer framing of a set without moving text.
+
 Update this skill after every film with anything learned.
