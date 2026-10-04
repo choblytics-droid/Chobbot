@@ -23,6 +23,7 @@ Everything lives in `brand-video/` (never mixed with other projects). Read first
 5. **Nobody sings on screen.** The song is background; lyrics appear as subtitles, chat, kinetic type.
 6. **Streamer Stories carry no brand:** no end card, logo, tagline, sonic logo or companion. The
    channel's avatar and name already carry the brand. Brand films use the end card (`app/src/kit/endcard.ts`).
+   **Exception (owner, 2026-10-04): the series cover** carries pixel Chob ("STORY TIME" + number), see step 9.
 7. **Stories open on the song at once** (no intro, no splice), with the hook sticker
    **"Based on a true story"** popping on over the first shot for 2.5–3 s, across the first cut.
 8. **Subtitles show the written lyric.** Small sung slips are accepted; a new take only if a line is
@@ -50,7 +51,7 @@ Everything lives in `brand-video/` (never mixed with other projects). Read first
 | 6 | Assets | sets, materials, UI in the kit | code | (with 5) |
 | 7 | Animatic | full film, 30 fps, 1 sample, on the master audio | `animatic/<id>_animatic_vN_540p.mp4` | owner approves timing |
 | 8 | Build | level 6–10, 60 fps, adaptive motion blur, 4K on a GPU machine | master + cut-downs | final review |
-| 9 | Post description | short caption < 150 chars, description = story summary start to end (facts only), credits, hashtags; link/name only with the author's permission | `DESCRIPTION.md` | owner approves |
+| 9 | Post package | TikTok description = hook line + story summary start to end (facts only, the feeling of the backstory, human-copy-voice) + credit + hashtags; link/name only with the author's permission. Cover: `python tools/cover.py --num NN --title "..."` (one series design). Pack it as `ready-to-post/<ID>_<name>/` with `_video.mp4`, `_cover.png`, `_description.txt` (naming in `ready-to-post/README.md`) | `DESCRIPTION.md` + the ready-to-post folder | owner approves, then posts |
 
 ## Step 4 in detail (audio)
 

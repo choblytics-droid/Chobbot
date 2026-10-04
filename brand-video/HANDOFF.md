@@ -48,21 +48,15 @@ skill), `node_modules` (`bun install`).
 | 0–4 story, brief, script, song, audio analysis | approved / done |
 | 5–6 style frames, assets | done; QA gate 0 flat objects, 0 text in UI zones; independent review: level 6 |
 | 7 animatic v4 | **approved by the owner** |
-| 8 build | 1080p60 with 4-sample motion blur done on the cloud CPU box: `release/`. **In owner review.** 4K level-8 build: needs a GPU machine (this PC). |
-| 9 post description | `DESCRIPTION.md` drafted; owner to approve |
+| 8 build | 1080p60 with 4-sample motion blur: **FINAL (owner, 2026-10-04)**. No polish, no 4K. |
+| 9 post package | `ready-to-post/ST-01_train-ride/` (video, cover, TikTok description): **ready to post** |
 
 **Open items:**
 
-1. Owner: review the 1080p60 video.
-2. Owner: send the permission DM to the Reddit author (draft in the script). After a yes, add
-   `, retold with permission` to the credit (`app/src/films/ST-01_train-ride/town.ts`, the
-   `credit` string) and to `DESCRIPTION.md`, then re-render.
-3. Owner: approve `DESCRIPTION.md`, then post (TikTok, Shorts, Reels).
-4. Defaults taken on "go" (changeable): "Reddit" stays in the credit as the source; the line
-   `can you keep it on?` stays as the viewer's message; the front-page body copy is soft texture.
-5. Optional level-8 polish before a 4K build: the macro phone as pixel art, station platform
-   furniture and lamp pools, a lit-window cluster at the globe's end marker, ice shading.
-6. Next films: ST-02…ST-10 are in the media plan (tab 1). The Story Fisher (n8n, manual trigger
+1. Owner: post it (`ready-to-post/README.md` has the 4 steps).
+2. Owner, optional: the permission DM to the Reddit author (draft in the script). After a yes, the
+   credit may say `, retold with permission` (then re-render the last shot).
+3. Next films: ST-02…ST-10 (`plan/STREAMER_STORIES.md`). The Story Fisher (n8n, manual trigger
    only) can fish more stories, including "bad stories" on the owner's say-so.
 
 ## Task queue (what "go" does, top first; see `CLAUDE.md`)
@@ -70,8 +64,9 @@ skill), `node_modules` (`bun install`).
 | # | Task | Gate / needs owner | State |
 |---|---|---|---|
 | 1 | Setup on the PC: tools, `bun install`, typecheck, smoke still, `perf` speed, note it here | system installs only | **done 2026-10-04** (speeds below) |
-| 2 | ST-01 level-8 polish: pixel-art phone in the macros, station platform furniture and lamp pools, lit-window cluster at the globe's end marker, shading on the ice; QA gate + reviewer | none | todo |
-| 3 | ST-01 4K 60 fps build (`--samples auto --max-samples 36 --scale 2`, ~10–12 h overnight, see speeds); keep the master in `out/`, a posting copy < 100 MB in `release/` | owner approves the final video | todo |
+| 2 | ~~ST-01 level-8 polish~~ | dropped: owner called the 1080p60 final (2026-10-04) | dropped |
+| 3 | ~~ST-01 4K build~~ | dropped (same) | dropped |
+| 3b | ST-01 post package: TikTok description, series cover (`tools/cover.py`), `ready-to-post/` folder | owner posts | **done 2026-10-04** |
 | 4 | ST-01 credit: add `, retold with permission` once the author says yes (town.ts `credit`, DESCRIPTION.md), re-render the last shot / rebuild | owner sends the DM (draft in the script) and reports the answer | waiting |
 | 5 | ST-02 "The raid from the hero": run Story Context on the post, brief + script draft (`docs/SCRIPT_TEMPLATE.md`), Suno blocks | owner approves the script, then makes the song in Suno and sends the WAV | todo |
 | 6 | ST-02 steps 4–9 once the WAV arrives (analysis, frames, QA, animatic, build, description) | gates per step | todo |
@@ -97,6 +92,15 @@ The film is 3 288 frames at 60 fps: 1080p60 with 4 samples ≈ 55 min; 4K60 with
 cost is CPU-bound (one Chrome thread; the GPU idles at 10–40 %), so `--scale 2` only adds ~40 %.
 
 ## Decisions from the chat (not recorded elsewhere)
+
+- **ST-01 is final at 1080p60** (owner, 2026-10-04): no level-8 polish, no 4K.
+- **One series cover for all Streamer Stories** (owner, 2026-10-04): "STORY TIME" + episode number +
+  title, pixel Chob in the streamer's room (`tools/cover.py`; plate and pixel Chob in
+  `assets/cover/`, Chob pixelated from the locked `CHOB_CANONICAL.png`, not redrawn). The cover is the
+  one place a Story shows Chob; the film itself stays brand-free.
+- **Posting package** = `ready-to-post/<ID>_<name>/` with `_video.mp4`, `_cover.png`,
+  `_description.txt` (`ready-to-post/README.md`). No AI watermark on the video (owner turned it off
+  2026-08-08); the description credits Suno and TikTok's AI-content switch goes on.
 
 - 4K build cap: `--max-samples 36` (taken on "go", 2026-10-04; uncapped auto would take days).
   Raise it per shot only where streaks still look stepped.

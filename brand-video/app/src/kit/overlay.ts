@@ -9,6 +9,8 @@ import type { Line } from '../engine/lyrics';
 import { clamp, ease } from '../engine/util';
 import { roundRect, wrap, typedChars } from './kit';
 
+const NOTEXT = typeof location !== 'undefined' && new URLSearchParams(location.search).has('notext');
+
 export class Overlay {
   /** Text layers drawn for the frame on screen (QA: tools/qa_frames.py checks them against the platform UI zones). */
   static drawn: HTMLCanvasElement[] = [];
@@ -16,6 +18,7 @@ export class Overlay {
   get c() { return this.layer.ctx; }
   begin() { this.layer.clear(); }
   draw(r: THREE.WebGLRenderer, comp: Compositor, out: THREE.WebGLRenderTarget) {
+    if (NOTEXT) return; // clean plates (covers): no subtitles, stickers or UI
     comp.draw(r, this.layer.upload(), out, { mode: 'normal' });
     Overlay.drawn.push(this.layer.canvas);
   }
