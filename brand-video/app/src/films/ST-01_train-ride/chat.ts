@@ -1,7 +1,7 @@
 // Frames 6 and 9: the chat as the hero, a macro shot of the phone screen. The viewer's words type in
 // letter by letter, on the sung words.
 //   keep:   "can you keep it on?" (signal bars full)
-//   thanks: after the signal came back: "thanks for being so chill. amazing stream"
+//   thanks: the viewer's thank-you, word for word: "thanks for being so chill. amazing stream"
 import type * as THREE from 'three';
 import { Scene, type Frame } from '../../engine/scene';
 import { Macro } from '../../kit/macro';
@@ -63,9 +63,8 @@ export default class Chat extends Scene {
       focusY = 1 - (y + 260) / H;
     } else {
       const l = this.ly.get('Said it was amazing');
-      let y = 360;
-      c.font = font(F.mono(500), 36); c.fillStyle = rgba('ash', 0.8); c.fillText('· reconnected ·', W / 2 - measure('· reconnected ·', F.mono(500), 36) / 2, y);
-      y += 120;
+      // (no "reconnected" line: the post doesn't say when the thank-you came, only that it did)
+      const y = 480;
       const s = 'thanks for being so chill. amazing stream';
       msg('viewer_3', this.typed(s, t, f.start, l.words[3]!.end), y, { size: 92, a: 1, hot: true, caret: true });
       focusY = 1 - (y + 300) / H;

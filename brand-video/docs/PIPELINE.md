@@ -13,8 +13,13 @@ off; only then does the next step start.
 | 6 | **Assets** | The companion, sets, UI stand-ins or real screens, brand kit | me (+ your design files) | you approve |
 | 7 | **Animatic** | A low-res timed cut of the whole film on the real audio | me | you approve the timing |
 | 8 | **Build + render** | The full film at the approved quality level, then the cut-downs | me (GPU machine for the 4K master) | final review |
+| 9 | **Post description** | `films/<film-id>/DESCRIPTION.md`: a short caption (under 150 characters), a description that summarises the story start to end (facts only, the real ending or "to be continued"), credits, hashtags | me drafts, you edit | you approve; author permission checked before any link or name |
 
 Rules:
+- **Every film ships with its story summary** (owner rule, 2026-10-04): step 9 writes the post
+  description from the script's full picture. Stories: only what the poster stated, the real ending
+  (or "to be continued"), anonymous unless the author agrees. Brand films: the pain, the need and
+  the function the film shows, no claims the product can't back.
 - **No audio, no build.** Steps 4–8 need the final audio, because every cut and word is timed to it.
 - **Script before song.** The song is written from the script, not the other way round, so the
   message leads and the music serves it.

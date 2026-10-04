@@ -42,6 +42,10 @@ The persuasion path from `USE_CASES.md`: recognition → cost → need → use c
 Every beat needs at least one ✓; the **Text** column alone must tell the whole story (muted viewers).
 List beats left out on purpose. Before the build: mute test, listen test, sung-as-written check.
 
+## Story summary (for the post description, step 9)
+
+- Three to six plain sentences, start to end, facts only. This becomes `DESCRIPTION.md`.
+
 ## Open questions
 
 - Anything to confirm (product facts, claims needing a source, rights).
