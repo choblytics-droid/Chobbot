@@ -1,14 +1,14 @@
-# Chob + Yutoo cutouts (brand films, brand covers)
+# Chob + Yutoo · brand cover characters
 
-Source: `D:\APP\KIE AI\posters\recruitment_poster_textless.png`, re-rendered by GPT Image 2.5 Sunburst
-(kie, image-to-image, 2K, 2026-10-05, 10 credits) with only the two characters on flat pure green.
+For **brand film covers only** (Brand · Generic A/B, Brand · Master). Streamer Stories never use them.
+The two characters are used together, never separated (owner, 2026-10-05).
 
-| File | What | Use |
-|---|---|---|
-| `chob_yutoo_green_source.png` | the kie output, 1536x2736, characters on #00FF00 | the master; re-key from it |
-| `chob_yutoo_pair.png` | both characters, transparent, clean edges | **use this** |
-| `yutoo_cut_from_pair.png` | Yutoo alone (it stands in front, so it is complete) | OK; small holes in the scarf knot |
-| `chob_cut_from_pair_has_gaps.png` | Chob alone | gaps where Yutoo covered him (scarf, right side); not for use alone |
+| File | What |
+|---|---|
+| `chob_yutoo_pair.png` | **The asset.** Both characters, transparent background, 1347x1502 px, clean edges. |
+| `chob_yutoo_green_source.png` | The master: the kie output, 1536x2736, characters on flat #00FF00. Re-key from this if the pair ever needs redoing (`python tools/cut_characters.py`). |
+| `_unused/` | Single cuts from a split attempt; not needed (kept, not deleted). |
 
-Keyed and split by `tools/cut_characters.py` (green key + despill, Yutoo cut along its own outline).
-Streamer Stories never use these (no brand); brand films and brand covers do.
+Origin: `D:\APP\KIE AI\posters\recruitment_poster_textless.png`, re-rendered by GPT Image 2.5 Sunburst
+(kie, image-to-image, 2K, 2026-10-05, 10 credits) with only the two characters on green. A copy of the
+green master also sits next to the poster: `D:\APP\KIE AI\posters\characters_green_2k.png`.

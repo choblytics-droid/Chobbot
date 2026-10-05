@@ -84,6 +84,7 @@ Everything lives in `brand-video/` (never mixed with other projects). Read first
   `screen()` copies part of the picture onto a phone screen in the scene.
 - `src/kit/overlay.ts`: `lyric` (word-lit subtitle, balanced rows), `hook` (the pop-on sticker),
   `caption`, `title`, `chat`, `streamUI` (generic LIVE / viewers / chat / "End stream?"), `spark` (brand only).
+- Brand film covers: `assets/characters/chob_yutoo_pair.png` (Chob + Yutoo together, transparent; never split them; master on green next to it). Streamer Stories never use it.
 - `src/kit/macro.ts` (phone-screen macro: LCD subpixels, shallow focus, bokeh), `src/kit/glitch.ts`,
   `src/kit/endcard.ts` (brand films only).
 - ST-01 sets to reuse: `sets/town.ts` (old town, 3 times of day, carousel, phone on tripod),

@@ -98,6 +98,7 @@ cost is CPU-bound (one Chrome thread; the GPU idles at 10–40 %), so `--scale 2
   title over the streamer's room with the empty chair (`tools/cover.py`, plate in `assets/cover/`).
   **No character on it (owner, 2026-10-05: Chob removed)**, so Stories stay brand-free on the cover
   too. Pixel Chob is kept in `assets/cover/chob_pixel.png`; `--chob` puts him back if ever wanted.
+- **Brand cover characters** (owner, 2026-10-05): `assets/characters/chob_yutoo_pair.png`, Chob + Yutoo from the recruitment poster (GPT Image 2.5 on green, 10 credits, keyed). Always used together, never split.
 - **Posting package** = `ready-to-post/<ID>_<name>/` at the repo root (owner moved it out of `brand-video/`) with `_video.mp4`, `_cover.png`,
   `_description.txt` (`ready-to-post/README.md`). No AI watermark on the video (owner turned it off
   2026-08-08); the description credits Suno and TikTok's AI-content switch goes on.
